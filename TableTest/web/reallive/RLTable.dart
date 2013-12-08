@@ -11,7 +11,7 @@ class RLTable {
   var selectedRowId='-1';
   TableElement table;
   num rowIdCnt = 1;
-
+  RLTableRowRenderer rowRenderer = new RLTableRowRenderer(); // def
   RLValueRenderer cellRenderer = new RLValueRenderer();
   RLTableRenderSpec renderStyle = new DefaultRenderSpec();
   HtmlElement pane;
