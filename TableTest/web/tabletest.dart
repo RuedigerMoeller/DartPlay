@@ -33,9 +33,18 @@ void main() {
 //    cell.attributes['t_id'] = '$i';
 //    cell.setInnerHtml("<font color=green>99.34</font>" );
 //  }
+  
+  List user = ["Reudi", "Emil", "Felix", "Anita", "Ex*"];
 
-  for ( var i = 0; i < 500; i++ ) {
-    rltable.addRowAsMap({ "id":i, "text":"Dies ist ein text $i", "qty":i*10, "prc":(i/.34)  });
+  for ( var i = 0; i < 100; i++ ) {
+    Map mp = { 
+               "id":i, "text":"Dies ist ein text $i", "Qty":i*10, "Price":(i/.34), "User":user[i%5],
+               "NotSoShort":".","Langtext":"blubb blubb blubb blubb blubb blubb blubb blubb", 
+               };
+    if ( i == 1 ) {
+      rltable.setHeaderFromList(mp.keys.toList(growable: false));
+    }
+    rltable.addRowAsMap(mp);
   }
 
 }

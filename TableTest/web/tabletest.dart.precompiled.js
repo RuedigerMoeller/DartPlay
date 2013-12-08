@@ -104,11 +104,11 @@ $$.BoundClosure$i1 = [W, {"": "BoundClosure;_self,__js_helper$_target,_receiver,
 
 $$.Closure$2 = [H, {"": "Closure;call$2,$name", $is_args2: true}];
 
+$$.Closure$1 = [H, {"": "Closure;call$1,$name", $is_args1: true}];
+
 $$.Closure$0 = [H, {"": "Closure;call$0,$name"}];
 
 $$.Closure$7 = [H, {"": "Closure;call$7,$name"}];
-
-$$.Closure$1 = [P, {"": "Closure;call$1,$name", $is_args1: true}];
 
 $$.Closure$20 = [P, {"": "Closure;call$2,$name",
   call$1: function(p0) {
@@ -205,12 +205,12 @@ $$.Closure$4 = [W, {"": "Closure;call$4,$name"}];
   }
 })([
 ["", "reallive/RLTable.dart", , N, {
-RLTable: {"": "Object;selectedRowId,table,rowIdCnt,rowRenderer,cellRenderer,renderStyle,pane,selectedRows,singleSel",
+RLTable: {"": "Object;selectedRowId,table,tableHeader,rowIdCnt,headerRenderer,rowRenderer,renderStyle,pane,headerPane,selectedRows,rows,singleSel,upDown",
   scrollVisible$1: function(cur) {
-    var t1, st, t2, t3, t4, t5, t6, t7, t8, visible;
+    var t1, t2, t3, t4, t5, t6;
     cur.toString;
     t1 = this.pane;
-    st = t1.scrollTop;
+    t1.scrollTop;
     t2 = new W._BorderCssRect(cur, 0, 0, 0, 0)._element;
     t3 = J.get$top$x(t2.getBoundingClientRect());
     t1 = new W._BorderCssRect(t1, 0, 0, 0, 0)._element;
@@ -222,15 +222,15 @@ RLTable: {"": "Object;selectedRowId,table,rowIdCnt,rowRenderer,cellRenderer,rend
     if (t3 < t4) {
       t3 = this.pane;
       t4 = t3.scrollTop;
-      t5 = J.get$top$x(t1.getBoundingClientRect());
-      t6 = J.get$top$x(t2.getBoundingClientRect());
-      if (typeof t5 !== "number")
-        throw t5.$sub();
-      if (typeof t6 !== "number")
-        throw H.iae(t6);
+      t1 = J.get$top$x(t1.getBoundingClientRect());
+      t2 = J.get$top$x(t2.getBoundingClientRect());
+      if (typeof t1 !== "number")
+        throw t1.$sub();
+      if (typeof t2 !== "number")
+        throw H.iae(t2);
       if (typeof t4 !== "number")
         throw t4.$sub();
-      t3.scrollTop = C.JSNumber_methods.toInt$0(t4 - (t5 - t6) - 4);
+      t3.scrollTop = C.JSNumber_methods.toInt$0(t4 - (t1 - t2) - 4);
     } else {
       t3 = J.get$top$x(t2.getBoundingClientRect());
       t4 = t2.offsetHeight;
@@ -250,43 +250,20 @@ RLTable: {"": "Object;selectedRowId,table,rowIdCnt,rowRenderer,cellRenderer,rend
         if (typeof t4 !== "number")
           throw H.iae(t4);
         t5 = J.get$top$x(t1.getBoundingClientRect());
-        t6 = t1.offsetHeight;
+        t1 = t1.offsetHeight;
         if (typeof t5 !== "number")
           throw t5.$add();
+        if (typeof t1 !== "number")
+          throw H.iae(t1);
+        t6 = J.get$top$x(t2.getBoundingClientRect());
+        t2 = t2.offsetHeight;
         if (typeof t6 !== "number")
-          throw H.iae(t6);
-        t7 = J.get$top$x(t2.getBoundingClientRect());
-        t8 = t2.offsetHeight;
-        if (typeof t7 !== "number")
-          throw t7.$add();
-        if (typeof t8 !== "number")
-          throw H.iae(t8);
-        t3.scrollTop = C.JSNumber_methods.toInt$0(4 + t4 - (t5 + t6 - 16 - (t7 + t8)));
+          throw t6.$add();
+        if (typeof t2 !== "number")
+          throw H.iae(t2);
+        t3.scrollTop = C.JSNumber_methods.toInt$0(4 + t4 - (t5 + t1 - 16 - (t6 + t2)));
       }
     }
-    t3 = J.get$top$x(t2.getBoundingClientRect());
-    t4 = J.get$top$x(t1.getBoundingClientRect());
-    if (typeof t3 !== "number")
-      throw t3.$gt();
-    if (typeof t4 !== "number")
-      throw H.iae(t4);
-    if (t3 > t4) {
-      t3 = J.get$top$x(t2.getBoundingClientRect());
-      t4 = t2.offsetHeight;
-      if (typeof t3 !== "number")
-        throw t3.$add();
-      if (typeof t4 !== "number")
-        throw H.iae(t4);
-      t5 = J.get$top$x(t1.getBoundingClientRect());
-      t6 = t1.offsetHeight;
-      if (typeof t5 !== "number")
-        throw t5.$add();
-      if (typeof t6 !== "number")
-        throw H.iae(t6);
-      visible = t3 + t4 < t5 + t6;
-    } else
-      visible = false;
-    P.print(H.S(J.get$top$x(t2.getBoundingClientRect())) + " " + H.S(J.get$top$x(t1.getBoundingClientRect())) + " " + visible + " " + H.S(st));
   },
   findRowId$1: function(index) {
     var t1, count, row;
@@ -375,37 +352,112 @@ RLTable: {"": "Object;selectedRowId,table,rowIdCnt,rowRenderer,cellRenderer,rend
     }
     return current;
   },
-  addRowAsMap$1: function(data) {
-    var newRow, id;
+  setHeader$1: function(header) {
+    var newRow;
+    if (J.get$length$asx(J.get$rows$x(this.tableHeader)) === 0)
+      J.addRow$0$x(this.tableHeader);
+    newRow = J.$index$asx(J.get$rows$x(this.tableHeader), 0);
+    J.get$attributes$x(newRow)._element.setAttribute("t_id", "header");
+    this.headerRenderer.renderRow$4("header", newRow, header, this.renderStyle);
+    this.adjustHeaderWidth$0();
+  },
+  adjustTWidth$0: function() {
+    J.set$width$x(this.headerPane.style, H.S(this.pane.clientWidth) + "px");
+  },
+  adjustHeaderWidth$0: function() {
+    var t1, hd, bd;
+    t1 = {};
+    this.adjustTWidth$0();
+    if (J.get$length$asx(J.get$rows$x(this.tableHeader)) < 1 || J.get$length$asx(J.get$rows$x(this.table)) < 1)
+      return;
+    hd = J.get$cells$x(J.$index$asx(J.get$rows$x(this.tableHeader), 0));
+    bd = J.get$cells$x(J.$index$asx(J.get$rows$x(this.table), 0));
+    if (hd._list.length < 1 || bd._list.length < 1)
+      return;
+    t1.index_0 = 0;
+    hd.forEach$1(hd, new N.RLTable_adjustHeaderWidth_closure(t1, bd, 2));
+  },
+  addRow$1: function(_, data) {
+    var newRow, id, t1;
     newRow = J.addRow$0$x(this.table);
     this.rowIdCnt = this.rowIdCnt + 1;
     id = "" + this.rowIdCnt;
     newRow.toString;
     new W._ElementAttributeMap(newRow)._element.setAttribute("t_id", id);
-    this.rowRenderer.renderRow$4(id, newRow, new N.RowMapAdapter(data, -1), this.renderStyle);
+    t1 = this.rows;
+    t1.$indexSet(t1, id, data);
+    this.rowRenderer.renderRow$4(id, newRow, data, this.renderStyle);
+    this.adjustHeaderWidth$0();
+  },
+  addRowAsMap$1: function(data) {
+    var newRow, id, t1;
+    newRow = J.addRow$0$x(this.table);
+    this.rowIdCnt = this.rowIdCnt + 1;
+    id = "" + this.rowIdCnt;
+    newRow.toString;
+    new W._ElementAttributeMap(newRow)._element.setAttribute("t_id", id);
+    t1 = this.rows;
+    t1.$indexSet(t1, id, new N.RowMapAdapter(data, H.Primitives_parseInt(id, null, null)));
+    this.rowRenderer.renderRow$4(id, newRow, t1.$index(t1, id), this.renderStyle);
+    this.adjustHeaderWidth$0();
+  },
+  sort$2: function(_, field, up) {
+    var t1, list;
+    t1 = J.map$1$ax(J.get$rows$x(this.table), new N.RLTable_sort_closure(this));
+    list = t1.toList$1$growable(t1, false);
+    H.IterableMixinWorkaround_sortList(list, new N.RLTable_sort_closure0(field, up));
+    H.IterableMixinWorkaround_forEach(J.toList$1$growable$ax(J.get$rows$x(this.table), false), new N.RLTable_sort_closure1());
+    t1 = this.rows;
+    t1.clear$0(t1);
+    H.IterableMixinWorkaround_forEach(list, new N.RLTable_sort_closure2(this));
   },
   RLTable$1: function(id) {
-    var t1, t2;
+    var t1, t2, t3;
     this.table = document.querySelector(id);
     t1 = id + "-pane";
     this.pane = document.querySelector(t1);
-    t1 = this.table;
-    t1.toString;
-    t1 = new W._ElementEventStreamImpl(t1, C.EventStreamProvider_click._eventType, false);
+    t1 = id + "-header-pane";
+    this.headerPane = document.querySelector(t1);
+    t1 = id + "-header";
+    this.tableHeader = document.querySelector(t1);
+    this.adjustTWidth$0();
+    t1 = new W._EventStream(window, C.EventStreamProvider_resize._eventType, false);
     H.setRuntimeTypeInfo(t1, [null]);
     t2 = new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new N.RLTable_closure(this)), t1._useCapture);
     H.setRuntimeTypeInfo(t2, [H.getRuntimeTypeArgument(t1, "_EventStream", 0)]);
     t2._tryResume$0();
-    t2 = new W._EventStream(document, C.EventStreamProvider_keydown._eventType, false);
+    t2 = this.pane;
+    t2.toString;
+    t2 = new W._ElementEventStreamImpl(t2, C.EventStreamProvider_scroll._eventType, false);
     H.setRuntimeTypeInfo(t2, [null]);
     t1 = new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new N.RLTable_closure0(this)), t2._useCapture);
     H.setRuntimeTypeInfo(t1, [H.getRuntimeTypeArgument(t2, "_EventStream", 0)]);
     t1._tryResume$0();
+    t1 = this.tableHeader;
+    t1.toString;
+    t2 = C.EventStreamProvider_click._eventType;
+    t1 = new W._ElementEventStreamImpl(t1, t2, false);
+    H.setRuntimeTypeInfo(t1, [null]);
+    t3 = new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new N.RLTable_closure1(this)), t1._useCapture);
+    H.setRuntimeTypeInfo(t3, [H.getRuntimeTypeArgument(t1, "_EventStream", 0)]);
+    t3._tryResume$0();
+    t3 = this.table;
+    t3.toString;
+    t2 = new W._ElementEventStreamImpl(t3, t2, false);
+    H.setRuntimeTypeInfo(t2, [null]);
+    t3 = new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new N.RLTable_closure2(this)), t2._useCapture);
+    H.setRuntimeTypeInfo(t3, [H.getRuntimeTypeArgument(t2, "_EventStream", 0)]);
+    t3._tryResume$0();
+    t3 = new W._EventStream(document, C.EventStreamProvider_keydown._eventType, false);
+    H.setRuntimeTypeInfo(t3, [null]);
+    t2 = new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new N.RLTable_closure3(this)), t3._useCapture);
+    H.setRuntimeTypeInfo(t2, [H.getRuntimeTypeArgument(t3, "_EventStream", 0)]);
+    t2._tryResume$0();
   },
   static: {
 "": "RLTable_selectedStyle,RLTable_caretStyleNoBG,RLTable_caretStyle,RLTable_selectedCaretStyle,RLTable_defaultStyle",
 RLTable$: function(id) {
-  var t1 = new N.RLTable("-1", null, 1, new N.RLTableRowRenderer(), new N.RLValueRenderer(), new N.DefaultRenderSpec(new N.RLValueRenderer()), null, P.LinkedHashMap_LinkedHashMap(null, null, null, null, null), true);
+  var t1 = new N.RLTable("-1", null, null, 1, new N.RLTableHeaderRowRenderer("#008DCC", "#00a0ff"), new N.RLTableRowRenderer(), new N.DefaultRenderSpec(new N.RLValueRenderer()), null, null, P.LinkedHashMap_LinkedHashMap(null, null, null, null, null), P.LinkedHashMap_LinkedHashMap(null, null, null, null, null), true, true);
   t1.RLTable$1(id);
   return t1;
 }}
@@ -413,10 +465,34 @@ RLTable$: function(id) {
 },
 
 RLTable_closure: {"": "Closure;this_0",
+  call$1: function(ev) {
+    this.this_0.adjustTWidth$0();
+  },
+  $is_args1: true
+},
+
+RLTable_closure0: {"": "Closure;this_1",
+  call$1: function($event) {
+    var t1 = this.this_1;
+    t1.headerPane.scrollLeft = t1.pane.scrollLeft;
+  },
+  $is_args1: true
+},
+
+RLTable_closure1: {"": "Closure;this_2",
+  call$1: function($E) {
+    var t1 = this.this_2;
+    t1.sort$2(t1, J.get$attributes$x(J.get$target$x($E))._element.getAttribute("t_field"), t1.upDown);
+    t1.upDown = !t1.upDown;
+  },
+  $is_args1: true
+},
+
+RLTable_closure2: {"": "Closure;this_3",
   call$1: function($event) {
     var clickedElement, t1, t2;
     clickedElement = J.get$attributes$x(J.get$target$x($event))._element.getAttribute("t_id");
-    t1 = this.this_0;
+    t1 = this.this_3;
     t1.changeCaret$1(clickedElement);
     t2 = t1.selectedRows;
     t1.changeSelection$2(clickedElement, t2.$index(t2, clickedElement) == null);
@@ -424,13 +500,13 @@ RLTable_closure: {"": "Closure;this_0",
   $is_args1: true
 },
 
-RLTable_closure0: {"": "Closure;this_1",
+RLTable_closure3: {"": "Closure;this_4",
   call$1: function($event) {
     var t1, t2, t3, index, curr;
     switch (J.get$keyCode$x($event)) {
       case 13:
       case 32:
-        t1 = this.this_1;
+        t1 = this.this_4;
         t2 = t1.selectedRowId;
         t3 = t1.selectedRows;
         t1.changeSelection$2(t2, t3.$index(t3, t2) == null);
@@ -438,7 +514,7 @@ RLTable_closure0: {"": "Closure;this_1",
         $event.stopImmediatePropagation();
         break;
       case 38:
-        t1 = this.this_1;
+        t1 = this.this_4;
         index = t1.findIndex$1(t1.selectedRowId);
         if (index > 0) {
           curr = t1.changeCaret$1(t1.findRowId$1(index - 1));
@@ -449,7 +525,7 @@ RLTable_closure0: {"": "Closure;this_1",
         $event.stopImmediatePropagation();
         break;
       case 40:
-        t1 = this.this_1;
+        t1 = this.this_4;
         curr = t1.changeCaret$1(t1.findRowId$1(t1.findIndex$1(t1.selectedRowId) + 1));
         if (curr != null)
           t1.scrollVisible$1(curr);
@@ -469,30 +545,163 @@ RLTable_clearSelection_closure: {"": "Closure;this_0",
   $is_args1: true
 },
 
+RLTable_adjustHeaderWidth_closure: {"": "Closure;box_0,bd_1,off_2",
+  call$1: function(headCell) {
+    var t1, t2, t3, t4, t5, t6, width;
+    t1 = this.box_0;
+    t2 = t1.index_0;
+    t3 = this.bd_1._list;
+    if (t2 < 0 || t2 >= t3.length)
+      throw H.ioore(t3, t2);
+    t2 = J.get$client$x(t3[t2]).width;
+    t4 = this.off_2;
+    if (typeof t2 !== "number")
+      throw t2.$sub();
+    t5 = J.getInterceptor$x(headCell);
+    t6 = t5.get$client(headCell);
+    width = P.max(t2 - t4, t6.get$width(t6));
+    J.set$width$x(t5.get$style(headCell), "" + width + "px");
+    t5 = t1.index_0;
+    if (t5 < 0 || t5 >= t3.length)
+      throw H.ioore(t3, t5);
+    J.set$width$x(J.get$style$x(t3[t5]), "" + (width + t4) + "px");
+    t1.index_0 = t1.index_0 + 1;
+  },
+  $is_args1: true
+},
+
+RLTable_sort_closure: {"": "Closure;this_0",
+  call$1: function(row) {
+    var t1 = this.this_0.rows;
+    return t1.$index(t1, J.get$attributes$x(row)._element.getAttribute("t_id"));
+  },
+  $is_args1: true
+},
+
+RLTable_sort_closure0: {"": "Closure;field_1,up_2",
+  call$2: function(idA, idB) {
+    var t1 = this.field_1;
+    t1 = J.compareTo$1$ns(idA.getValue$1(t1), idB.getValue$1(t1));
+    return t1 * (this.up_2 ? -1 : 1);
+  },
+  $is_args2: true
+},
+
+RLTable_sort_closure1: {"": "Closure;",
+  call$1: function(row) {
+    J.remove$0$ax(row);
+  },
+  $is_args1: true
+},
+
+RLTable_sort_closure2: {"": "Closure;this_3",
+  call$1: function(rowData) {
+    var t1 = this.this_3;
+    t1.addRow$1(t1, rowData);
+  },
+  $is_args1: true
+},
+
 RLTableRenderSpec: {"": "Object;"},
 
 DefaultRenderSpec: {"": "RLTableRenderSpec;defValRend"},
 
 RLTableRowData: {"": "Object;"},
 
-RowMapAdapter: {"": "RLTableRowData;data,rowId"},
+ListRowMapAdapter: {"": "RLTableRowData;data",
+  getFieldNames$0: function() {
+    return this.data;
+  },
+  getValue$1: function(fieldName) {
+    return fieldName;
+  }
+},
 
-RLValueRenderer: {"": "Object;"},
+RowMapAdapter: {"": "RLTableRowData;data,rowId",
+  getFieldNames$0: function() {
+    return P.List_List$from(this.data.get$keys(), true, null);
+  },
+  getValue$1: function(fieldName) {
+    var t1 = this.data;
+    return t1.$index(t1, fieldName);
+  }
+},
+
+RLValueRenderer: {"": "Object;",
+  renderValue$2: function(elem, value) {
+    if (typeof value === "number") {
+      elem.toString;
+      new W._ElementAttributeMap(elem)._element.setAttribute("style", "text-align:right;");
+      if (typeof value === "number" && Math.floor(value) === value)
+        return C.JSInt_methods.toString$0(C.JSInt_methods.toInt$0(value));
+      else
+        return C.JSNumber_methods.toStringAsFixed$1(value, 2);
+    }
+    return H.S(value);
+  }
+},
+
+RLTableHeaderRowRenderer: {"": "RLTableRowRenderer;headerBG,headerBGHover",
+  renderRow$4: function(rowId, target, row, style) {
+    H.IterableMixinWorkaround_forEach(row.getFieldNames$0(), new N.RLTableHeaderRowRenderer_renderRow_closure(this, rowId, target, row, style));
+  }
+},
+
+RLTableHeaderRowRenderer_renderRow_closure: {"": "Closure;this_0,rowId_1,target_2,row_3,style_4",
+  call$1: function(f) {
+    var cell, val, t1, t2, t3;
+    cell = J.addCell$0$x(this.target_2);
+    val = this.style_4.defValRend.renderValue$2(cell, f);
+    cell.toString;
+    new W._ElementAttributeMap(cell)._element.setAttribute("t_field", f);
+    new W._ElementAttributeMap(cell)._element.setAttribute("t_id", this.rowId_1);
+    new W._ElementAttributeMap(cell)._element.setAttribute("nowrap", "nowrap");
+    t1 = this.this_0;
+    new W._ElementAttributeMap(cell)._element.setAttribute("style", "text-align:center;background-color: " + t1.headerBG + ";");
+    J.setInnerHtml$1$x(cell, val);
+    t2 = new W._ElementEventStreamImpl(cell, C.EventStreamProvider_mouseenter._eventType, false);
+    H.setRuntimeTypeInfo(t2, [null]);
+    t3 = new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new N.RLTableHeaderRowRenderer_renderRow__closure(t1, cell)), t2._useCapture);
+    H.setRuntimeTypeInfo(t3, [H.getRuntimeTypeArgument(t2, "_EventStream", 0)]);
+    t3._tryResume$0();
+    t3 = new W._ElementEventStreamImpl(cell, C.EventStreamProvider_mouseleave._eventType, false);
+    H.setRuntimeTypeInfo(t3, [null]);
+    t1 = new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new N.RLTableHeaderRowRenderer_renderRow__closure0(t1, cell)), t3._useCapture);
+    H.setRuntimeTypeInfo(t1, [H.getRuntimeTypeArgument(t3, "_EventStream", 0)]);
+    t1._tryResume$0();
+  },
+  $is_args1: true
+},
+
+RLTableHeaderRowRenderer_renderRow__closure: {"": "Closure;this_5,cell_6",
+  call$1: function(ev) {
+    J.set$background$x(this.cell_6.style, this.this_5.headerBGHover);
+  },
+  $is_args1: true
+},
+
+RLTableHeaderRowRenderer_renderRow__closure0: {"": "Closure;this_7,cell_8",
+  call$1: function(ev) {
+    J.set$background$x(this.cell_8.style, this.this_7.headerBG);
+  },
+  $is_args1: true
+},
 
 RLTableRowRenderer: {"": "Object;",
   renderRow$4: function(rowId, target, row, style) {
-    H.IterableMixinWorkaround_forEach(P.List_List$from(row.data.get$keys(), true, null), new N.RLTableRowRenderer_renderRow_closure(rowId, target, row, style));
+    H.IterableMixinWorkaround_forEach(row.getFieldNames$0(), new N.RLTableRowRenderer_renderRow_closure(rowId, target, row, style));
   }
 },
 
 RLTableRowRenderer_renderRow_closure: {"": "Closure;rowId_0,target_1,row_2,style_3",
   call$1: function(f) {
-    var t1, val, cell;
-    t1 = this.row_2.data;
-    val = H.S(t1.$index(t1, f));
+    var value, cell, val;
+    value = this.row_2.getValue$1(f);
     cell = J.addCell$0$x(this.target_1);
+    val = this.style_3.defValRend.renderValue$2(cell, value);
     cell.toString;
     new W._ElementAttributeMap(cell)._element.setAttribute("t_id", this.rowId_0);
+    new W._ElementAttributeMap(cell)._element.setAttribute("nowrap", "nowrap");
     J.setInnerHtml$1$x(cell, val);
   },
   $is_args1: true
@@ -544,7 +753,7 @@ Interceptor: {"": "Object;",
   toString$0: function(receiver) {
     return H.Primitives_objectToString(receiver);
   },
-  "%": "ArrayBuffer|Blob|DOMError|DOMImplementation|File|FileError|MediaError|MediaKeyError|Navigator|NavigatorUserMediaError|PositionError|SQLError|SVGAnimatedLength|SVGAnimatedNumberList|SVGAnimatedString"
+  "%": "ArrayBuffer|Blob|DOMError|DOMImplementation|File|FileError|MediaError|MediaKeyError|Navigator|NavigatorUserMediaError|PositionError|SQLError|SVGAnimatedLength|SVGAnimatedLengthList|SVGAnimatedNumber|SVGAnimatedNumberList|SVGAnimatedString"
 },
 
 JSBool: {"": "bool/Interceptor;",
@@ -606,6 +815,13 @@ JSArray: {"": "List/Interceptor;",
   get$length: function(receiver) {
     return receiver.length;
   },
+  set$length: function(receiver, newLength) {
+    if (newLength < 0)
+      throw H.wrapException(P.RangeError$value(newLength));
+    if (!!receiver.fixed$length)
+      H.throwExpression(P.UnsupportedError$("set length"));
+    receiver.length = newLength;
+  },
   $index: function(receiver, index) {
     if (typeof index !== "number" || Math.floor(index) !== index)
       throw H.wrapException(new P.ArgumentError(index));
@@ -639,9 +855,40 @@ JSMutableArray: {"": "JSArray;", $isJSMutableArray: true,
 
 JSFixedArray: {"": "JSMutableArray;"},
 
-JSExtendableArray: {"": "JSMutableArray;"},
+JSExtendableArray: {"": "JSMutableArray;", $isJSExtendableArray: true},
 
 JSNumber: {"": "num/Interceptor;",
+  compareTo$1: function(receiver, b) {
+    var bIsNegative;
+    if (typeof b !== "number")
+      throw H.wrapException(new P.ArgumentError(b));
+    if (receiver < b)
+      return -1;
+    else if (receiver > b)
+      return 1;
+    else if (receiver === b) {
+      if (receiver === 0) {
+        bIsNegative = this.get$isNegative(b);
+        if (this.get$isNegative(receiver) === bIsNegative)
+          return 0;
+        if (this.get$isNegative(receiver))
+          return -1;
+        return 1;
+      }
+      return 0;
+    } else if (isNaN(receiver)) {
+      if (this.get$isNaN(b))
+        return 0;
+      return 1;
+    } else
+      return -1;
+  },
+  get$isNegative: function(receiver) {
+    return receiver === 0 ? 1 / receiver < 0 : receiver < 0;
+  },
+  get$isNaN: function(receiver) {
+    return isNaN(receiver);
+  },
   remainder$1: function(receiver, b) {
     return receiver % b;
   },
@@ -655,6 +902,15 @@ JSNumber: {"": "num/Interceptor;",
     }
     throw H.wrapException(P.UnsupportedError$('' + receiver));
   },
+  toStringAsFixed$1: function(receiver, fractionDigits) {
+    var result;
+    if (fractionDigits < 0 || fractionDigits > 20)
+      throw H.wrapException(P.RangeError$(fractionDigits));
+    result = receiver.toFixed(fractionDigits);
+    if (receiver === 0 && this.get$isNegative(receiver))
+      return "-" + result;
+    return result;
+  },
   toString$0: function(receiver) {
     if (receiver === 0 && 1 / receiver < 0)
       return "-0.0";
@@ -663,6 +919,17 @@ JSNumber: {"": "num/Interceptor;",
   },
   get$hashCode: function(receiver) {
     return receiver & 0x1FFFFFFF;
+  },
+  $mod: function(receiver, other) {
+    var result = receiver % other;
+    if (result === 0)
+      return 0;
+    if (result > 0)
+      return result;
+    if (other < 0)
+      return result - other;
+    else
+      return result + other;
   },
   $tdiv: function(receiver, other) {
     if ((receiver | 0) === receiver && (other | 0) === other && 0 !== other && -1 !== other)
@@ -756,6 +1023,16 @@ JSString: {"": "String/Interceptor;",
   },
   get$isEmpty: function(receiver) {
     return receiver.length === 0;
+  },
+  compareTo$1: function(receiver, other) {
+    var t1;
+    if (typeof other !== "string")
+      throw H.wrapException(new P.ArgumentError(other));
+    if (receiver === other)
+      t1 = 0;
+    else
+      t1 = receiver < other ? -1 : 1;
+    return t1;
   },
   toString$0: function(receiver) {
     return receiver;
@@ -1694,6 +1971,31 @@ Primitives_objectHashCode: function(object) {
   return hash;
 },
 
+Primitives__throwFormatException: function(string) {
+  throw H.wrapException(P.FormatException$(string));
+},
+
+Primitives_parseInt: function(source, radix, handleError) {
+  var match, t1;
+  handleError = H.Primitives__throwFormatException$closure;
+  match = /^\s*[+-]?((0x[a-f0-9]+)|(\d+)|([a-z0-9]+))\s*$/i.exec(source);
+  if (match != null) {
+    t1 = match.length;
+    if (2 >= t1)
+      throw H.ioore(match, 2);
+    if (match[2] != null)
+      return parseInt(source, 16);
+    if (3 >= t1)
+      throw H.ioore(match, 3);
+    if (match[3] != null)
+      return parseInt(source, 10);
+    return handleError.call$1(source);
+  }
+  if (match == null)
+    return handleError.call$1(source);
+  return parseInt(source, 10);
+},
+
 Primitives_objectTypeName: function(object) {
   var $name, decompiled;
   $name = C.JS_CONST_86y(J.getInterceptor(object));
@@ -2527,6 +2829,10 @@ IterableMixinWorkaround_toStringIterable: function(iterable, leftDelimiter, righ
   return result.get$_contents();
 },
 
+IterableMixinWorkaround_sortList: function(list, compare) {
+  H.Sort__doSort(list, 0, list.length - 1, compare);
+},
+
 IterableMixinWorkaround__rangeCheck: function(list, start, end) {
   if (start < 0 || start > list.length)
     throw H.wrapException(P.RangeError$range(start, 0, list.length));
@@ -2565,6 +2871,222 @@ printToConsole: function(line) {
   throw "Unable to print message: " + String(line);
 },
 
+Sort__doSort: function(a, left, right, compare) {
+  if (right - left <= 32)
+    H.Sort__insertionSort(a, left, right, compare);
+  else
+    H.Sort__dualPivotQuicksort(a, left, right, compare);
+},
+
+Sort__insertionSort: function(a, left, right, compare) {
+  var i, t1, el, j, j0;
+  for (i = left + 1, t1 = J.getInterceptor$asx(a); i <= right; ++i) {
+    el = t1.$index(a, i);
+    j = i;
+    while (true) {
+      if (!(j > left && J.$gt$n(compare.call$2(t1.$index(a, j - 1), el), 0)))
+        break;
+      j0 = j - 1;
+      t1.$indexSet(a, j, t1.$index(a, j0));
+      j = j0;
+    }
+    t1.$indexSet(a, j, el);
+  }
+},
+
+Sort__dualPivotQuicksort: function(a, left, right, compare) {
+  var sixth, index1, index5, index3, index2, index4, t1, el1, el2, el3, el4, el5, t0, less, great, k, ak, comp, t2, great0, less0, pivots_are_equal;
+  sixth = C.JSInt_methods.$tdiv(right - left + 1, 6);
+  index1 = left + sixth;
+  index5 = right - sixth;
+  index3 = C.JSInt_methods.$tdiv(left + right, 2);
+  index2 = index3 - sixth;
+  index4 = index3 + sixth;
+  t1 = J.getInterceptor$asx(a);
+  el1 = t1.$index(a, index1);
+  el2 = t1.$index(a, index2);
+  el3 = t1.$index(a, index3);
+  el4 = t1.$index(a, index4);
+  el5 = t1.$index(a, index5);
+  if (J.$gt$n(compare.call$2(el1, el2), 0)) {
+    t0 = el2;
+    el2 = el1;
+    el1 = t0;
+  }
+  if (J.$gt$n(compare.call$2(el4, el5), 0)) {
+    t0 = el5;
+    el5 = el4;
+    el4 = t0;
+  }
+  if (J.$gt$n(compare.call$2(el1, el3), 0)) {
+    t0 = el3;
+    el3 = el1;
+    el1 = t0;
+  }
+  if (J.$gt$n(compare.call$2(el2, el3), 0)) {
+    t0 = el3;
+    el3 = el2;
+    el2 = t0;
+  }
+  if (J.$gt$n(compare.call$2(el1, el4), 0)) {
+    t0 = el4;
+    el4 = el1;
+    el1 = t0;
+  }
+  if (J.$gt$n(compare.call$2(el3, el4), 0)) {
+    t0 = el4;
+    el4 = el3;
+    el3 = t0;
+  }
+  if (J.$gt$n(compare.call$2(el2, el5), 0)) {
+    t0 = el5;
+    el5 = el2;
+    el2 = t0;
+  }
+  if (J.$gt$n(compare.call$2(el2, el3), 0)) {
+    t0 = el3;
+    el3 = el2;
+    el2 = t0;
+  }
+  if (J.$gt$n(compare.call$2(el4, el5), 0)) {
+    t0 = el5;
+    el5 = el4;
+    el4 = t0;
+  }
+  t1.$indexSet(a, index1, el1);
+  t1.$indexSet(a, index3, el3);
+  t1.$indexSet(a, index5, el5);
+  t1.$indexSet(a, index2, t1.$index(a, left));
+  t1.$indexSet(a, index4, t1.$index(a, right));
+  less = left + 1;
+  great = right - 1;
+  if (J.$eq(compare.call$2(el2, el4), 0)) {
+    for (k = less; k <= great; ++k) {
+      ak = t1.$index(a, k);
+      comp = compare.call$2(ak, el2);
+      t2 = J.getInterceptor(comp);
+      if (t2.$eq(comp, 0))
+        continue;
+      if (t2.$lt(comp, 0)) {
+        if (k !== less) {
+          t1.$indexSet(a, k, t1.$index(a, less));
+          t1.$indexSet(a, less, ak);
+        }
+        ++less;
+      } else
+        for (; true;) {
+          comp = compare.call$2(t1.$index(a, great), el2);
+          t2 = J.getInterceptor$n(comp);
+          if (t2.$gt(comp, 0)) {
+            --great;
+            continue;
+          } else {
+            great0 = great - 1;
+            if (t2.$lt(comp, 0)) {
+              t1.$indexSet(a, k, t1.$index(a, less));
+              less0 = less + 1;
+              t1.$indexSet(a, less, t1.$index(a, great));
+              t1.$indexSet(a, great, ak);
+              great = great0;
+              less = less0;
+              break;
+            } else {
+              t1.$indexSet(a, k, t1.$index(a, great));
+              t1.$indexSet(a, great, ak);
+              great = great0;
+              break;
+            }
+          }
+        }
+    }
+    pivots_are_equal = true;
+  } else {
+    for (k = less; k <= great; ++k) {
+      ak = t1.$index(a, k);
+      if (J.$lt$n(compare.call$2(ak, el2), 0)) {
+        if (k !== less) {
+          t1.$indexSet(a, k, t1.$index(a, less));
+          t1.$indexSet(a, less, ak);
+        }
+        ++less;
+      } else if (J.$gt$n(compare.call$2(ak, el4), 0))
+        for (; true;)
+          if (J.$gt$n(compare.call$2(t1.$index(a, great), el4), 0)) {
+            --great;
+            if (great < k)
+              break;
+            continue;
+          } else {
+            great0 = great - 1;
+            if (J.$lt$n(compare.call$2(t1.$index(a, great), el2), 0)) {
+              t1.$indexSet(a, k, t1.$index(a, less));
+              less0 = less + 1;
+              t1.$indexSet(a, less, t1.$index(a, great));
+              t1.$indexSet(a, great, ak);
+              great = great0;
+              less = less0;
+            } else {
+              t1.$indexSet(a, k, t1.$index(a, great));
+              t1.$indexSet(a, great, ak);
+              great = great0;
+            }
+            break;
+          }
+    }
+    pivots_are_equal = false;
+  }
+  t2 = less - 1;
+  t1.$indexSet(a, left, t1.$index(a, t2));
+  t1.$indexSet(a, t2, el2);
+  t2 = great + 1;
+  t1.$indexSet(a, right, t1.$index(a, t2));
+  t1.$indexSet(a, t2, el4);
+  H.Sort__doSort(a, left, less - 2, compare);
+  H.Sort__doSort(a, great + 2, right, compare);
+  if (pivots_are_equal)
+    return;
+  if (less < index1 && great > index5) {
+    for (; J.$eq(compare.call$2(t1.$index(a, less), el2), 0);)
+      ++less;
+    for (; J.$eq(compare.call$2(t1.$index(a, great), el4), 0);)
+      --great;
+    for (k = less; k <= great; ++k) {
+      ak = t1.$index(a, k);
+      if (J.$eq(compare.call$2(ak, el2), 0)) {
+        if (k !== less) {
+          t1.$indexSet(a, k, t1.$index(a, less));
+          t1.$indexSet(a, less, ak);
+        }
+        ++less;
+      } else if (J.$eq(compare.call$2(ak, el4), 0))
+        for (; true;)
+          if (J.$eq(compare.call$2(t1.$index(a, great), el4), 0)) {
+            --great;
+            if (great < k)
+              break;
+            continue;
+          } else {
+            great0 = great - 1;
+            if (J.$lt$n(compare.call$2(t1.$index(a, great), el2), 0)) {
+              t1.$indexSet(a, k, t1.$index(a, less));
+              less0 = less + 1;
+              t1.$indexSet(a, less, t1.$index(a, great));
+              t1.$indexSet(a, great, ak);
+              great = great0;
+              less = less0;
+            } else {
+              t1.$indexSet(a, k, t1.$index(a, great));
+              t1.$indexSet(a, great, ak);
+              great = great0;
+            }
+            break;
+          }
+    }
+    H.Sort__doSort(a, less, great, compare);
+  } else
+    H.Sort__doSort(a, less, great, compare);
+},
+
 Symbol_getName: function(symbol) {
   return symbol.get$_name();
 },
@@ -2581,6 +3103,24 @@ ListIterable: {"": "IterableBase;",
       if ($length !== this.get$length(this))
         throw H.wrapException(P.ConcurrentModificationError$(this));
     }
+  },
+  toList$1$growable: function(_, growable) {
+    var result, i, t1;
+    if (growable) {
+      result = P.List_List(null, H.getRuntimeTypeArgument(this, "ListIterable", 0));
+      H.setRuntimeTypeInfo(result, [H.getRuntimeTypeArgument(this, "ListIterable", 0)]);
+      C.JSArray_methods.set$length(result, this.get$length(this));
+    } else {
+      result = P.List_List(this.get$length(this), H.getRuntimeTypeArgument(this, "ListIterable", 0));
+      H.setRuntimeTypeInfo(result, [H.getRuntimeTypeArgument(this, "ListIterable", 0)]);
+    }
+    for (i = 0; i < this.get$length(this); ++i) {
+      t1 = this.elementAt$1(this, i);
+      if (i >= result.length)
+        throw H.ioore(result, i);
+      result[i] = t1;
+    }
+    return result;
   },
   $asIterableBase: null,
   $isEfficientLength: true
@@ -4456,9 +4996,12 @@ _LinkedHashMap: {"": "Object;_collection$_length,_strings,_nums,_rest,_first,_la
     return this._collection$_length === 0;
   },
   get$keys: function() {
-    var t1 = new P.LinkedHashMapKeyIterable(this);
-    H.setRuntimeTypeInfo(t1, [H.getRuntimeTypeArgument(this, "_LinkedHashMap", 0)]);
-    return t1;
+    var $arguments, t1, t2;
+    $arguments = H.substitute(this.$as_LinkedHashMap, H.getRuntimeTypeInfo(this));
+    t1 = $arguments == null ? null : $arguments[0];
+    t2 = new P.LinkedHashMapKeyIterable(this);
+    t2.$builtinTypeInfo = [t1];
+    return t2;
   },
   get$values: function(_) {
     var t1 = new P.LinkedHashMapKeyIterable(this);
@@ -4556,6 +5099,17 @@ _LinkedHashMap: {"": "Object;_collection$_length,_strings,_nums,_rest,_first,_la
       cell = bucket.splice(index, 1)[0];
       this._unlinkCell$1(cell);
       return cell.get$_value();
+    }
+  },
+  clear$0: function(_) {
+    if (this._collection$_length > 0) {
+      this._last = null;
+      this._first = null;
+      this._rest = null;
+      this._nums = null;
+      this._strings = null;
+      this._collection$_length = 0;
+      this._modifications = this._modifications + 1 & 67108863;
     }
   },
   forEach$1: function(_, action) {
@@ -5124,6 +5678,29 @@ ListMixin: {"": "Object;",
     H.setRuntimeTypeInfo(t1, [H.getRuntimeTypeArgument(receiver, "ListMixin", 0)]);
     return t1;
   },
+  map$1: function(receiver, f) {
+    var t1 = new H.MappedListIterable(receiver, f);
+    H.setRuntimeTypeInfo(t1, [null, null]);
+    return t1;
+  },
+  toList$1$growable: function(receiver, growable) {
+    var result, i, t1;
+    if (growable) {
+      result = P.List_List(null, H.getRuntimeTypeArgument(receiver, "ListMixin", 0));
+      H.setRuntimeTypeInfo(result, [H.getRuntimeTypeArgument(receiver, "ListMixin", 0)]);
+      C.JSArray_methods.set$length(result, this.get$length(receiver));
+    } else {
+      result = P.List_List(this.get$length(receiver), H.getRuntimeTypeArgument(receiver, "ListMixin", 0));
+      H.setRuntimeTypeInfo(result, [H.getRuntimeTypeArgument(receiver, "ListMixin", 0)]);
+    }
+    for (i = 0; i < this.get$length(receiver); ++i) {
+      t1 = this.$index(receiver, i);
+      if (i >= result.length)
+        throw H.ioore(result, i);
+      result[i] = t1;
+    }
+    return result;
+  },
   toString$0: function(receiver) {
     var result, t1;
     t1 = $.get$_toStringVisiting();
@@ -5275,6 +5852,10 @@ _symbolToString: function(symbol) {
   return H.Symbol_getName(symbol);
 },
 
+Comparable_compare: function(a, b) {
+  return J.compareTo$1$ns(a, b);
+},
+
 Error_safeToString: function(object) {
   var buffer, t1, i, codeUnit, t2, charCodes;
   if (typeof object === "number" || typeof object === "boolean" || null == object)
@@ -5387,7 +5968,9 @@ NoSuchMethodError_toString_closure: {"": "Closure;box_0",
   $is_args2: true
 },
 
-Duration: {"": "Object;_duration",
+Comparable: {"": "Object;"},
+
+Duration: {"": "Object;_duration<",
   $lt: function(_, other) {
     return C.JSNumber_methods.$lt(this._duration, other.get$_duration());
   },
@@ -5408,6 +5991,9 @@ Duration: {"": "Object;_duration",
   },
   get$hashCode: function(_) {
     return this._duration & 0x1FFFFFFF;
+  },
+  compareTo$1: function(_, other) {
+    return C.JSNumber_methods.compareTo$1(this._duration, other.get$_duration());
   },
   toString$0: function(_) {
     var t1, t2, twoDigitMinutes, twoDigitSeconds, sixDigitUs;
@@ -5488,6 +6074,10 @@ RangeError: {"": "ArgumentError;message",
     return "RangeError: " + H.S(this.message);
   },
   static: {
+RangeError$: function(message) {
+  return new P.RangeError(message);
+},
+
 RangeError$value: function(value) {
   return new P.RangeError("value " + H.S(value));
 },
@@ -5575,6 +6165,17 @@ _ExceptionImplementation: {"": "Object;message",
       return "Exception";
     return "Exception: " + H.S(t1);
   }
+},
+
+FormatException: {"": "Object;message",
+  toString$0: function(_) {
+    return "FormatException: " + H.S(this.message);
+  },
+  static: {
+FormatException$: function(message) {
+  return new P.FormatException(message);
+}}
+
 },
 
 Expando: {"": "Object;name",
@@ -5740,7 +6341,7 @@ _wrapZone: function(callback) {
   return t1.bindUnaryCallback$2$runGuarded(callback, true);
 },
 
-HtmlElement: {"": "Element;", "%": "HTMLAppletElement|HTMLBRElement|HTMLBaseFontElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDirectoryElement|HTMLDivElement|HTMLFontElement|HTMLFrameElement|HTMLFrameSetElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLImageElement|HTMLLabelElement|HTMLLegendElement|HTMLMarqueeElement|HTMLMenuElement|HTMLModElement|HTMLOListElement|HTMLOptGroupElement|HTMLParagraphElement|HTMLPreElement|HTMLQuoteElement|HTMLScriptElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableCellElement|HTMLTableColElement|HTMLTableDataCellElement|HTMLTableHeaderCellElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement;HTMLElement"},
+HtmlElement: {"": "Element;", "%": "HTMLAppletElement|HTMLBRElement|HTMLBaseFontElement|HTMLCanvasElement|HTMLContentElement|HTMLDListElement|HTMLDataListElement|HTMLDetailsElement|HTMLDialogElement|HTMLDirectoryElement|HTMLDivElement|HTMLFontElement|HTMLFrameElement|HTMLFrameSetElement|HTMLHRElement|HTMLHeadElement|HTMLHeadingElement|HTMLHtmlElement|HTMLImageElement|HTMLLabelElement|HTMLLegendElement|HTMLMarqueeElement|HTMLMenuElement|HTMLModElement|HTMLOListElement|HTMLOptGroupElement|HTMLParagraphElement|HTMLPreElement|HTMLQuoteElement|HTMLScriptElement|HTMLShadowElement|HTMLSourceElement|HTMLSpanElement|HTMLStyleElement|HTMLTableCaptionElement|HTMLTableColElement|HTMLTitleElement|HTMLTrackElement|HTMLUListElement|HTMLUnknownElement;HTMLElement"},
 
 AnchorElement: {"": "HtmlElement;hostname=,href},port=,protocol=,target=",
   toString$0: function(receiver) {
@@ -5759,6 +6360,23 @@ ButtonElement: {"": "HtmlElement;name=,value=", "%": "HTMLButtonElement"},
 
 CharacterData: {"": "Node;length=", "%": "CDATASection|Comment|Text;CharacterData"},
 
+CssStyleDeclaration: {"": "Interceptor_CssStyleDeclarationBase;length=",
+  setProperty$3: function(receiver, propertyName, value, priority) {
+    var exception;
+    try {
+      if (priority == null)
+        priority = "";
+      receiver.setProperty(propertyName, value, priority);
+      if (!!receiver.setAttribute)
+        receiver.setAttribute(propertyName, value);
+    } catch (exception) {
+      H.unwrapException(exception);
+    }
+
+  },
+  "%": "CSS2Properties|CSSStyleDeclaration|MSStyleCSSProperties"
+},
+
 DomException: {"": "Interceptor;",
   toString$0: function(receiver) {
     return receiver.toString();
@@ -5766,9 +6384,14 @@ DomException: {"": "Interceptor;",
   "%": "DOMException"
 },
 
-Element: {"": "Node;",
+Element: {"": "Node;style=",
   get$attributes: function(receiver) {
     return new W._ElementAttributeMap(receiver);
+  },
+  get$client: function(receiver) {
+    var t1 = new P.Rectangle(receiver.clientLeft, receiver.clientTop, receiver.clientWidth, receiver.clientHeight);
+    H.setRuntimeTypeInfo(t1, [null]);
+    return t1;
   },
   toString$0: function(receiver) {
     return receiver.localName;
@@ -5935,7 +6558,14 @@ MidiOutput: {"": "MidiPort;",
 
 MidiPort: {"": "EventTarget;", "%": "MIDIInput;MIDIPort"},
 
-MouseEvent: {"": "UIEvent;", "%": "DragEvent|MSPointerEvent|MouseEvent|MouseScrollEvent|MouseWheelEvent|PointerEvent|WheelEvent"},
+MouseEvent: {"": "UIEvent;",
+  get$client: function(receiver) {
+    var t1 = new P.Point(receiver.clientX, receiver.clientY);
+    H.setRuntimeTypeInfo(t1, [null]);
+    return t1;
+  },
+  "%": "DragEvent|MSPointerEvent|MouseEvent|MouseScrollEvent|MouseWheelEvent|PointerEvent|WheelEvent"
+},
 
 Node: {"": "EventTarget;lastChild=,nodeType=",
   get$nodes: function(receiver) {
@@ -6003,6 +6633,8 @@ SelectElement: {"": "HtmlElement;length=,name=,value=", "%": "HTMLSelectElement"
 
 SpeechRecognitionError: {"": "Event;error=", "%": "SpeechRecognitionError"},
 
+TableCellElement: {"": "HtmlElement;", "%": "HTMLTableCellElement|HTMLTableDataCellElement|HTMLTableHeaderCellElement"},
+
 TableElement: {"": "HtmlElement;",
   get$rows: function(receiver) {
     var t1 = new W._WrappedList(receiver.rows);
@@ -6027,6 +6659,11 @@ TableElement: {"": "HtmlElement;",
 },
 
 TableRowElement: {"": "HtmlElement;",
+  get$cells: function(receiver) {
+    var t1 = new W._WrappedList(receiver.cells);
+    H.setRuntimeTypeInfo(t1, [W.TableCellElement]);
+    return t1;
+  },
   addCell$0: function(receiver) {
     return receiver.insertCell(-1);
   },
@@ -6198,6 +6835,17 @@ Console: {"": "Object;",
 "": "Console__safeConsole",
 }
 
+},
+
+Interceptor_CssStyleDeclarationBase: {"": "Interceptor+CssStyleDeclarationBase;"},
+
+CssStyleDeclarationBase: {"": "Object;",
+  set$background: function(receiver, value) {
+    this.setProperty$3(receiver, "background", value, "");
+  },
+  set$width: function(receiver, value) {
+    this.setProperty$3(receiver, "width", value, "");
+  }
 },
 
 Element_Element$html_closure: {"": "Closure;",
@@ -6782,6 +7430,45 @@ _JenkinsSmiHash_finish0: function(hash) {
   return 536870911 & hash + ((16383 & hash) << 15 >>> 0);
 },
 
+max: function(a, b) {
+  if (typeof b !== "number")
+    throw H.wrapException(new P.ArgumentError(b));
+  if (a > b)
+    return a;
+  return b;
+},
+
+Point: {"": "Object;x,y",
+  toString$0: function(_) {
+    return "Point(" + H.S(this.x) + ", " + H.S(this.y) + ")";
+  },
+  $eq: function(_, other) {
+    var t1, t2;
+    if (other == null)
+      return false;
+    t1 = J.getInterceptor(other);
+    if (typeof other !== "object" || other === null || !t1.$isPoint)
+      return false;
+    t1 = this.x;
+    t2 = other.x;
+    if (t1 == null ? t2 == null : t1 === t2) {
+      t1 = this.y;
+      t2 = other.y;
+      t2 = t1 == null ? t2 == null : t1 === t2;
+      t1 = t2;
+    } else
+      t1 = false;
+    return t1;
+  },
+  get$hashCode: function(_) {
+    var t1, t2;
+    t1 = J.get$hashCode$(this.x);
+    t2 = J.get$hashCode$(this.y);
+    return P._JenkinsSmiHash_finish0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(0, t1), t2));
+  },
+  $isPoint: true
+},
+
 _RectangleBase: {"": "Object;",
   toString$0: function(_) {
     return "Rectangle (" + H.S(this.get$left(this)) + ", " + H.S(this.get$top(this)) + ") " + H.S(this.get$width(this)) + " x " + H.S(this.get$height(this));
@@ -6822,6 +7509,8 @@ _RectangleBase: {"": "Object;",
     return P._JenkinsSmiHash_finish0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(0, t1), t2), t3), t4));
   }
 },
+
+Rectangle: {"": "_RectangleBase;left>,top>,width>,height>", $isRectangle: true, $asRectangle: null, $as_RectangleBase: null},
 
 MutableRectangle: {"": "_RectangleBase;left>,top>,width>,height>", $as_RectangleBase: null, $asRectangle: null, $isRectangle: true}}],
 ["dart.typed_data", "dart:typed_data", , P, {
@@ -7185,10 +7874,23 @@ Uint64List: {"": "TypedData;", $isList: true,
 }}],
 ["", "tabletest.dart", , A, {
 main: function() {
-  var rltable, i;
+  var rltable, user, i, t1, t2, mp, $arguments;
   rltable = N.RLTable$("#table_id");
-  for (i = 0; i < 500; ++i)
-    rltable.addRowAsMap$1(H.fillLiteralMap(["id", "" + i, "text", "Dies ist ein text " + i, "qty", "43." + i, "prc", "" + i + "." + i], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
+  user = ["Reudi", "Emil", "Felix", "Anita", "Ex*"];
+  for (i = 0; i < 100; ++i) {
+    t1 = "Dies ist ein text " + i;
+    t2 = C.JSInt_methods.$mod(i, 5);
+    if (t2 < 0 || t2 >= 5)
+      throw H.ioore(user, t2);
+    mp = H.fillLiteralMap(["id", i, "text", t1, "Qty", i * 10, "Price", i / 0.34, "User", user[t2], "NotSoShort", ".", "Langtext", "blubb blubb blubb blubb blubb blubb blubb blubb"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null));
+    if (i === 1) {
+      t1 = mp.get$keys();
+      $arguments = H.substitute(t1.$asIterableBase, H.getRuntimeTypeInfo(t1));
+      t2 = $arguments == null ? null : $arguments[0];
+      rltable.setHeader$1(new N.ListRowMapAdapter(P.List_List$from(t1, false, t2)));
+    }
+    rltable.addRowAsMap$1(mp);
+  }
 }},
 1],
 ]);
@@ -7197,34 +7899,56 @@ $$ = null;
 
 // Static function getters
 init.globalFunctions.IsolateNatives__processWorkerMessage$closure = H.IsolateNatives__processWorkerMessage$closure = new H.Closure$2(H.IsolateNatives__processWorkerMessage, "IsolateNatives__processWorkerMessage$closure");
+init.globalFunctions.Primitives__throwFormatException$closure = H.Primitives__throwFormatException$closure = new H.Closure$1(H.Primitives__throwFormatException, "Primitives__throwFormatException$closure");
 init.globalFunctions.toStringWrapper$closure = H.toStringWrapper$closure = new H.Closure$0(H.toStringWrapper, "toStringWrapper$closure");
 init.globalFunctions.invokeClosure$closure = H.invokeClosure$closure = new H.Closure$7(H.invokeClosure, "invokeClosure$closure");
 init.globalFunctions._asyncRunCallback$closure = P._asyncRunCallback$closure = new H.Closure$0(P._asyncRunCallback, "_asyncRunCallback$closure");
-init.globalFunctions._nullDataHandler$closure = P._nullDataHandler$closure = new P.Closure$1(P._nullDataHandler, "_nullDataHandler$closure");
+init.globalFunctions._nullDataHandler$closure = P._nullDataHandler$closure = new H.Closure$1(P._nullDataHandler, "_nullDataHandler$closure");
 init.globalFunctions._nullErrorHandler$closure = P._nullErrorHandler$closure = new P.Closure$20(P._nullErrorHandler, "_nullErrorHandler$closure");
 init.globalFunctions._nullDoneHandler$closure = P._nullDoneHandler$closure = new H.Closure$0(P._nullDoneHandler, "_nullDoneHandler$closure");
 init.globalFunctions._defaultEquals$closure = P._defaultEquals$closure = new H.Closure$2(P._defaultEquals, "_defaultEquals$closure");
-init.globalFunctions._defaultHashCode$closure = P._defaultHashCode$closure = new P.Closure$1(P._defaultHashCode, "_defaultHashCode$closure");
+init.globalFunctions._defaultHashCode$closure = P._defaultHashCode$closure = new H.Closure$1(P._defaultHashCode, "_defaultHashCode$closure");
+init.globalFunctions.Comparable_compare$closure = P.Comparable_compare$closure = new H.Closure$2(P.Comparable_compare, "Comparable_compare$closure");
 init.globalFunctions.identical$closure = P.identical$closure = new H.Closure$2(P.identical, "identical$closure");
-init.globalFunctions.identityHashCode$closure = P.identityHashCode$closure = new P.Closure$1(P.identityHashCode, "identityHashCode$closure");
+init.globalFunctions.identityHashCode$closure = P.identityHashCode$closure = new H.Closure$1(P.identityHashCode, "identityHashCode$closure");
 init.globalFunctions._Html5NodeValidator__standardAttributeValidator$closure = W._Html5NodeValidator__standardAttributeValidator$closure = new W.Closure$4(W._Html5NodeValidator__standardAttributeValidator, "_Html5NodeValidator__standardAttributeValidator$closure");
 init.globalFunctions._Html5NodeValidator__uriAttributeValidator$closure = W._Html5NodeValidator__uriAttributeValidator$closure = new W.Closure$4(W._Html5NodeValidator__uriAttributeValidator, "_Html5NodeValidator__uriAttributeValidator$closure");
 init.globalFunctions.main$closure = A.main$closure = new H.Closure$0(A.main, "main$closure");
 // Runtime type support
 J.JSInt.$isint = true;
+J.JSInt.$isComparable = true;
+J.JSInt.$asComparable = [J.JSNumber];
+J.JSInt.$isComparable = true;
+J.JSInt.$asComparable = [J.JSNumber];
+J.JSInt.$isComparable = true;
+J.JSInt.$asComparable = [J.JSNumber];
 J.JSInt.$isObject = true;
+J.JSDouble.$isComparable = true;
+J.JSDouble.$asComparable = [J.JSNumber];
+J.JSDouble.$isComparable = true;
+J.JSDouble.$asComparable = [J.JSNumber];
 J.JSDouble.$isObject = true;
 W.Node.$isNode = true;
 W.Node.$isObject = true;
 J.JSString.$isString = true;
+J.JSString.$isComparable = true;
+J.JSString.$asComparable = [J.JSString];
 J.JSString.$isObject = true;
+J.JSNumber.$isComparable = true;
+J.JSNumber.$asComparable = [J.JSNumber];
 J.JSNumber.$isObject = true;
+P.Duration.$isComparable = true;
+P.Duration.$asComparable = [P.Duration];
 P.Duration.$isObject = true;
-W.MouseEvent.$isObject = true;
-W.KeyboardEvent.$isObject = true;
+W.TableCellElement.$isElement = true;
+W.TableCellElement.$isNode = true;
+W.TableCellElement.$isObject = true;
 W.TableRowElement.$isElement = true;
 W.TableRowElement.$isNode = true;
 W.TableRowElement.$isObject = true;
+W.Event.$isObject = true;
+W.MouseEvent.$isObject = true;
+W.KeyboardEvent.$isObject = true;
 W.NodeValidator.$isObject = true;
 P.ReceivePort.$isObject = true;
 H._IsolateEvent.$isObject = true;
@@ -7239,6 +7963,8 @@ J.JSBool.$isbool = true;
 J.JSBool.$isObject = true;
 P.Function.$isFunction = true;
 P.Function.$isObject = true;
+P.Comparable.$isComparable = true;
+P.Comparable.$isObject = true;
 W.Element.$isElement = true;
 W.Element.$isNode = true;
 W.Element.$isObject = true;
@@ -7304,6 +8030,17 @@ J.getInterceptor$n = function(receiver) {
     return J.UnknownJavaScriptObject.prototype;
   return receiver;
 };
+J.getInterceptor$ns = function(receiver) {
+  if (typeof receiver == "number")
+    return J.JSNumber.prototype;
+  if (typeof receiver == "string")
+    return J.JSString.prototype;
+  if (receiver == null)
+    return receiver;
+  if (!(receiver instanceof P.Object))
+    return J.UnknownJavaScriptObject.prototype;
+  return receiver;
+};
 J.getInterceptor$s = function(receiver) {
   if (typeof receiver == "string")
     return J.JSString.prototype;
@@ -7327,6 +8064,10 @@ C.C__RootZone = new P._RootZone();
 C.Duration_0 = new P.Duration(0);
 C.EventStreamProvider_click = new W.EventStreamProvider("click");
 C.EventStreamProvider_keydown = new W.EventStreamProvider("keydown");
+C.EventStreamProvider_mouseenter = new W.EventStreamProvider("mouseenter");
+C.EventStreamProvider_mouseleave = new W.EventStreamProvider("mouseleave");
+C.EventStreamProvider_resize = new W.EventStreamProvider("resize");
+C.EventStreamProvider_scroll = new W.EventStreamProvider("scroll");
 C.JSArray_methods = J.JSArray.prototype;
 C.JSInt_methods = J.JSInt.prototype;
 C.JSNumber_methods = J.JSNumber.prototype;
@@ -7463,7 +8204,7 @@ C.Type_oqh = H.createRuntimeType('Uint64List');
 C.Type_qxd = H.createRuntimeType('Int64List');
 C.UnknownJavaScriptObject_methods = J.UnknownJavaScriptObject.prototype;
 C.Window_methods = W.Window.prototype;
-$.RLTable_selectedStyle = "border:2px solid black; background-color:#00c0Ff;";
+$.RLTable_selectedStyle = "background-color:#00c0ff;";
 $.RLTable_caretStyleNoBG = "outline: 1px dashed black;";
 $.RLTable_caretStyle = "outline: 1px dashed black; background-color:rgba(100%,100%,100%,0.7);";
 $.RLTable_defaultStyle = "";
@@ -7499,6 +8240,11 @@ J.$ge$n = function(receiver, a0) {
     return receiver >= a0;
   return J.getInterceptor$n(receiver).$ge(receiver, a0);
 };
+J.$gt$n = function(receiver, a0) {
+  if (typeof receiver == "number" && typeof a0 == "number")
+    return receiver > a0;
+  return J.getInterceptor$n(receiver).$gt(receiver, a0);
+};
 J.$index$asx = function(receiver, a0) {
   if (receiver.constructor == Array || typeof receiver == "string" || H.isJsIndexable(receiver, receiver[init.dispatchPropertyName]))
     if (a0 >>> 0 === a0 && a0 < receiver.length)
@@ -7510,6 +8256,11 @@ J.$indexSet$ax = function(receiver, a0, a1) {
     return receiver[a0] = a1;
   return J.getInterceptor$ax(receiver).$indexSet(receiver, a0, a1);
 };
+J.$lt$n = function(receiver, a0) {
+  if (typeof receiver == "number" && typeof a0 == "number")
+    return receiver < a0;
+  return J.getInterceptor$n(receiver).$lt(receiver, a0);
+};
 J.addCell$0$x = function(receiver) {
   return J.getInterceptor$x(receiver).addCell$0(receiver);
 };
@@ -7518,6 +8269,9 @@ J.addEventListener$3$x = function(receiver, a0, a1, a2) {
 };
 J.addRow$0$x = function(receiver) {
   return J.getInterceptor$x(receiver).addRow$0(receiver);
+};
+J.compareTo$1$ns = function(receiver, a0) {
+  return J.getInterceptor$ns(receiver).compareTo$1(receiver, a0);
 };
 J.createFragment$2$treeSanitizer$x = function(receiver, a0, a1) {
   return J.getInterceptor$x(receiver).createFragment$2$treeSanitizer(receiver, a0, a1);
@@ -7533,6 +8287,12 @@ J.forEach$1$ax = function(receiver, a0) {
 };
 J.get$attributes$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$attributes(receiver);
+};
+J.get$cells$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$cells(receiver);
+};
+J.get$client$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$client(receiver);
 };
 J.get$error$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$error(receiver);
@@ -7564,6 +8324,9 @@ J.get$nodes$x = function(receiver) {
 J.get$rows$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$rows(receiver);
 };
+J.get$style$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$style(receiver);
+};
 J.get$target$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$target(receiver);
 };
@@ -7572,6 +8335,9 @@ J.get$top$x = function(receiver) {
 };
 J.get$value$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$value(receiver);
+};
+J.map$1$ax = function(receiver, a0) {
+  return J.getInterceptor$ax(receiver).map$1(receiver, a0);
 };
 J.remove$0$ax = function(receiver) {
   return J.getInterceptor$ax(receiver).remove$0(receiver);
@@ -7582,14 +8348,23 @@ J.removeEventListener$3$x = function(receiver, a0, a1, a2) {
 J.send$1$x = function(receiver, a0) {
   return J.getInterceptor$x(receiver).send$1(receiver, a0);
 };
+J.set$background$x = function(receiver, value) {
+  return J.getInterceptor$x(receiver).set$background(receiver, value);
+};
 J.set$href$x = function(receiver, value) {
   return J.getInterceptor$x(receiver).set$href(receiver, value);
+};
+J.set$width$x = function(receiver, value) {
+  return J.getInterceptor$x(receiver).set$width(receiver, value);
 };
 J.setInnerHtml$1$x = function(receiver, a0) {
   return J.getInterceptor$x(receiver).setInnerHtml$1(receiver, a0);
 };
 J.toList$0$ax = function(receiver) {
   return J.getInterceptor$ax(receiver).toList$0(receiver);
+};
+J.toList$1$growable$ax = function(receiver, a0) {
+  return J.getInterceptor$ax(receiver).toList$1$growable(receiver, a0);
 };
 J.toLowerCase$0$s = function(receiver) {
   return J.getInterceptor$s(receiver).toLowerCase$0(receiver);
@@ -8235,6 +9010,18 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   CssFontFaceLoadEvent.prototype = $desc;
+  function CssStyleDeclaration() {
+  }
+  CssStyleDeclaration.builtin$cls = "CssStyleDeclaration";
+  if (!"name" in CssStyleDeclaration)
+    CssStyleDeclaration.name = "CssStyleDeclaration";
+  $desc = $collectedClasses.CssStyleDeclaration;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  CssStyleDeclaration.prototype = $desc;
+  CssStyleDeclaration.prototype.get$length = function(receiver) {
+    return receiver.length;
+  };
   function CustomEvent() {
   }
   CustomEvent.builtin$cls = "CustomEvent";
@@ -8370,6 +9157,9 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   Element.prototype = $desc;
+  Element.prototype.get$style = function(receiver) {
+    return receiver.style;
+  };
   function EmbedElement() {
   }
   EmbedElement.builtin$cls = "EmbedElement";
@@ -9660,6 +10450,24 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   AnimatedLength.prototype = $desc;
+  function AnimatedLengthList() {
+  }
+  AnimatedLengthList.builtin$cls = "AnimatedLengthList";
+  if (!"name" in AnimatedLengthList)
+    AnimatedLengthList.name = "AnimatedLengthList";
+  $desc = $collectedClasses.AnimatedLengthList;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  AnimatedLengthList.prototype = $desc;
+  function AnimatedNumber() {
+  }
+  AnimatedNumber.builtin$cls = "AnimatedNumber";
+  if (!"name" in AnimatedNumber)
+    AnimatedNumber.name = "AnimatedNumber";
+  $desc = $collectedClasses.AnimatedNumber;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  AnimatedNumber.prototype = $desc;
   function AnimatedNumberList() {
   }
   AnimatedNumberList.builtin$cls = "AnimatedNumberList";
@@ -10569,16 +11377,20 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   Uint8List.prototype = $desc;
-  function RLTable(selectedRowId, table, rowIdCnt, rowRenderer, cellRenderer, renderStyle, pane, selectedRows, singleSel) {
+  function RLTable(selectedRowId, table, tableHeader, rowIdCnt, headerRenderer, rowRenderer, renderStyle, pane, headerPane, selectedRows, rows, singleSel, upDown) {
     this.selectedRowId = selectedRowId;
     this.table = table;
+    this.tableHeader = tableHeader;
     this.rowIdCnt = rowIdCnt;
+    this.headerRenderer = headerRenderer;
     this.rowRenderer = rowRenderer;
-    this.cellRenderer = cellRenderer;
     this.renderStyle = renderStyle;
     this.pane = pane;
+    this.headerPane = headerPane;
     this.selectedRows = selectedRows;
+    this.rows = rows;
     this.singleSel = singleSel;
+    this.upDown = upDown;
   }
   RLTable.builtin$cls = "RLTable";
   if (!"name" in RLTable)
@@ -10607,6 +11419,36 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   RLTable_closure0.prototype = $desc;
+  function RLTable_closure1(this_2) {
+    this.this_2 = this_2;
+  }
+  RLTable_closure1.builtin$cls = "RLTable_closure1";
+  if (!"name" in RLTable_closure1)
+    RLTable_closure1.name = "RLTable_closure1";
+  $desc = $collectedClasses.RLTable_closure1;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  RLTable_closure1.prototype = $desc;
+  function RLTable_closure2(this_3) {
+    this.this_3 = this_3;
+  }
+  RLTable_closure2.builtin$cls = "RLTable_closure2";
+  if (!"name" in RLTable_closure2)
+    RLTable_closure2.name = "RLTable_closure2";
+  $desc = $collectedClasses.RLTable_closure2;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  RLTable_closure2.prototype = $desc;
+  function RLTable_closure3(this_4) {
+    this.this_4 = this_4;
+  }
+  RLTable_closure3.builtin$cls = "RLTable_closure3";
+  if (!"name" in RLTable_closure3)
+    RLTable_closure3.name = "RLTable_closure3";
+  $desc = $collectedClasses.RLTable_closure3;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  RLTable_closure3.prototype = $desc;
   function RLTable_clearSelection_closure(this_0) {
     this.this_0 = this_0;
   }
@@ -10617,6 +11459,58 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   RLTable_clearSelection_closure.prototype = $desc;
+  function RLTable_adjustHeaderWidth_closure(box_0, bd_1, off_2) {
+    this.box_0 = box_0;
+    this.bd_1 = bd_1;
+    this.off_2 = off_2;
+  }
+  RLTable_adjustHeaderWidth_closure.builtin$cls = "RLTable_adjustHeaderWidth_closure";
+  if (!"name" in RLTable_adjustHeaderWidth_closure)
+    RLTable_adjustHeaderWidth_closure.name = "RLTable_adjustHeaderWidth_closure";
+  $desc = $collectedClasses.RLTable_adjustHeaderWidth_closure;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  RLTable_adjustHeaderWidth_closure.prototype = $desc;
+  function RLTable_sort_closure(this_0) {
+    this.this_0 = this_0;
+  }
+  RLTable_sort_closure.builtin$cls = "RLTable_sort_closure";
+  if (!"name" in RLTable_sort_closure)
+    RLTable_sort_closure.name = "RLTable_sort_closure";
+  $desc = $collectedClasses.RLTable_sort_closure;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  RLTable_sort_closure.prototype = $desc;
+  function RLTable_sort_closure0(field_1, up_2) {
+    this.field_1 = field_1;
+    this.up_2 = up_2;
+  }
+  RLTable_sort_closure0.builtin$cls = "RLTable_sort_closure0";
+  if (!"name" in RLTable_sort_closure0)
+    RLTable_sort_closure0.name = "RLTable_sort_closure0";
+  $desc = $collectedClasses.RLTable_sort_closure0;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  RLTable_sort_closure0.prototype = $desc;
+  function RLTable_sort_closure1() {
+  }
+  RLTable_sort_closure1.builtin$cls = "RLTable_sort_closure1";
+  if (!"name" in RLTable_sort_closure1)
+    RLTable_sort_closure1.name = "RLTable_sort_closure1";
+  $desc = $collectedClasses.RLTable_sort_closure1;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  RLTable_sort_closure1.prototype = $desc;
+  function RLTable_sort_closure2(this_3) {
+    this.this_3 = this_3;
+  }
+  RLTable_sort_closure2.builtin$cls = "RLTable_sort_closure2";
+  if (!"name" in RLTable_sort_closure2)
+    RLTable_sort_closure2.name = "RLTable_sort_closure2";
+  $desc = $collectedClasses.RLTable_sort_closure2;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  RLTable_sort_closure2.prototype = $desc;
   function RLTableRenderSpec() {
   }
   RLTableRenderSpec.builtin$cls = "RLTableRenderSpec";
@@ -10645,6 +11539,16 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   RLTableRowData.prototype = $desc;
+  function ListRowMapAdapter(data) {
+    this.data = data;
+  }
+  ListRowMapAdapter.builtin$cls = "ListRowMapAdapter";
+  if (!"name" in ListRowMapAdapter)
+    ListRowMapAdapter.name = "ListRowMapAdapter";
+  $desc = $collectedClasses.ListRowMapAdapter;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  ListRowMapAdapter.prototype = $desc;
   function RowMapAdapter(data, rowId) {
     this.data = data;
     this.rowId = rowId;
@@ -10665,6 +11569,53 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   RLValueRenderer.prototype = $desc;
+  function RLTableHeaderRowRenderer(headerBG, headerBGHover) {
+    this.headerBG = headerBG;
+    this.headerBGHover = headerBGHover;
+  }
+  RLTableHeaderRowRenderer.builtin$cls = "RLTableHeaderRowRenderer";
+  if (!"name" in RLTableHeaderRowRenderer)
+    RLTableHeaderRowRenderer.name = "RLTableHeaderRowRenderer";
+  $desc = $collectedClasses.RLTableHeaderRowRenderer;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  RLTableHeaderRowRenderer.prototype = $desc;
+  function RLTableHeaderRowRenderer_renderRow_closure(this_0, rowId_1, target_2, row_3, style_4) {
+    this.this_0 = this_0;
+    this.rowId_1 = rowId_1;
+    this.target_2 = target_2;
+    this.row_3 = row_3;
+    this.style_4 = style_4;
+  }
+  RLTableHeaderRowRenderer_renderRow_closure.builtin$cls = "RLTableHeaderRowRenderer_renderRow_closure";
+  if (!"name" in RLTableHeaderRowRenderer_renderRow_closure)
+    RLTableHeaderRowRenderer_renderRow_closure.name = "RLTableHeaderRowRenderer_renderRow_closure";
+  $desc = $collectedClasses.RLTableHeaderRowRenderer_renderRow_closure;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  RLTableHeaderRowRenderer_renderRow_closure.prototype = $desc;
+  function RLTableHeaderRowRenderer_renderRow__closure(this_5, cell_6) {
+    this.this_5 = this_5;
+    this.cell_6 = cell_6;
+  }
+  RLTableHeaderRowRenderer_renderRow__closure.builtin$cls = "RLTableHeaderRowRenderer_renderRow__closure";
+  if (!"name" in RLTableHeaderRowRenderer_renderRow__closure)
+    RLTableHeaderRowRenderer_renderRow__closure.name = "RLTableHeaderRowRenderer_renderRow__closure";
+  $desc = $collectedClasses.RLTableHeaderRowRenderer_renderRow__closure;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  RLTableHeaderRowRenderer_renderRow__closure.prototype = $desc;
+  function RLTableHeaderRowRenderer_renderRow__closure0(this_7, cell_8) {
+    this.this_7 = this_7;
+    this.cell_8 = cell_8;
+  }
+  RLTableHeaderRowRenderer_renderRow__closure0.builtin$cls = "RLTableHeaderRowRenderer_renderRow__closure0";
+  if (!"name" in RLTableHeaderRowRenderer_renderRow__closure0)
+    RLTableHeaderRowRenderer_renderRow__closure0.name = "RLTableHeaderRowRenderer_renderRow__closure0";
+  $desc = $collectedClasses.RLTableHeaderRowRenderer_renderRow__closure0;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  RLTableHeaderRowRenderer_renderRow__closure0.prototype = $desc;
   function RLTableRowRenderer() {
   }
   RLTableRowRenderer.builtin$cls = "RLTableRowRenderer";
@@ -12452,6 +13403,15 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   NoSuchMethodError_toString_closure.prototype = $desc;
+  function Comparable() {
+  }
+  Comparable.builtin$cls = "Comparable";
+  if (!"name" in Comparable)
+    Comparable.name = "Comparable";
+  $desc = $collectedClasses.Comparable;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  Comparable.prototype = $desc;
   function Duration(_duration) {
     this._duration = _duration;
   }
@@ -12462,6 +13422,9 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   Duration.prototype = $desc;
+  Duration.prototype.get$_duration = function() {
+    return this._duration;
+  };
   function Duration_toString_sixDigits() {
   }
   Duration_toString_sixDigits.builtin$cls = "Duration_toString_sixDigits";
@@ -12587,6 +13550,16 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   _ExceptionImplementation.prototype = $desc;
+  function FormatException(message) {
+    this.message = message;
+  }
+  FormatException.builtin$cls = "FormatException";
+  if (!"name" in FormatException)
+    FormatException.name = "FormatException";
+  $desc = $collectedClasses.FormatException;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  FormatException.prototype = $desc;
   function Expando(name) {
     this.name = name;
   }
@@ -12684,6 +13657,24 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   BoundClosure$i1.prototype = $desc;
+  function Interceptor_CssStyleDeclarationBase() {
+  }
+  Interceptor_CssStyleDeclarationBase.builtin$cls = "Interceptor_CssStyleDeclarationBase";
+  if (!"name" in Interceptor_CssStyleDeclarationBase)
+    Interceptor_CssStyleDeclarationBase.name = "Interceptor_CssStyleDeclarationBase";
+  $desc = $collectedClasses.Interceptor_CssStyleDeclarationBase;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  Interceptor_CssStyleDeclarationBase.prototype = $desc;
+  function CssStyleDeclarationBase() {
+  }
+  CssStyleDeclarationBase.builtin$cls = "CssStyleDeclarationBase";
+  if (!"name" in CssStyleDeclarationBase)
+    CssStyleDeclarationBase.name = "CssStyleDeclarationBase";
+  $desc = $collectedClasses.CssStyleDeclarationBase;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  CssStyleDeclarationBase.prototype = $desc;
   function Element_Element$html_closure() {
   }
   Element_Element$html_closure.builtin$cls = "Element_Element$html_closure";
@@ -13048,6 +14039,17 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   ReceivePort.prototype = $desc;
+  function Point(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+  Point.builtin$cls = "Point";
+  if (!"name" in Point)
+    Point.name = "Point";
+  $desc = $collectedClasses.Point;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  Point.prototype = $desc;
   function _RectangleBase() {
   }
   _RectangleBase.builtin$cls = "_RectangleBase";
@@ -13057,6 +14059,31 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   _RectangleBase.prototype = $desc;
+  function Rectangle(left, top, width, height) {
+    this.left = left;
+    this.top = top;
+    this.width = width;
+    this.height = height;
+  }
+  Rectangle.builtin$cls = "Rectangle";
+  if (!"name" in Rectangle)
+    Rectangle.name = "Rectangle";
+  $desc = $collectedClasses.Rectangle;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  Rectangle.prototype = $desc;
+  Rectangle.prototype.get$left = function(receiver) {
+    return this.left;
+  };
+  Rectangle.prototype.get$top = function(receiver) {
+    return this.top;
+  };
+  Rectangle.prototype.get$width = function(receiver) {
+    return this.width;
+  };
+  Rectangle.prototype.get$height = function(receiver) {
+    return this.height;
+  };
   function MutableRectangle(left, top, width, height) {
     this.left = left;
     this.top = top;
@@ -13271,6 +14298,15 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   Closure$2.prototype = $desc;
+  function Closure$1(call$1, $name) {
+    this.call$1 = call$1;
+    this.$name = $name;
+  }
+  Closure$1.builtin$cls = "Closure$1";
+  $desc = $collectedClasses.Closure$1;
+  if ($desc instanceof Array)
+    $desc = $desc[1];
+  Closure$1.prototype = $desc;
   function Closure$0(call$0, $name) {
     this.call$0 = call$0;
     this.$name = $name;
@@ -13289,15 +14325,6 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   Closure$7.prototype = $desc;
-  function Closure$1(call$1, $name) {
-    this.call$1 = call$1;
-    this.$name = $name;
-  }
-  Closure$1.builtin$cls = "Closure$1";
-  $desc = $collectedClasses.Closure$1;
-  if ($desc instanceof Array)
-    $desc = $desc[1];
-  Closure$1.prototype = $desc;
   function Closure$20(call$2, $name) {
     this.call$2 = call$2;
     this.$name = $name;
@@ -13316,5 +14343,5 @@ function dart_precompiled($collectedClasses) {
   if ($desc instanceof Array)
     $desc = $desc[1];
   Closure$4.prototype = $desc;
-  return [HtmlElement, AnchorElement, AnimationEvent, AreaElement, AudioElement, AutocompleteErrorEvent, BRElement, BaseElement, BeforeLoadEvent, BeforeUnloadEvent, Blob, BodyElement, ButtonElement, CDataSection, CanvasElement, CharacterData, CloseEvent, Comment, CompositionEvent, ContentElement, CssFontFaceLoadEvent, CustomEvent, DListElement, DataListElement, DetailsElement, DeviceMotionEvent, DeviceOrientationEvent, DialogElement, DivElement, Document, DocumentFragment, DocumentType, DomError, DomException, DomImplementation, Element, EmbedElement, ErrorEvent, Event, EventTarget, FieldSetElement, File, FileError, FocusEvent, FormElement, HRElement, HashChangeEvent, HeadElement, HeadingElement, HtmlCollection, HtmlDocument, HtmlFormControlsCollection, HtmlHtmlElement, HtmlOptionsCollection, IFrameElement, ImageElement, InputElement, KeyboardEvent, KeygenElement, LIElement, LabelElement, LegendElement, LinkElement, Location, MapElement, MediaElement, MediaError, MediaKeyError, MediaKeyEvent, MediaKeyMessageEvent, MediaKeyNeededEvent, MediaStream, MediaStreamEvent, MediaStreamTrackEvent, MenuElement, MessageEvent, MetaElement, MeterElement, MidiConnectionEvent, MidiInput, MidiMessageEvent, MidiOutput, MidiPort, ModElement, MouseEvent, Navigator, NavigatorUserMediaError, Node, NodeList, OListElement, ObjectElement, OptGroupElement, OptionElement, OutputElement, OverflowEvent, PageTransitionEvent, ParagraphElement, ParamElement, PopStateEvent, PositionError, PreElement, ProcessingInstruction, ProgressElement, ProgressEvent, QuoteElement, Range, ResourceProgressEvent, RtcDataChannelEvent, RtcDtmfToneChangeEvent, RtcIceCandidateEvent, ScriptElement0, SecurityPolicyViolationEvent, SelectElement, ShadowElement, ShadowRoot, SourceElement, SpanElement, SpeechInputEvent, SpeechRecognitionError, SpeechRecognitionEvent, SpeechSynthesisEvent, StorageEvent, StyleElement, TableCaptionElement, TableCellElement, TableColElement, TableElement, TableRowElement, TableSectionElement, TemplateElement, Text, TextAreaElement, TextEvent, TitleElement, TouchEvent, TrackElement, TrackEvent, TransitionEvent, UIEvent, UListElement, UnknownElement, VideoElement, WheelEvent, Window, _Attr, _ClientRect, _Entity, _HTMLAppletElement, _HTMLBaseFontElement, _HTMLDirectoryElement, _HTMLFontElement, _HTMLFrameElement, _HTMLFrameSetElement, _HTMLMarqueeElement, _MutationEvent, _NamedNodeMap, _Notation, _XMLHttpRequestProgressEvent, VersionChangeEvent, AElement, AltGlyphElement, AnimateElement, AnimateMotionElement, AnimateTransformElement, AnimatedLength, AnimatedNumberList, AnimatedString, AnimationElement, CircleElement, ClipPathElement, DefsElement, DescElement, EllipseElement, FEBlendElement, FEColorMatrixElement, FEComponentTransferElement, FECompositeElement, FEConvolveMatrixElement, FEDiffuseLightingElement, FEDisplacementMapElement, FEDistantLightElement, FEFloodElement, FEFuncAElement, FEFuncBElement, FEFuncGElement, FEFuncRElement, FEGaussianBlurElement, FEImageElement, FEMergeElement, FEMergeNodeElement, FEMorphologyElement, FEOffsetElement, FEPointLightElement, FESpecularLightingElement, FESpotLightElement, FETileElement, FETurbulenceElement, FilterElement, ForeignObjectElement, GElement, GraphicsElement, ImageElement0, LineElement, LinearGradientElement, MarkerElement, MaskElement, MetadataElement, PathElement, PatternElement, PolygonElement, PolylineElement, RadialGradientElement, RectElement, ScriptElement, SetElement, StopElement, StyleElement0, SvgDocument, SvgElement, SvgSvgElement, SwitchElement, SymbolElement, TSpanElement, TextContentElement, TextElement, TextPathElement, TextPositioningElement, TitleElement0, UseElement, ViewElement, ZoomEvent, _GradientElement, _SVGAltGlyphDefElement, _SVGAltGlyphItemElement, _SVGAnimateColorElement, _SVGComponentTransferFunctionElement, _SVGCursorElement, _SVGFEDropShadowElement, _SVGFontElement, _SVGFontFaceElement, _SVGFontFaceFormatElement, _SVGFontFaceNameElement, _SVGFontFaceSrcElement, _SVGFontFaceUriElement, _SVGGlyphElement, _SVGGlyphRefElement, _SVGHKernElement, _SVGMPathElement, _SVGMissingGlyphElement, _SVGVKernElement, AudioProcessingEvent, OfflineAudioCompletionEvent, ContextEvent, SqlError, ByteBuffer, TypedData, ByteData, Float32List, Float64List, Int16List, Int32List, Int8List, Uint16List, Uint32List, Uint8ClampedList, Uint8List, RLTable, RLTable_closure, RLTable_closure0, RLTable_clearSelection_closure, RLTableRenderSpec, DefaultRenderSpec, RLTableRowData, RowMapAdapter, RLValueRenderer, RLTableRowRenderer, RLTableRowRenderer_renderRow_closure, JS_CONST, Interceptor, JSBool, JSNull, JavaScriptObject, PlainJavaScriptObject, UnknownJavaScriptObject, JSArray, JSMutableArray, JSFixedArray, JSExtendableArray, JSNumber, JSInt, JSDouble, JSString, startRootIsolate_closure, startRootIsolate_closure0, _Manager, _IsolateContext, _EventLoop, _EventLoop__runHelper_next, _IsolateEvent, _MainManagerStub, IsolateNatives__processWorkerMessage_closure, _BaseSendPort, _NativeJsSendPort, _NativeJsSendPort_send_closure, _NativeJsSendPort_send__closure, _WorkerSendPort, _WorkerSendPort_send_closure, ReceivePortImpl, BoundClosure$i0, _waitForPendingPorts_closure, _PendingSendPortFinder, _JsSerializer, _JsCopier, _JsDeserializer, _JsVisitedMap, _MessageTraverserVisitedMap, _MessageTraverser, BoundClosure$1, _Copier, _Copier_visitMap_closure, _Serializer, _Deserializer, TimerImpl, TimerImpl_internalCallback, TimerImpl_internalCallback0, TypeErrorDecoder, NullError, JsNoSuchMethodError, UnknownJsTypeError, unwrapException_saveStackTrace, _StackTrace, invokeClosure_closure, invokeClosure_closure0, invokeClosure_closure1, invokeClosure_closure2, invokeClosure_closure3, Closure, BoundClosure, TypeImpl, initHooks_closure, initHooks_closure0, initHooks_closure1, ListIterable, ListIterator, MappedIterable, EfficientLengthMappedIterable, MappedIterator, MappedListIterable, WhereIterable, WhereIterator, FixedLengthListMixin, _AsyncError, Future, Future_wait_handleError, Future_wait_closure, _Completer, _AsyncCompleter, _Future, BoundClosure$2, _Future__addListener_closure, _Future__chainFutures_closure, _Future__chainFutures_closure0, _Future__asyncComplete_closure, _Future__asyncCompleteError_closure, _Future__propagateToListeners_closure, _Future__propagateToListeners_closure0, _Future__propagateToListeners__closure, _Future__propagateToListeners__closure0, Stream, Stream_forEach_closure, Stream_forEach__closure, Stream_forEach__closure0, Stream_forEach_closure0, Stream_length_closure, Stream_length_closure0, StreamSubscription, _StreamController, _StreamController__subscribe_closure, _StreamController__recordCancel_complete, _SyncStreamControllerDispatch, _AsyncStreamControllerDispatch, _AsyncStreamController, _StreamController__AsyncStreamControllerDispatch, _SyncStreamController, _StreamController__SyncStreamControllerDispatch, _ControllerStream, _ControllerSubscription, BoundClosure$0, _EventSink, _BufferingStreamSubscription, _BufferingStreamSubscription__sendDone_sendDone, _StreamImpl, _DelayedEvent, _DelayedData, _DelayedDone, _PendingEvents, _PendingEvents_schedule_closure, _StreamImplEvents, _cancelAndError_closure, _cancelAndErrorClosure_closure, _BaseZone, _BaseZone_bindCallback_closure, _BaseZone_bindCallback_closure0, _BaseZone_bindUnaryCallback_closure, _BaseZone_bindUnaryCallback_closure0, _rootHandleUncaughtError_closure, _rootHandleUncaughtError__closure, _RootZone, _HashMap, _HashMap_values_closure, HashMapKeyIterable, HashMapKeyIterator, _LinkedHashMap, _LinkedHashMap_values_closure, LinkedHashMapCell, LinkedHashMapKeyIterable, LinkedHashMapKeyIterator, _HashSet, _IdentityHashSet, HashSetIterator, _LinkedHashSet, LinkedHashSetCell, LinkedHashSetIterator, _HashSetBase, IterableBase, ListBase, ListMixin, Maps_mapToString_closure, ListQueue, _ListQueueIterator, NoSuchMethodError_toString_closure, Duration, Duration_toString_sixDigits, Duration_toString_twoDigits, Error, NullThrownError, ArgumentError, RangeError, UnsupportedError, UnimplementedError, StateError, ConcurrentModificationError, StackOverflowError, CyclicInitializationError, _ExceptionImplementation, Expando, Function, Iterator, Null, Object, StackTrace, StringBuffer, Symbol, Console, BoundClosure$i1, Element_Element$html_closure, Interceptor_ListMixin, Interceptor_ListMixin_ImmutableListMixin, _ChildNodeListLazy, Interceptor_ListMixin0, Interceptor_ListMixin_ImmutableListMixin0, Interceptor_ListMixin1, Interceptor_ListMixin_ImmutableListMixin1, _AttributeMap, _ElementAttributeMap, _BorderCssRect, CssRect, EventStreamProvider, _EventStream, _ElementEventStreamImpl, _EventStreamSubscription, _Html5NodeValidator, ImmutableListMixin, NodeValidatorBuilder, NodeValidatorBuilder_allowsElement_closure, NodeValidatorBuilder_allowsAttribute_closure, _SimpleNodeValidator, _TemplatingNodeValidator, _TemplatingNodeValidator_closure, _SvgNodeValidator, _WrappedList, _WrappedIterator, FixedSizeListIterator, _DOMWindowCrossFrame, _LocationWrapper, NodeValidator, _SameOriginUriPolicy, _ValidatingTreeSanitizer, _ValidatingTreeSanitizer_sanitizeTree_walk, ReceivePort, _RectangleBase, MutableRectangle, TypedData_ListMixin, TypedData_ListMixin_FixedLengthListMixin, TypedData_ListMixin0, TypedData_ListMixin_FixedLengthListMixin0, TypedData_ListMixin1, TypedData_ListMixin_FixedLengthListMixin1, TypedData_ListMixin2, TypedData_ListMixin_FixedLengthListMixin2, TypedData_ListMixin3, TypedData_ListMixin_FixedLengthListMixin3, TypedData_ListMixin4, TypedData_ListMixin_FixedLengthListMixin4, TypedData_ListMixin5, TypedData_ListMixin_FixedLengthListMixin5, TypedData_ListMixin6, TypedData_ListMixin_FixedLengthListMixin6, TypedData_ListMixin7, TypedData_ListMixin_FixedLengthListMixin7, Int64List, Uint64List, Closure$2, Closure$0, Closure$7, Closure$1, Closure$20, Closure$4];
+  return [HtmlElement, AnchorElement, AnimationEvent, AreaElement, AudioElement, AutocompleteErrorEvent, BRElement, BaseElement, BeforeLoadEvent, BeforeUnloadEvent, Blob, BodyElement, ButtonElement, CDataSection, CanvasElement, CharacterData, CloseEvent, Comment, CompositionEvent, ContentElement, CssFontFaceLoadEvent, CssStyleDeclaration, CustomEvent, DListElement, DataListElement, DetailsElement, DeviceMotionEvent, DeviceOrientationEvent, DialogElement, DivElement, Document, DocumentFragment, DocumentType, DomError, DomException, DomImplementation, Element, EmbedElement, ErrorEvent, Event, EventTarget, FieldSetElement, File, FileError, FocusEvent, FormElement, HRElement, HashChangeEvent, HeadElement, HeadingElement, HtmlCollection, HtmlDocument, HtmlFormControlsCollection, HtmlHtmlElement, HtmlOptionsCollection, IFrameElement, ImageElement, InputElement, KeyboardEvent, KeygenElement, LIElement, LabelElement, LegendElement, LinkElement, Location, MapElement, MediaElement, MediaError, MediaKeyError, MediaKeyEvent, MediaKeyMessageEvent, MediaKeyNeededEvent, MediaStream, MediaStreamEvent, MediaStreamTrackEvent, MenuElement, MessageEvent, MetaElement, MeterElement, MidiConnectionEvent, MidiInput, MidiMessageEvent, MidiOutput, MidiPort, ModElement, MouseEvent, Navigator, NavigatorUserMediaError, Node, NodeList, OListElement, ObjectElement, OptGroupElement, OptionElement, OutputElement, OverflowEvent, PageTransitionEvent, ParagraphElement, ParamElement, PopStateEvent, PositionError, PreElement, ProcessingInstruction, ProgressElement, ProgressEvent, QuoteElement, Range, ResourceProgressEvent, RtcDataChannelEvent, RtcDtmfToneChangeEvent, RtcIceCandidateEvent, ScriptElement0, SecurityPolicyViolationEvent, SelectElement, ShadowElement, ShadowRoot, SourceElement, SpanElement, SpeechInputEvent, SpeechRecognitionError, SpeechRecognitionEvent, SpeechSynthesisEvent, StorageEvent, StyleElement, TableCaptionElement, TableCellElement, TableColElement, TableElement, TableRowElement, TableSectionElement, TemplateElement, Text, TextAreaElement, TextEvent, TitleElement, TouchEvent, TrackElement, TrackEvent, TransitionEvent, UIEvent, UListElement, UnknownElement, VideoElement, WheelEvent, Window, _Attr, _ClientRect, _Entity, _HTMLAppletElement, _HTMLBaseFontElement, _HTMLDirectoryElement, _HTMLFontElement, _HTMLFrameElement, _HTMLFrameSetElement, _HTMLMarqueeElement, _MutationEvent, _NamedNodeMap, _Notation, _XMLHttpRequestProgressEvent, VersionChangeEvent, AElement, AltGlyphElement, AnimateElement, AnimateMotionElement, AnimateTransformElement, AnimatedLength, AnimatedLengthList, AnimatedNumber, AnimatedNumberList, AnimatedString, AnimationElement, CircleElement, ClipPathElement, DefsElement, DescElement, EllipseElement, FEBlendElement, FEColorMatrixElement, FEComponentTransferElement, FECompositeElement, FEConvolveMatrixElement, FEDiffuseLightingElement, FEDisplacementMapElement, FEDistantLightElement, FEFloodElement, FEFuncAElement, FEFuncBElement, FEFuncGElement, FEFuncRElement, FEGaussianBlurElement, FEImageElement, FEMergeElement, FEMergeNodeElement, FEMorphologyElement, FEOffsetElement, FEPointLightElement, FESpecularLightingElement, FESpotLightElement, FETileElement, FETurbulenceElement, FilterElement, ForeignObjectElement, GElement, GraphicsElement, ImageElement0, LineElement, LinearGradientElement, MarkerElement, MaskElement, MetadataElement, PathElement, PatternElement, PolygonElement, PolylineElement, RadialGradientElement, RectElement, ScriptElement, SetElement, StopElement, StyleElement0, SvgDocument, SvgElement, SvgSvgElement, SwitchElement, SymbolElement, TSpanElement, TextContentElement, TextElement, TextPathElement, TextPositioningElement, TitleElement0, UseElement, ViewElement, ZoomEvent, _GradientElement, _SVGAltGlyphDefElement, _SVGAltGlyphItemElement, _SVGAnimateColorElement, _SVGComponentTransferFunctionElement, _SVGCursorElement, _SVGFEDropShadowElement, _SVGFontElement, _SVGFontFaceElement, _SVGFontFaceFormatElement, _SVGFontFaceNameElement, _SVGFontFaceSrcElement, _SVGFontFaceUriElement, _SVGGlyphElement, _SVGGlyphRefElement, _SVGHKernElement, _SVGMPathElement, _SVGMissingGlyphElement, _SVGVKernElement, AudioProcessingEvent, OfflineAudioCompletionEvent, ContextEvent, SqlError, ByteBuffer, TypedData, ByteData, Float32List, Float64List, Int16List, Int32List, Int8List, Uint16List, Uint32List, Uint8ClampedList, Uint8List, RLTable, RLTable_closure, RLTable_closure0, RLTable_closure1, RLTable_closure2, RLTable_closure3, RLTable_clearSelection_closure, RLTable_adjustHeaderWidth_closure, RLTable_sort_closure, RLTable_sort_closure0, RLTable_sort_closure1, RLTable_sort_closure2, RLTableRenderSpec, DefaultRenderSpec, RLTableRowData, ListRowMapAdapter, RowMapAdapter, RLValueRenderer, RLTableHeaderRowRenderer, RLTableHeaderRowRenderer_renderRow_closure, RLTableHeaderRowRenderer_renderRow__closure, RLTableHeaderRowRenderer_renderRow__closure0, RLTableRowRenderer, RLTableRowRenderer_renderRow_closure, JS_CONST, Interceptor, JSBool, JSNull, JavaScriptObject, PlainJavaScriptObject, UnknownJavaScriptObject, JSArray, JSMutableArray, JSFixedArray, JSExtendableArray, JSNumber, JSInt, JSDouble, JSString, startRootIsolate_closure, startRootIsolate_closure0, _Manager, _IsolateContext, _EventLoop, _EventLoop__runHelper_next, _IsolateEvent, _MainManagerStub, IsolateNatives__processWorkerMessage_closure, _BaseSendPort, _NativeJsSendPort, _NativeJsSendPort_send_closure, _NativeJsSendPort_send__closure, _WorkerSendPort, _WorkerSendPort_send_closure, ReceivePortImpl, BoundClosure$i0, _waitForPendingPorts_closure, _PendingSendPortFinder, _JsSerializer, _JsCopier, _JsDeserializer, _JsVisitedMap, _MessageTraverserVisitedMap, _MessageTraverser, BoundClosure$1, _Copier, _Copier_visitMap_closure, _Serializer, _Deserializer, TimerImpl, TimerImpl_internalCallback, TimerImpl_internalCallback0, TypeErrorDecoder, NullError, JsNoSuchMethodError, UnknownJsTypeError, unwrapException_saveStackTrace, _StackTrace, invokeClosure_closure, invokeClosure_closure0, invokeClosure_closure1, invokeClosure_closure2, invokeClosure_closure3, Closure, BoundClosure, TypeImpl, initHooks_closure, initHooks_closure0, initHooks_closure1, ListIterable, ListIterator, MappedIterable, EfficientLengthMappedIterable, MappedIterator, MappedListIterable, WhereIterable, WhereIterator, FixedLengthListMixin, _AsyncError, Future, Future_wait_handleError, Future_wait_closure, _Completer, _AsyncCompleter, _Future, BoundClosure$2, _Future__addListener_closure, _Future__chainFutures_closure, _Future__chainFutures_closure0, _Future__asyncComplete_closure, _Future__asyncCompleteError_closure, _Future__propagateToListeners_closure, _Future__propagateToListeners_closure0, _Future__propagateToListeners__closure, _Future__propagateToListeners__closure0, Stream, Stream_forEach_closure, Stream_forEach__closure, Stream_forEach__closure0, Stream_forEach_closure0, Stream_length_closure, Stream_length_closure0, StreamSubscription, _StreamController, _StreamController__subscribe_closure, _StreamController__recordCancel_complete, _SyncStreamControllerDispatch, _AsyncStreamControllerDispatch, _AsyncStreamController, _StreamController__AsyncStreamControllerDispatch, _SyncStreamController, _StreamController__SyncStreamControllerDispatch, _ControllerStream, _ControllerSubscription, BoundClosure$0, _EventSink, _BufferingStreamSubscription, _BufferingStreamSubscription__sendDone_sendDone, _StreamImpl, _DelayedEvent, _DelayedData, _DelayedDone, _PendingEvents, _PendingEvents_schedule_closure, _StreamImplEvents, _cancelAndError_closure, _cancelAndErrorClosure_closure, _BaseZone, _BaseZone_bindCallback_closure, _BaseZone_bindCallback_closure0, _BaseZone_bindUnaryCallback_closure, _BaseZone_bindUnaryCallback_closure0, _rootHandleUncaughtError_closure, _rootHandleUncaughtError__closure, _RootZone, _HashMap, _HashMap_values_closure, HashMapKeyIterable, HashMapKeyIterator, _LinkedHashMap, _LinkedHashMap_values_closure, LinkedHashMapCell, LinkedHashMapKeyIterable, LinkedHashMapKeyIterator, _HashSet, _IdentityHashSet, HashSetIterator, _LinkedHashSet, LinkedHashSetCell, LinkedHashSetIterator, _HashSetBase, IterableBase, ListBase, ListMixin, Maps_mapToString_closure, ListQueue, _ListQueueIterator, NoSuchMethodError_toString_closure, Comparable, Duration, Duration_toString_sixDigits, Duration_toString_twoDigits, Error, NullThrownError, ArgumentError, RangeError, UnsupportedError, UnimplementedError, StateError, ConcurrentModificationError, StackOverflowError, CyclicInitializationError, _ExceptionImplementation, FormatException, Expando, Function, Iterator, Null, Object, StackTrace, StringBuffer, Symbol, Console, BoundClosure$i1, Interceptor_CssStyleDeclarationBase, CssStyleDeclarationBase, Element_Element$html_closure, Interceptor_ListMixin, Interceptor_ListMixin_ImmutableListMixin, _ChildNodeListLazy, Interceptor_ListMixin0, Interceptor_ListMixin_ImmutableListMixin0, Interceptor_ListMixin1, Interceptor_ListMixin_ImmutableListMixin1, _AttributeMap, _ElementAttributeMap, _BorderCssRect, CssRect, EventStreamProvider, _EventStream, _ElementEventStreamImpl, _EventStreamSubscription, _Html5NodeValidator, ImmutableListMixin, NodeValidatorBuilder, NodeValidatorBuilder_allowsElement_closure, NodeValidatorBuilder_allowsAttribute_closure, _SimpleNodeValidator, _TemplatingNodeValidator, _TemplatingNodeValidator_closure, _SvgNodeValidator, _WrappedList, _WrappedIterator, FixedSizeListIterator, _DOMWindowCrossFrame, _LocationWrapper, NodeValidator, _SameOriginUriPolicy, _ValidatingTreeSanitizer, _ValidatingTreeSanitizer_sanitizeTree_walk, ReceivePort, Point, _RectangleBase, Rectangle, MutableRectangle, TypedData_ListMixin, TypedData_ListMixin_FixedLengthListMixin, TypedData_ListMixin0, TypedData_ListMixin_FixedLengthListMixin0, TypedData_ListMixin1, TypedData_ListMixin_FixedLengthListMixin1, TypedData_ListMixin2, TypedData_ListMixin_FixedLengthListMixin2, TypedData_ListMixin3, TypedData_ListMixin_FixedLengthListMixin3, TypedData_ListMixin4, TypedData_ListMixin_FixedLengthListMixin4, TypedData_ListMixin5, TypedData_ListMixin_FixedLengthListMixin5, TypedData_ListMixin6, TypedData_ListMixin_FixedLengthListMixin6, TypedData_ListMixin7, TypedData_ListMixin_FixedLengthListMixin7, Int64List, Uint64List, Closure$2, Closure$1, Closure$0, Closure$7, Closure$20, Closure$4];
 }

@@ -1,8 +1,9 @@
 import 'dart:html';
+import 'dart:math' as math;
 
 class RLTable {
 
-  static var selectedStyle = "border:2px solid black; background-color:#00c0Ff;";
+  static var selectedStyle = "background-color:#00c0ff;";
   static var caretStyleNoBG = "outline: 1px dashed black;";
   static var caretStyle = "outline: 1px dashed black; background-color:rgba(100%,100%,100%,0.7);";
   static var selectedCaretStyle = selectedStyle+" "+caretStyleNoBG;
@@ -10,24 +11,48 @@ class RLTable {
   
   var selectedRowId='-1';
   TableElement table;
+  TableElement tableHeader;
   num rowIdCnt = 1;
+  RLTableRowRenderer headerRenderer = new RLTableHeaderRowRenderer(); // def
   RLTableRowRenderer rowRenderer = new RLTableRowRenderer(); // def
-  RLValueRenderer cellRenderer = new RLValueRenderer();
   RLTableRenderSpec renderStyle = new DefaultRenderSpec();
-  HtmlElement pane;
+  HtmlElement pane, headerPane;
   Map selectedRows = new Map();
+  Map<String,RLTableRowData> rows = new Map();
 
   bool singleSel = true;
+  bool upDown = true;
   
   RLTable(String id) {
     table = querySelector(id);
     pane = querySelector(id+"-pane");
+    headerPane = querySelector(id+"-header-pane");
+    tableHeader = querySelector(id+"-header");
+    adjustTWidth();
+    
+    window.onResize.listen( (ev) { 
+        adjustTWidth(); 
+      } 
+    );
+    
+    pane.onScroll.listen((event) {
+      headerPane.scrollLeft = pane.scrollLeft;
+    } 
+    );
+    
+    tableHeader.onClick.listen((E) {
+      var clickedField = E.target.attributes['t_field'];
+      sort(clickedField, upDown);
+      upDown = ! upDown;
+    });
+    
     table.onClick.listen( (event) {
         var clickedElement = event.target.attributes['t_id'];
         changeCaret(clickedElement);
         changeSelection(clickedElement, ! isSelected(clickedElement) );
       } 
     );
+    
     document.onKeyDown.listen( (event) {     
       switch( event.keyCode ) {
         case 13: 
@@ -157,18 +182,84 @@ class RLTable {
     return '$rowIdCnt';
   }
   
+  setHeaderFromList(List values) {
+    setHeader(new ListRowMapAdapter(values));
+  }
+
+  setHeader(RLTableRowData header) {
+    if ( tableHeader.rows.length == 0 ) {
+      tableHeader.addRow();
+    }
+    TableRowElement newRow = tableHeader.rows[0];
+    newRow.attributes['t_id'] = "header";
+    headerRenderer.renderRow("header", newRow, header, renderStyle);
+    adjustHeaderWidth();
+  }
+  
+  adjustTWidth() {
+    headerPane.style.width = '${pane.clientWidth}px';
+  }
+  
+  adjustHeaderWidth() {
+    adjustTWidth();
+    if ( tableHeader.rows.length < 1 || table.rows.length < 1 )
+      return;
+    List hd = tableHeader.rows[0].cells;
+    List bd = table.rows[0].cells;
+    if ( hd.length < 1 || bd.length < 1) 
+      return;
+    num index = 0;
+    int off = 2;
+    hd.forEach((headCell) {
+      // fixme try marginEdge
+       var width = math.max(bd[index].client.width-off, headCell.client.width);
+       headCell.style.width = '${width}px';  
+       bd[index].style.width='${width+off}px';
+       index++;
+     }
+    );
+  }
+  
   addRow(RLTableRowData data) {
     TableRowElement newRow = table.addRow();
-    var id = createRowId(); newRow.attributes['t_id'] = id;
+    var id = createRowId(); 
+    newRow.attributes['t_id'] = id;
+    rows[id] = data;
     rowRenderer.renderRow(id, newRow, data, renderStyle);
+    adjustHeaderWidth();
+  }
+  
+  removeRow(String rowId) {
+    findRow(rowId).remove();
+    rows[rowId] = null;
+    selectedRows[rowId] = null;
+    if ( selectedRowId == rowId )
+      selectedRowId = null;
+    adjustHeaderWidth();
   }
   
   addRowAsMap(Map data) {
     TableRowElement newRow = table.addRow();
-    var id = createRowId(); newRow.attributes['t_id'] = id;
-    rowRenderer.renderRow(id, newRow, new RowMapAdapter(data, -1), renderStyle);
+    var id = createRowId(); 
+    newRow.attributes['t_id'] = id;
+    rows[id] = new RowMapAdapter(data, int.parse(id));
+    rowRenderer.renderRow(id, newRow, rows[id], renderStyle);
+    adjustHeaderWidth();
   }
 
+  sort( String field, bool up ) {
+    List list = table.rows.map((row) { return rows[row.attributes['t_id']]; } ).toList(growable: false);
+    list.sort( (idA,idB) {
+       return idA.getValue(field).compareTo(idB.getValue(field)) * (up?-1:1);
+    });
+    
+    table.rows.toList(growable: false).forEach((row) { row.remove();} );
+    rows.clear();
+    list.forEach((rowData) {
+      addRow(rowData);
+    });
+  }
+  
 }
 
 abstract class RLTableRenderSpec {
@@ -183,6 +274,10 @@ abstract class RLTableRenderSpec {
 class DefaultRenderSpec extends RLTableRenderSpec {
   RLValueRenderer defValRend = new RLValueRenderer();
   
+  DefaultRenderSpec() {}
+
+  DefaultRenderSpec.cellRenderer(this.defValRend);
+
   List<String> getFieldNames(RLTableRowData row) {
     return row.getFieldNames();
   }
@@ -199,6 +294,28 @@ abstract class RLTableRowData {
   num getId();  
 }
 
+class ListRowMapAdapter extends RLTableRowData {
+  List data;
+  
+  ListRowMapAdapter(this.data);
+  
+  List<String> getFieldNames() => data;
+  dynamic getValue( String fieldName ) => fieldName;
+  num getId() => -1;  
+  
+}
+
+class HeaderRowMapAdapter extends RLTableRowData {
+  Map data;
+  
+  HeaderRowMapAdapter(this.data);
+  
+  List<String> getFieldNames() => new List.from(data.keys);
+  dynamic getValue( String fieldName ) => fieldName;
+  num getId() => -1;  
+  
+}
+
 class RowMapAdapter extends RLTableRowData {
   Map data;
   num rowId;
@@ -212,6 +329,8 @@ class RowMapAdapter extends RLTableRowData {
 }
 
 class RLValueRenderer {
+  
+  RLValueRenderer();
   String renderValue(TableCellElement elem,  var value ) {
     if ( value is num ) {
       elem.attributes['style']="text-align:right;";
@@ -225,21 +344,36 @@ class RLValueRenderer {
   }
 }
 
+class RLTableHeaderRowRenderer extends RLTableRowRenderer {
 
-class RLTableRowRenderer {
+  String headerBG = "#008DCC";
+  String headerBGHover = "#00a0ff";
   
-  renderHeader( String rowId, TableRowElement target, RLTableRowData row, RLTableRenderSpec style ) {
+  renderRow( String rowId, TableRowElement target, RLTableRowData row, RLTableRenderSpec style ) {    
     style.getFieldNames(row).forEach( 
         (f) {
           var value = row.getValue(f);
-          String val = style.getHeaderVale(f);
           TableCellElement cell = target.addCell();
+          String val = style.getRendererFor(f,row).renderValue(cell,value);
+          cell.attributes['t_field'] = f;
           cell.attributes['t_id'] = rowId;
+          cell.attributes['nowrap'] = "nowrap";
+          cell.attributes['style']="text-align:center;background-color: $headerBG;";
           cell.setInnerHtml(val);
+          cell.onMouseEnter.listen((ev) {
+            cell.style.background='$headerBGHover';
+          } );
+          cell.onMouseLeave.listen((ev) {
+            cell.style.background = '$headerBG';
+          } );
         } 
     );
   }
 
+}
+
+class RLTableRowRenderer {
+  
   renderRow( String rowId, TableRowElement target, RLTableRowData row, RLTableRenderSpec style ) {    
     style.getFieldNames(row).forEach( 
         (f) {
@@ -247,6 +381,7 @@ class RLTableRowRenderer {
           TableCellElement cell = target.addCell();
           String val = style.getRendererFor(f,row).renderValue(cell,value);
           cell.attributes['t_id'] = rowId;
+          cell.attributes['nowrap'] = "nowrap";
           cell.setInnerHtml(val);
         } 
     );
