@@ -35,7 +35,7 @@ void main() {
 //  }
 
   for ( var i = 0; i < 500; i++ ) {
-    rltable.addRowAsMap({ "id":"$i", "text":"Dies ist ein text $i", "qty":"43.$i", "prc":"$i.$i"  });
+    rltable.addRowAsMap({ "id":i, "text":"Dies ist ein text $i", "qty":i*10, "prc":(i/.34)  });
   }
 
 }

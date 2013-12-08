@@ -11,7 +11,7 @@ class RLTable {
   var selectedRowId='-1';
   TableElement table;
   num rowIdCnt = 1;
-  RLTableRowRenderer rowRenderer = new RLTableRowRenderer();
+
   RLValueRenderer cellRenderer = new RLValueRenderer();
   RLTableRenderSpec renderStyle = new DefaultRenderSpec();
   HtmlElement pane;
@@ -74,9 +74,6 @@ class RLTable {
       pane.scrollTop = (pane.scrollTop - (paneRect.top-x.top)-4).toInt();
     else if ( x.top+x.height > paneRect.top+paneRect.height-16 )
       pane.scrollTop = (4+pane.scrollTop - ((paneRect.top+paneRect.height-16)-(x.top+x.height))).toInt();
-    bool visible = x.top > paneRect.top && x.top+x.height < paneRect.top+paneRect.height;
-    print("${x.top} ${paneRect.top} $visible $st");
-//    cur.scrollIntoView(ScrollAlignment.CENTER);
   }
 
   String findRowId(int index) {
@@ -215,7 +212,15 @@ class RowMapAdapter extends RLTableRowData {
 }
 
 class RLValueRenderer {
-  String renderValue( var value ) {
+  String renderValue(TableCellElement elem,  var value ) {
+    if ( value is num ) {
+      elem.attributes['style']="text-align:right;";
+      if ( value is int ) {
+        return value.toInt().toString();
+      } else {
+        return value.toStringAsFixed(2);
+      }
+    }
     return '$value';
   }
 }
@@ -239,8 +244,8 @@ class RLTableRowRenderer {
     style.getFieldNames(row).forEach( 
         (f) {
           var value = row.getValue(f);
-          String val = style.getRendererFor(f,row).renderValue(value);
           TableCellElement cell = target.addCell();
+          String val = style.getRendererFor(f,row).renderValue(cell,value);
           cell.attributes['t_id'] = rowId;
           cell.setInnerHtml(val);
         } 
