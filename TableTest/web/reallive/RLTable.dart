@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:async';
 import 'dart:math' as math;
 
 class RLTable {
@@ -15,7 +16,9 @@ class RLTable {
   num rowIdCnt = 1;
   RLTableRowRenderer headerRenderer = new RLTableHeaderRowRenderer(); // def
   RLTableRowRenderer rowRenderer = new RLTableRowRenderer(); // def
-  RLTableRenderSpec renderStyle = new DefaultRenderSpec();
+  RLValueRenderer defValRend = new RLValueRenderer();
+  RLTableRenderSpec renderStyle;
+
   HtmlElement pane, headerPane;
   Map selectedRows = new Map();
   Map<String,RLTableRowData> rows = new Map();
@@ -24,6 +27,7 @@ class RLTable {
   bool upDown = true;
   
   RLTable(String id) {
+    renderStyle = new DefaultRenderSpec(defValRend);
     table = querySelector(id);
     pane = querySelector(id+"-pane");
     headerPane = querySelector(id+"-header-pane");
@@ -53,6 +57,12 @@ class RLTable {
       } 
     );
     
+    table.onDoubleClick.listen( (event) {
+        var row = event.target.attributes['t_id'];
+        updateRow(row, { "Qty":"99", "Price":"2.01" } );
+      } 
+    );
+
     document.onKeyDown.listen( (event) {     
       switch( event.keyCode ) {
         case 13: 
@@ -220,15 +230,56 @@ class RLTable {
     );
   }
   
+  String upArrow = ' <span class="arrow-n"></span>';
+  String doArrow = ' <span class="arrow-s"></span>';
+  setHeaderSortArrow(String field, bool up) {
+    TableRowElement header = tableHeader.rows[0];
+    header.cells.forEach((cell) {
+       if ( cell.innerHtml.endsWith(upArrow) )
+         cell.innerHtml = cell.innerHtml.substring(0, cell.innerHtml.length-upArrow.length);
+       if ( cell.innerHtml.endsWith(doArrow) )
+         cell.innerHtml = cell.innerHtml.substring(0, cell.innerHtml.length-doArrow.length);
+       if ( cell.attributes['t_field'] == field ) {
+         cell.innerHtml = cell.innerHtml+(up?upArrow:doArrow);
+       }
+    });
+  }
+  
+  updateRow(String rowId, Map newValues) {
+    RLTableRowData data = rows[rowId];
+    if ( data != null ) {
+      newValues.forEach( (key,val) => data.setValue(key, val) );
+      TableRowElement row = findRow(rowId);
+      row.cells.forEach((cell) {
+        String field = cell.attributes['t_field'];
+        if (newValues[field] != null) {
+          cell.innerHtml = defValRend.renderValue(cell, newValues[field]);
+          cell.style.backgroundColor="#db0";
+          new Timer(new Duration(milliseconds:1000), () { 
+               cell.style.transition = "background-color 1s";
+               cell.style.backgroundColor="";
+               new Timer(new Duration(milliseconds:1050), () {cell.style.transition="";} );
+            } 
+          );
+        }
+      });
+      adjustHeaderWidth();
+    }
+  }
+  
   addRow(RLTableRowData data) {
+    var id = createRowId();
+    addRowWithId(id,data);
+  }
+
+  addRowWithId(var id, RLTableRowData data) {
     TableRowElement newRow = table.addRow();
-    var id = createRowId(); 
     newRow.attributes['t_id'] = id;
     rows[id] = data;
     rowRenderer.renderRow(id, newRow, data, renderStyle);
     adjustHeaderWidth();
   }
-  
+
   removeRow(String rowId) {
     findRow(rowId).remove();
     rows[rowId] = null;
@@ -256,8 +307,9 @@ class RLTable {
     table.rows.toList(growable: false).forEach((row) { row.remove();} );
     rows.clear();
     list.forEach((rowData) {
-      addRow(rowData);
+      addRowWithId("${rowData.getId()}",rowData);
     });
+    setHeaderSortArrow(field, up);
   }
   
 }
@@ -272,11 +324,9 @@ abstract class RLTableRenderSpec {
 }
 
 class DefaultRenderSpec extends RLTableRenderSpec {
-  RLValueRenderer defValRend = new RLValueRenderer();
+  RLValueRenderer defValRend;
   
-  DefaultRenderSpec() {}
-
-  DefaultRenderSpec.cellRenderer(this.defValRend);
+  DefaultRenderSpec(this.defValRend);
 
   List<String> getFieldNames(RLTableRowData row) {
     return row.getFieldNames();
@@ -290,7 +340,8 @@ class DefaultRenderSpec extends RLTableRenderSpec {
 
 abstract class RLTableRowData {
   List<String> getFieldNames();
-  dynamic getValue( String fieldName );
+  getValue( String fieldName );
+  setValue( String fieldName, value );
   num getId();  
 }
 
@@ -300,7 +351,8 @@ class ListRowMapAdapter extends RLTableRowData {
   ListRowMapAdapter(this.data);
   
   List<String> getFieldNames() => data;
-  dynamic getValue( String fieldName ) => fieldName;
+  getValue( String fieldName ) => fieldName;
+  setValue( String fieldName, value ) => null;
   num getId() => -1;  
   
 }
@@ -311,7 +363,8 @@ class HeaderRowMapAdapter extends RLTableRowData {
   HeaderRowMapAdapter(this.data);
   
   List<String> getFieldNames() => new List.from(data.keys);
-  dynamic getValue( String fieldName ) => fieldName;
+  getValue( String fieldName ) => fieldName;
+  setValue( String fieldName, value ) => null;
   num getId() => -1;  
   
 }
@@ -323,7 +376,8 @@ class RowMapAdapter extends RLTableRowData {
   RowMapAdapter(this.data,this.rowId);
   
   List<String> getFieldNames() => new List.from(data.keys);
-  dynamic getValue( String fieldName ) => data[fieldName];
+  getValue( String fieldName ) => data[fieldName];
+  setValue( String fieldName, value ) => data[fieldName] = value;
   num getId() => rowId;  
   
 }
@@ -347,7 +401,7 @@ class RLValueRenderer {
 class RLTableHeaderRowRenderer extends RLTableRowRenderer {
 
   String headerBG = "#008DCC";
-  String headerBGHover = "#00a0ff";
+  String headerBGHover = "#00C3FF";
   
   renderRow( String rowId, TableRowElement target, RLTableRowData row, RLTableRenderSpec style ) {    
     style.getFieldNames(row).forEach( 
@@ -359,6 +413,7 @@ class RLTableHeaderRowRenderer extends RLTableRowRenderer {
           cell.attributes['t_id'] = rowId;
           cell.attributes['nowrap'] = "nowrap";
           cell.attributes['style']="text-align:center;background-color: $headerBG;";
+          cell.style.transition = "background-color .3s";
           cell.setInnerHtml(val);
           cell.onMouseEnter.listen((ev) {
             cell.style.background='$headerBGHover';
@@ -366,6 +421,8 @@ class RLTableHeaderRowRenderer extends RLTableRowRenderer {
           cell.onMouseLeave.listen((ev) {
             cell.style.background = '$headerBG';
           } );
+          cell.style.paddingBottom="6px";
+          cell.style.paddingTop="6px";
         } 
     );
   }
@@ -380,6 +437,7 @@ class RLTableRowRenderer {
           var value = row.getValue(f);
           TableCellElement cell = target.addCell();
           String val = style.getRendererFor(f,row).renderValue(cell,value);
+          cell.attributes['t_field'] = f;
           cell.attributes['t_id'] = rowId;
           cell.attributes['nowrap'] = "nowrap";
           cell.setInnerHtml(val);

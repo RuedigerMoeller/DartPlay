@@ -205,7 +205,7 @@ $$.Closure$4 = [W, {"": "Closure;call$4,$name"}];
   }
 })([
 ["", "reallive/RLTable.dart", , N, {
-RLTable: {"": "Object;selectedRowId,table,tableHeader,rowIdCnt,headerRenderer,rowRenderer,renderStyle,pane,headerPane,selectedRows,rows,singleSel,upDown",
+RLTable: {"": "Object;selectedRowId,table,tableHeader,rowIdCnt,headerRenderer,rowRenderer,defValRend,renderStyle,pane,headerPane,selectedRows,rows,singleSel,upDown,upArrow,doArrow",
   scrollVisible$1: function(cur) {
     var t1, t2, t3, t4, t5, t6;
     cur.toString;
@@ -377,11 +377,24 @@ RLTable: {"": "Object;selectedRowId,table,tableHeader,rowIdCnt,headerRenderer,ro
     t1.index_0 = 0;
     hd.forEach$1(hd, new N.RLTable_adjustHeaderWidth_closure(t1, bd, 2));
   },
-  addRow$1: function(_, data) {
-    var newRow, id, t1;
+  setHeaderSortArrow$2: function(field, up) {
+    var t1 = J.get$cells$x(J.$index$asx(J.get$rows$x(this.tableHeader), 0));
+    t1.forEach$1(t1, new N.RLTable_setHeaderSortArrow_closure(this, field, up));
+  },
+  updateRow$2: function(rowId, newValues) {
+    var t1, data;
+    t1 = this.rows;
+    data = t1.$index(t1, rowId);
+    if (data != null) {
+      newValues.forEach$1(newValues, new N.RLTable_updateRow_closure(data));
+      t1 = J.get$cells$x(this.findRow$1(rowId));
+      t1.forEach$1(t1, new N.RLTable_updateRow_closure0(this, newValues));
+      this.adjustHeaderWidth$0();
+    }
+  },
+  addRowWithId$2: function(id, data) {
+    var newRow, t1;
     newRow = J.addRow$0$x(this.table);
-    this.rowIdCnt = this.rowIdCnt + 1;
-    id = "" + this.rowIdCnt;
     newRow.toString;
     new W._ElementAttributeMap(newRow)._element.setAttribute("t_id", id);
     t1 = this.rows;
@@ -410,9 +423,11 @@ RLTable: {"": "Object;selectedRowId,table,tableHeader,rowIdCnt,headerRenderer,ro
     t1 = this.rows;
     t1.clear$0(t1);
     H.IterableMixinWorkaround_forEach(list, new N.RLTable_sort_closure2(this));
+    this.setHeaderSortArrow$2(field, up);
   },
   RLTable$1: function(id) {
     var t1, t2, t3;
+    this.renderStyle = new N.DefaultRenderSpec(this.defValRend);
     this.table = document.querySelector(id);
     t1 = id + "-pane";
     this.pane = document.querySelector(t1);
@@ -448,16 +463,23 @@ RLTable: {"": "Object;selectedRowId,table,tableHeader,rowIdCnt,headerRenderer,ro
     t3 = new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new N.RLTable_closure2(this)), t2._useCapture);
     H.setRuntimeTypeInfo(t3, [H.getRuntimeTypeArgument(t2, "_EventStream", 0)]);
     t3._tryResume$0();
-    t3 = new W._EventStream(document, C.EventStreamProvider_keydown._eventType, false);
+    t3 = this.table;
+    t3.toString;
+    t3 = new W._ElementEventStreamImpl(t3, C.EventStreamProvider_dblclick._eventType, false);
     H.setRuntimeTypeInfo(t3, [null]);
     t2 = new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new N.RLTable_closure3(this)), t3._useCapture);
     H.setRuntimeTypeInfo(t2, [H.getRuntimeTypeArgument(t3, "_EventStream", 0)]);
     t2._tryResume$0();
+    t2 = new W._EventStream(document, C.EventStreamProvider_keydown._eventType, false);
+    H.setRuntimeTypeInfo(t2, [null]);
+    t3 = new W._EventStreamSubscription(0, t2._target, t2._eventType, W._wrapZone(new N.RLTable_closure4(this)), t2._useCapture);
+    H.setRuntimeTypeInfo(t3, [H.getRuntimeTypeArgument(t2, "_EventStream", 0)]);
+    t3._tryResume$0();
   },
   static: {
 "": "RLTable_selectedStyle,RLTable_caretStyleNoBG,RLTable_caretStyle,RLTable_selectedCaretStyle,RLTable_defaultStyle",
 RLTable$: function(id) {
-  var t1 = new N.RLTable("-1", null, null, 1, new N.RLTableHeaderRowRenderer("#008DCC", "#00a0ff"), new N.RLTableRowRenderer(), new N.DefaultRenderSpec(new N.RLValueRenderer()), null, null, P.LinkedHashMap_LinkedHashMap(null, null, null, null, null), P.LinkedHashMap_LinkedHashMap(null, null, null, null, null), true, true);
+  var t1 = new N.RLTable("-1", null, null, 1, new N.RLTableHeaderRowRenderer("#008DCC", "#00C3FF"), new N.RLTableRowRenderer(), new N.RLValueRenderer(), null, null, null, P.LinkedHashMap_LinkedHashMap(null, null, null, null, null), P.LinkedHashMap_LinkedHashMap(null, null, null, null, null), true, true, " <span class=\"arrow-n\"></span>", " <span class=\"arrow-s\"></span>");
   t1.RLTable$1(id);
   return t1;
 }}
@@ -502,11 +524,18 @@ RLTable_closure2: {"": "Closure;this_3",
 
 RLTable_closure3: {"": "Closure;this_4",
   call$1: function($event) {
+    this.this_4.updateRow$2(J.get$attributes$x(J.get$target$x($event))._element.getAttribute("t_id"), H.fillLiteralMap(["Qty", "99", "Price", "2.01"], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
+  },
+  $is_args1: true
+},
+
+RLTable_closure4: {"": "Closure;this_5",
+  call$1: function($event) {
     var t1, t2, t3, index, curr;
     switch (J.get$keyCode$x($event)) {
       case 13:
       case 32:
-        t1 = this.this_4;
+        t1 = this.this_5;
         t2 = t1.selectedRowId;
         t3 = t1.selectedRows;
         t1.changeSelection$2(t2, t3.$index(t3, t2) == null);
@@ -514,7 +543,7 @@ RLTable_closure3: {"": "Closure;this_4",
         $event.stopImmediatePropagation();
         break;
       case 38:
-        t1 = this.this_4;
+        t1 = this.this_5;
         index = t1.findIndex$1(t1.selectedRowId);
         if (index > 0) {
           curr = t1.changeCaret$1(t1.findRowId$1(index - 1));
@@ -525,7 +554,7 @@ RLTable_closure3: {"": "Closure;this_4",
         $event.stopImmediatePropagation();
         break;
       case 40:
-        t1 = this.this_4;
+        t1 = this.this_5;
         curr = t1.changeCaret$1(t1.findRowId$1(t1.findIndex$1(t1.selectedRowId) + 1));
         if (curr != null)
           t1.scrollVisible$1(curr);
@@ -570,6 +599,64 @@ RLTable_adjustHeaderWidth_closure: {"": "Closure;box_0,bd_1,off_2",
   $is_args1: true
 },
 
+RLTable_setHeaderSortArrow_closure: {"": "Closure;this_0,field_1,up_2",
+  call$1: function(cell) {
+    var t1, t2, t3, t4, t5;
+    t1 = J.getInterceptor$x(cell);
+    t2 = this.this_0;
+    t3 = t2.upArrow;
+    if (J.endsWith$1$s(t1.get$innerHtml(cell), t3))
+      t1.set$innerHtml(cell, J.substring$2$s(t1.get$innerHtml(cell), 0, t1.get$innerHtml(cell).length - t3.length));
+    t2 = t2.doArrow;
+    if (J.endsWith$1$s(t1.get$innerHtml(cell), t2))
+      t1.set$innerHtml(cell, J.substring$2$s(t1.get$innerHtml(cell), 0, t1.get$innerHtml(cell).length - t2.length));
+    t4 = t1.get$attributes(cell)._element.getAttribute("t_field");
+    t5 = this.field_1;
+    if (t4 == null ? t5 == null : t4 === t5) {
+      t4 = t1.get$innerHtml(cell);
+      t1.set$innerHtml(cell, J.$add$ns(t4, this.up_2 ? t3 : t2));
+    }
+  },
+  $is_args1: true
+},
+
+RLTable_updateRow_closure: {"": "Closure;data_0",
+  call$2: function(key, val) {
+    return this.data_0.setValue$2(key, val);
+  },
+  $is_args2: true
+},
+
+RLTable_updateRow_closure0: {"": "Closure;this_1,newValues_2",
+  call$1: function(cell) {
+    var t1, field, t2;
+    t1 = J.getInterceptor$x(cell);
+    field = t1.get$attributes(cell)._element.getAttribute("t_field");
+    t2 = this.newValues_2;
+    if (t2.$index(t2, field) != null) {
+      t1.set$innerHtml(cell, this.this_1.defValRend.renderValue$2(cell, t2.$index(t2, field)));
+      J.set$backgroundColor$x(cell.style, "#db0");
+      P.Timer_Timer(P.Duration$(0, 0, 0, 1000, 0, 0), new N.RLTable_updateRow__closure(cell));
+    }
+  },
+  $is_args1: true
+},
+
+RLTable_updateRow__closure: {"": "Closure;cell_3",
+  call$0: function() {
+    var t1 = this.cell_3;
+    J.set$transition$x(t1.style, "background-color 1s");
+    J.set$backgroundColor$x(t1.style, "");
+    P.Timer_Timer(P.Duration$(0, 0, 0, 1050, 0, 0), new N.RLTable_updateRow___closure(t1));
+  }
+},
+
+RLTable_updateRow___closure: {"": "Closure;cell_4",
+  call$0: function() {
+    J.set$transition$x(this.cell_4.style, "");
+  }
+},
+
 RLTable_sort_closure: {"": "Closure;this_0",
   call$1: function(row) {
     var t1 = this.this_0.rows;
@@ -596,8 +683,7 @@ RLTable_sort_closure1: {"": "Closure;",
 
 RLTable_sort_closure2: {"": "Closure;this_3",
   call$1: function(rowData) {
-    var t1 = this.this_3;
-    t1.addRow$1(t1, rowData);
+    this.this_3.addRowWithId$2(H.S(rowData.getId$0()), rowData);
   },
   $is_args1: true
 },
@@ -614,6 +700,12 @@ ListRowMapAdapter: {"": "RLTableRowData;data",
   },
   getValue$1: function(fieldName) {
     return fieldName;
+  },
+  setValue$2: function(fieldName, value) {
+    return;
+  },
+  getId$0: function() {
+    return -1;
   }
 },
 
@@ -624,6 +716,14 @@ RowMapAdapter: {"": "RLTableRowData;data,rowId",
   getValue$1: function(fieldName) {
     var t1 = this.data;
     return t1.$index(t1, fieldName);
+  },
+  setValue$2: function(fieldName, value) {
+    var t1 = this.data;
+    t1.$indexSet(t1, fieldName, value);
+    return value;
+  },
+  getId$0: function() {
+    return this.rowId;
   }
 },
 
@@ -658,6 +758,7 @@ RLTableHeaderRowRenderer_renderRow_closure: {"": "Closure;this_0,rowId_1,target_
     new W._ElementAttributeMap(cell)._element.setAttribute("nowrap", "nowrap");
     t1 = this.this_0;
     new W._ElementAttributeMap(cell)._element.setAttribute("style", "text-align:center;background-color: " + t1.headerBG + ";");
+    J.set$transition$x(cell.style, "background-color .3s");
     J.setInnerHtml$1$x(cell, val);
     t2 = new W._ElementEventStreamImpl(cell, C.EventStreamProvider_mouseenter._eventType, false);
     H.setRuntimeTypeInfo(t2, [null]);
@@ -669,6 +770,8 @@ RLTableHeaderRowRenderer_renderRow_closure: {"": "Closure;this_0,rowId_1,target_
     t1 = new W._EventStreamSubscription(0, t3._target, t3._eventType, W._wrapZone(new N.RLTableHeaderRowRenderer_renderRow__closure0(t1, cell)), t3._useCapture);
     H.setRuntimeTypeInfo(t1, [H.getRuntimeTypeArgument(t3, "_EventStream", 0)]);
     t1._tryResume$0();
+    J.set$paddingBottom$x(cell.style, "6px");
+    J.set$paddingTop$x(cell.style, "6px");
   },
   $is_args1: true
 },
@@ -700,6 +803,7 @@ RLTableRowRenderer_renderRow_closure: {"": "Closure;rowId_0,target_1,row_2,style
     cell = J.addCell$0$x(this.target_1);
     val = this.style_3.defValRend.renderValue$2(cell, value);
     cell.toString;
+    new W._ElementAttributeMap(cell)._element.setAttribute("t_field", f);
     new W._ElementAttributeMap(cell)._element.setAttribute("t_id", this.rowId_0);
     new W._ElementAttributeMap(cell)._element.setAttribute("nowrap", "nowrap");
     J.setInnerHtml$1$x(cell, val);
@@ -789,6 +893,16 @@ PlainJavaScriptObject: {"": "JavaScriptObject;"},
 UnknownJavaScriptObject: {"": "JavaScriptObject;"},
 
 JSArray: {"": "List/Interceptor;",
+  add$1: function(receiver, value) {
+    if (!!receiver.fixed$length)
+      H.throwExpression(P.UnsupportedError$("add"));
+    receiver.push(value);
+  },
+  addAll$1: function(receiver, collection) {
+    var t1;
+    for (t1 = J.get$iterator$ax(collection); t1.moveNext$0();)
+      this.add$1(receiver, t1.get$current());
+  },
   forEach$1: function(receiver, f) {
     return H.IterableMixinWorkaround_forEach(receiver, f);
   },
@@ -796,6 +910,15 @@ JSArray: {"": "List/Interceptor;",
     if (index < 0 || index >= receiver.length)
       throw H.ioore(receiver, index);
     return receiver[index];
+  },
+  sublist$2: function(receiver, start, end) {
+    if (start < 0 || start > receiver.length)
+      throw H.wrapException(P.RangeError$range(start, 0, receiver.length));
+    if (end < start || end > receiver.length)
+      throw H.wrapException(P.RangeError$range(end, start, receiver.length));
+    if (start === end)
+      return [];
+    return receiver.slice(start, end);
   },
   toString$0: function(receiver) {
     return H.IterableMixinWorkaround_toStringIterable(receiver, "[", "]");
@@ -959,7 +1082,7 @@ JSNumber: {"": "num/Interceptor;",
   },
   $gt: function(receiver, other) {
     if (typeof other !== "number")
-      throw H.wrapException(new P.ArgumentError(other));
+      throw H.wrapException(P.ArgumentError$(other));
     return receiver > other;
   },
   $ge: function(receiver, other) {
@@ -987,6 +1110,17 @@ JSString: {"": "String/Interceptor;",
     if (index >= receiver.length)
       throw H.wrapException(P.RangeError$value(index));
     return receiver.charCodeAt(index);
+  },
+  $add: function(receiver, other) {
+    return receiver + other;
+  },
+  endsWith$1: function(receiver, other) {
+    var otherLength, t1;
+    otherLength = other.length;
+    t1 = receiver.length;
+    if (otherLength > t1)
+      return false;
+    return other === this.substring$1(receiver, t1 - otherLength);
   },
   startsWith$2: function(receiver, pattern, index) {
     var endIndex;
@@ -1020,6 +1154,18 @@ JSString: {"": "String/Interceptor;",
   },
   toLowerCase$0: function(receiver) {
     return receiver.toLowerCase();
+  },
+  indexOf$2: function(receiver, pattern, start) {
+    if (typeof start !== "number" || Math.floor(start) !== start)
+      throw H.wrapException(new P.ArgumentError(start));
+    if (start < 0 || start > receiver.length)
+      throw H.wrapException(P.RangeError$range(start, 0, receiver.length));
+    return receiver.indexOf(pattern, start);
+  },
+  contains$2: function(receiver, other, startIndex) {
+    if (startIndex < 0 || startIndex > receiver.length)
+      throw H.wrapException(P.RangeError$range(startIndex, 0, receiver.length));
+    return H.stringContainsUnchecked(receiver, other, startIndex);
   },
   get$isEmpty: function(receiver) {
     return receiver.length === 0;
@@ -1883,6 +2029,15 @@ _Deserializer: {"": "Object;",
 },
 
 TimerImpl: {"": "Object;_once,_inEventLoop,_handle",
+  TimerImpl$periodic$2: function(milliseconds, callback) {
+    var t1;
+    if ($.get$globalThis().setTimeout != null) {
+      t1 = $globalState.topEventLoop;
+      t1.activeTimerCount = t1.activeTimerCount + 1;
+      this._handle = $.get$globalThis().setInterval(H.convertDartClosureToJS(new H.TimerImpl$periodic_closure(this, callback), 0), milliseconds);
+    } else
+      throw H.wrapException(P.UnsupportedError$("Periodic timer."));
+  },
   TimerImpl$2: function(milliseconds, callback) {
     var t1, t2;
     if (milliseconds === 0)
@@ -1907,6 +2062,12 @@ TimerImpl$: function(milliseconds, callback) {
   var t1 = new H.TimerImpl(true, false, null);
   t1.TimerImpl$2(milliseconds, callback);
   return t1;
+},
+
+TimerImpl$periodic: function(milliseconds, callback) {
+  var t1 = new H.TimerImpl(false, false, null);
+  t1.TimerImpl$periodic$2(milliseconds, callback);
+  return t1;
 }}
 
 },
@@ -1924,6 +2085,12 @@ TimerImpl_internalCallback0: {"": "Closure;this_2,callback_3",
     var t1 = $globalState.topEventLoop;
     t1.activeTimerCount = t1.activeTimerCount - 1;
     this.callback_3.call$0();
+  }
+},
+
+TimerImpl$periodic_closure: {"": "Closure;this_0,callback_1",
+  call$0: function() {
+    this.callback_1.call$1(this.this_0);
   }
 }}],
 ["_js_helper", "dart:_js_helper", , H, {
@@ -2497,6 +2664,10 @@ initHooks: function() {
 
 applyHooksTransformer: function(transformer, hooks) {
   return transformer(hooks) || hooks;
+},
+
+stringContainsUnchecked: function(receiver, other, startIndex) {
+  return C.JSString_methods.indexOf$2(receiver, other, startIndex) !== -1;
 },
 
 TypeErrorDecoder: {"": "Object;_pattern,_arguments,_argumentsExpr,_expr,_method,_receiver",
@@ -3243,7 +3414,14 @@ WhereIterator: {"": "Iterator;_dev$_iterator,_f",
   $asIterator: null
 },
 
-FixedLengthListMixin: {"": "Object;"}}],
+FixedLengthListMixin: {"": "Object;",
+  set$length: function(receiver, newLength) {
+    throw H.wrapException(P.UnsupportedError$("Cannot change the length of a fixed-length list"));
+  },
+  addAll$1: function(receiver, iterable) {
+    throw H.wrapException(P.UnsupportedError$("Cannot add to a fixed-length list"));
+  }
+}}],
 ["dart._js_names", "dart:_js_names", , H, {
 unmangleGlobalNameIfPreservedAnyways: function($name) {
   return init.mangledGlobalNames[$name];
@@ -3412,9 +3590,23 @@ Timer_Timer: function(duration, callback) {
   return P._createTimer(duration, t1.bindCallback$2$runGuarded(callback, true));
 },
 
+Timer_Timer$periodic: function(duration, callback) {
+  var t1 = $.Zone__current;
+  if (t1 === C.C__RootZone) {
+    t1.toString;
+    return P._createPeriodicTimer(duration, callback);
+  }
+  return P._createPeriodicTimer(duration, t1.bindUnaryCallback$2$runGuarded(callback, true));
+},
+
 _createTimer: function(duration, callback) {
   var milliseconds = C.JSNumber_methods.$tdiv(duration._duration, 1000);
   return H.TimerImpl$(milliseconds < 0 ? 0 : milliseconds, callback);
+},
+
+_createPeriodicTimer: function(duration, callback) {
+  var milliseconds = C.JSNumber_methods.$tdiv(duration._duration, 1000);
+  return H.TimerImpl$periodic(milliseconds < 0 ? 0 : milliseconds, callback);
 },
 
 _rootHandleUncaughtError: function($self, $parent, zone, error, stackTrace) {
@@ -5701,6 +5893,18 @@ ListMixin: {"": "Object;",
     }
     return result;
   },
+  toList$0: function($receiver) {
+    return this.toList$1$growable($receiver, true);
+  },
+  addAll$1: function(receiver, iterable) {
+    var t1, element, t2;
+    for (t1 = J.get$iterator$ax(iterable); t1.moveNext$0();) {
+      element = t1.get$current();
+      t2 = this.get$length(receiver);
+      this.set$length(receiver, t2 + 1);
+      this.$indexSet(receiver, t2, element);
+    }
+  },
   toString$0: function(receiver) {
     var result, t1;
     t1 = $.get$_toStringVisiting();
@@ -6295,6 +6499,10 @@ Element_Element$html: function(html, treeSanitizer, validator) {
   return t1.get$single(t1);
 },
 
+_ElementFactoryProvider_createElement_tag: function(tag, typeExtension) {
+  return document.createElement(tag);
+},
+
 Window__isDartLocation: function(thing) {
   var t1, t2, exception;
   try {
@@ -6377,6 +6585,36 @@ CssStyleDeclaration: {"": "Interceptor_CssStyleDeclarationBase;length=",
   "%": "CSS2Properties|CSSStyleDeclaration|MSStyleCSSProperties"
 },
 
+DocumentFragment: {"": "Node;",
+  get$children: function(receiver) {
+    var t1;
+    if (receiver._children == null) {
+      t1 = new P.FilteredElementList(receiver, new W._ChildNodeListLazy(receiver));
+      H.setRuntimeTypeInfo(t1, [null]);
+      receiver._children = t1;
+    }
+    return receiver._children;
+  },
+  get$innerHtml: function(receiver) {
+    var e, t1;
+    e = W._ElementFactoryProvider_createElement_tag("div", null);
+    t1 = J.getInterceptor$x(e);
+    t1.append$1(e, this.clone$1(receiver, true));
+    return t1.get$innerHtml(e);
+  },
+  set$innerHtml: function(receiver, value) {
+    this.setInnerHtml$1(receiver, value);
+  },
+  setInnerHtml$3$treeSanitizer$validator: function(receiver, html, treeSanitizer, validator) {
+    new W._ChildNodeListLazy(receiver)._this.textContent = "";
+    receiver.appendChild(J.createFragment$3$treeSanitizer$validator$x(document.body, html, treeSanitizer, validator));
+  },
+  setInnerHtml$1: function($receiver, html) {
+    return this.setInnerHtml$3$treeSanitizer$validator($receiver, html, null, null);
+  },
+  "%": ";DocumentFragment"
+},
+
 DomException: {"": "Interceptor;",
   toString$0: function(receiver) {
     return receiver.toString();
@@ -6387,6 +6625,9 @@ DomException: {"": "Interceptor;",
 Element: {"": "Node;style=",
   get$attributes: function(receiver) {
     return new W._ElementAttributeMap(receiver);
+  },
+  get$children: function(receiver) {
+    return new W._ChildrenElementList(receiver, receiver.children);
   },
   get$client: function(receiver) {
     var t1 = new P.Rectangle(receiver.clientLeft, receiver.clientTop, receiver.clientWidth, receiver.clientHeight);
@@ -6449,12 +6690,18 @@ Element: {"": "Node;style=",
   createFragment$2$treeSanitizer: function($receiver, html, treeSanitizer) {
     return this.createFragment$3$treeSanitizer$validator($receiver, html, treeSanitizer, null);
   },
+  set$innerHtml: function(receiver, html) {
+    this.setInnerHtml$1(receiver, html);
+  },
   setInnerHtml$3$treeSanitizer$validator: function(receiver, html, treeSanitizer, validator) {
     receiver.textContent = null;
     receiver.appendChild(this.createFragment$3$treeSanitizer$validator(receiver, html, treeSanitizer, validator));
   },
   setInnerHtml$1: function($receiver, html) {
     return this.setInnerHtml$3$treeSanitizer$validator($receiver, html, null, null);
+  },
+  get$innerHtml: function(receiver) {
+    return receiver.innerHTML;
   },
   $isElement: true,
   "%": ";Element"
@@ -6498,6 +6745,9 @@ HtmlCollection: {"": "Interceptor_ListMixin_ImmutableListMixin;",
   },
   $indexSet: function(receiver, index, value) {
     throw H.wrapException(P.UnsupportedError$("Cannot assign element of immutable List."));
+  },
+  set$length: function(receiver, value) {
+    throw H.wrapException(P.UnsupportedError$("Cannot resize immutable List."));
   },
   elementAt$1: function(receiver, index) {
     if (index < 0 || index >= receiver.length)
@@ -6576,11 +6826,31 @@ Node: {"": "EventTarget;lastChild=,nodeType=",
     if (t1 != null)
       t1.removeChild(receiver);
   },
+  replaceWith$1: function(receiver, otherNode) {
+    var $parent, exception;
+    try {
+      $parent = receiver.parentNode;
+      J._replaceChild$2$x($parent, otherNode, receiver);
+    } catch (exception) {
+      H.unwrapException(exception);
+    }
+
+    return receiver;
+  },
   toString$0: function(receiver) {
     var t1 = receiver.nodeValue;
     return t1 == null ? J.Interceptor.prototype.toString$0.call(this, receiver) : t1;
   },
-  "%": "Document|DocumentFragment|DocumentType|Entity|HTMLDocument|Notation|SVGDocument|ShadowRoot;Node"
+  append$1: function(receiver, newChild) {
+    return receiver.appendChild(newChild);
+  },
+  clone$1: function(receiver, deep) {
+    return receiver.cloneNode(deep);
+  },
+  _replaceChild$2: function(receiver, newChild, oldChild) {
+    return receiver.replaceChild(newChild, oldChild);
+  },
+  "%": "Document|DocumentType|Entity|HTMLDocument|Notation|SVGDocument;Node"
 },
 
 NodeList: {"": "Interceptor_ListMixin_ImmutableListMixin0;",
@@ -6595,6 +6865,9 @@ NodeList: {"": "Interceptor_ListMixin_ImmutableListMixin0;",
   },
   $indexSet: function(receiver, index, value) {
     throw H.wrapException(P.UnsupportedError$("Cannot assign element of immutable List."));
+  },
+  set$length: function(receiver, value) {
+    throw H.wrapException(P.UnsupportedError$("Cannot resize immutable List."));
   },
   elementAt$1: function(receiver, index) {
     if (index < 0 || index >= receiver.length)
@@ -6630,6 +6903,13 @@ Range: {"": "Interceptor;",
 },
 
 SelectElement: {"": "HtmlElement;length=,name=,value=", "%": "HTMLSelectElement"},
+
+ShadowRoot: {"": "DocumentFragment;innerHtml:innerHTML%",
+  clone$1: function(receiver, deep) {
+    return receiver.cloneNode(deep);
+  },
+  "%": "ShadowRoot"
+},
 
 SpeechRecognitionError: {"": "Event;error=", "%": "SpeechRecognitionError"},
 
@@ -6810,6 +7090,9 @@ _NamedNodeMap: {"": "Interceptor_ListMixin_ImmutableListMixin1;",
   $indexSet: function(receiver, index, value) {
     throw H.wrapException(P.UnsupportedError$("Cannot assign element of immutable List."));
   },
+  set$length: function(receiver, value) {
+    throw H.wrapException(P.UnsupportedError$("Cannot resize immutable List."));
+  },
   elementAt$1: function(receiver, index) {
     if (index < 0 || index >= receiver.length)
       throw H.ioore(receiver, index);
@@ -6843,8 +7126,54 @@ CssStyleDeclarationBase: {"": "Object;",
   set$background: function(receiver, value) {
     this.setProperty$3(receiver, "background", value, "");
   },
+  set$backgroundColor: function(receiver, value) {
+    this.setProperty$3(receiver, "background-color", value, "");
+  },
+  set$paddingBottom: function(receiver, value) {
+    this.setProperty$3(receiver, "padding-bottom", value, "");
+  },
+  set$paddingTop: function(receiver, value) {
+    this.setProperty$3(receiver, "padding-top", value, "");
+  },
+  set$transition: function(receiver, value) {
+    this.setProperty$3(receiver, P.Device_cssPrefix() + "transition", value, "");
+  },
   set$width: function(receiver, value) {
     this.setProperty$3(receiver, "width", value, "");
+  }
+},
+
+_ChildrenElementList: {"": "ListBase;_element,_childElements",
+  get$length: function(_) {
+    return this._childElements.length;
+  },
+  $index: function(_, index) {
+    var t1 = this._childElements;
+    if (index >>> 0 !== index || index >= t1.length)
+      throw H.ioore(t1, index);
+    return t1[index];
+  },
+  $indexSet: function(_, index, value) {
+    var t1 = this._childElements;
+    if (index >>> 0 !== index || index >= t1.length)
+      throw H.ioore(t1, index);
+    this._element.replaceChild(value, t1[index]);
+  },
+  set$length: function(_, newLength) {
+    throw H.wrapException(P.UnsupportedError$("Cannot resize element lists"));
+  },
+  get$iterator: function(_) {
+    var t1 = this.toList$0(this);
+    return new H.ListIterator(t1, t1.length, 0, null);
+  },
+  addAll$1: function(_, iterable) {
+    var t1, t2;
+    t1 = J.getInterceptor(iterable);
+    for (t1 = J.get$iterator$ax(typeof iterable === "object" && iterable !== null && !!t1.$is_ChildNodeListLazy ? P.List_List$from(iterable, true, null) : iterable), t2 = this._element; t1.moveNext$0();)
+      t2.appendChild(t1.get$current());
+  },
+  $asList: function() {
+    return [W.Element];
   }
 },
 
@@ -6873,12 +7202,17 @@ _ChildNodeListLazy: {"": "ListBase;_this",
   },
   addAll$1: function(_, iterable) {
     var t1, t2, len, i;
-    t1 = iterable._this;
-    t2 = this._this;
-    if (t1 !== t2)
-      for (len = t1.childNodes.length, i = 0; i < len; ++i)
-        t2.appendChild(t1.firstChild);
-    return;
+    t1 = J.getInterceptor$ax(iterable);
+    if (typeof iterable === "object" && iterable !== null && !!t1.$is_ChildNodeListLazy) {
+      t1 = iterable._this;
+      t2 = this._this;
+      if (t1 !== t2)
+        for (len = t1.childNodes.length, i = 0; i < len; ++i)
+          t2.appendChild(t1.firstChild);
+      return;
+    }
+    for (t1 = t1.get$iterator(iterable), t2 = this._this; t1.moveNext$0();)
+      t2.appendChild(t1.get$current());
   },
   $indexSet: function(_, index, value) {
     var t1, t2;
@@ -6894,12 +7228,16 @@ _ChildNodeListLazy: {"": "ListBase;_this",
   get$length: function(_) {
     return this._this.childNodes.length;
   },
+  set$length: function(_, value) {
+    throw H.wrapException(P.UnsupportedError$("Cannot set length on immutable List."));
+  },
   $index: function(_, index) {
     var t1 = this._this.childNodes;
     if (index >>> 0 !== index || index >= t1.length)
       throw H.ioore(t1, index);
     return t1[index];
   },
+  $is_ChildNodeListLazy: true,
   $asList: function() {
     return [W.Node];
   }
@@ -7084,6 +7422,9 @@ ImmutableListMixin: {"": "Object;",
   get$iterator: function(receiver) {
     return W.FixedSizeListIterator$(receiver);
   },
+  addAll$1: function(receiver, iterable) {
+    throw H.wrapException(P.UnsupportedError$("Cannot add to immutable List."));
+  },
   $isList: true,
   $asList: null,
   $isEfficientLength: true
@@ -7213,6 +7554,9 @@ _WrappedList: {"": "ListBase;_list",
     if (index >>> 0 !== index || index >= t1.length)
       throw H.ioore(t1, index);
     t1[index] = value;
+  },
+  set$length: function(_, newLength) {
+    J.set$length$asx(this._list, newLength);
   },
   $asListBase: null,
   $asList: null
@@ -7392,6 +7736,23 @@ GraphicsElement: {"": "SvgElement;", "%": "SVGAltGlyphElement|SVGCircleElement|S
 ScriptElement: {"": "SvgElement;", $isScriptElement: true, "%": "SVGScriptElement"},
 
 SvgElement: {"": "Element;",
+  get$children: function(receiver) {
+    var t1 = new P.FilteredElementList(receiver, new W._ChildNodeListLazy(receiver));
+    H.setRuntimeTypeInfo(t1, [W.Element]);
+    return t1;
+  },
+  get$innerHtml: function(receiver) {
+    var container, cloned, t1;
+    container = W._ElementFactoryProvider_createElement_tag("div", null);
+    cloned = receiver.cloneNode(true);
+    t1 = J.getInterceptor$x(container);
+    J.addAll$1$ax(t1.get$children(container), J.get$children$x(cloned));
+    return t1.get$innerHtml(container);
+  },
+  set$innerHtml: function(receiver, value) {
+    receiver.textContent = null;
+    receiver.appendChild(this.createFragment$3$treeSanitizer$validator(receiver, value, null, null));
+  },
   createFragment$3$treeSanitizer$validator: function(receiver, svg, treeSanitizer, validator) {
     var t1, html, fragment, svgFragment, root;
     t1 = [];
@@ -7436,6 +7797,16 @@ max: function(a, b) {
   if (a > b)
     return a;
   return b;
+},
+
+_Random: {"": "Object;",
+  nextInt$1: function(max) {
+    if (max < 0)
+      throw H.wrapException(new P.ArgumentError("negative max: " + max));
+    if (max > 4294967295)
+      max = 4294967295;
+    return Math.random() * max >>> 0;
+  }
 },
 
 Point: {"": "Object;x,y",
@@ -7872,6 +8243,99 @@ Uint64List: {"": "TypedData;", $isList: true,
 }
 
 }}],
+["html_common", "dart:html_common", , P, {
+Device_isOpera: function() {
+  if ($.Device__isOpera == null)
+    $.Device__isOpera = J.contains$2$asx(window.navigator.userAgent, "Opera", 0);
+  return $.Device__isOpera;
+},
+
+Device_isIE: function() {
+  if ($.Device__isIE == null)
+    $.Device__isIE = P.Device_isOpera() !== true && J.contains$2$asx(window.navigator.userAgent, "Trident/", 0);
+  return $.Device__isIE;
+},
+
+Device_isFirefox: function() {
+  if ($.Device__isFirefox == null)
+    $.Device__isFirefox = J.contains$2$asx(window.navigator.userAgent, "Firefox", 0);
+  return $.Device__isFirefox;
+},
+
+Device_cssPrefix: function() {
+  if ($.Device__cachedCssPrefix == null)
+    if (P.Device_isFirefox() === true)
+      $.Device__cachedCssPrefix = "-moz-";
+    else if (P.Device_isIE() === true)
+      $.Device__cachedCssPrefix = "-ms-";
+    else if (P.Device_isOpera() === true)
+      $.Device__cachedCssPrefix = "-o-";
+    else
+      $.Device__cachedCssPrefix = "-webkit-";
+  return $.Device__cachedCssPrefix;
+},
+
+FilteredElementList: {"": "ListBase;_node,_childNodes",
+  get$_filtered: function() {
+    var t1 = this._childNodes;
+    return P.List_List$from(t1.where$1(t1, new P.FilteredElementList__filtered_closure()), true, W.Element);
+  },
+  forEach$1: function(_, f) {
+    H.IterableMixinWorkaround_forEach(this.get$_filtered(), f);
+  },
+  $indexSet: function(_, index, value) {
+    var t1 = this.get$_filtered();
+    if (index >>> 0 !== index || index >= t1.length)
+      throw H.ioore(t1, index);
+    J.replaceWith$1$x(t1[index], value);
+  },
+  set$length: function(_, newLength) {
+    var len = this.get$_filtered().length;
+    if (newLength >= len)
+      return;
+    else if (newLength < 0)
+      throw H.wrapException(new P.ArgumentError("Invalid list length"));
+    this.removeRange$2(this, newLength, len);
+  },
+  addAll$1: function(_, iterable) {
+    var t1, t2;
+    for (t1 = J.get$iterator$ax(iterable), t2 = this._childNodes._this; t1.moveNext$0();)
+      t2.appendChild(t1.get$current());
+  },
+  removeRange$2: function(_, start, end) {
+    H.IterableMixinWorkaround_forEach(C.JSArray_methods.sublist$2(this.get$_filtered(), start, end), new P.FilteredElementList_removeRange_closure());
+  },
+  get$length: function(_) {
+    return this.get$_filtered().length;
+  },
+  $index: function(_, index) {
+    var t1 = this.get$_filtered();
+    if (index >>> 0 !== index || index >= t1.length)
+      throw H.ioore(t1, index);
+    return t1[index];
+  },
+  get$iterator: function(_) {
+    var t1 = this.get$_filtered();
+    return new H.ListIterator(t1, t1.length, 0, null);
+  },
+  $asListBase: null,
+  $asList: null
+},
+
+FilteredElementList__filtered_closure: {"": "Closure;",
+  call$1: function(n) {
+    var t1 = J.getInterceptor(n);
+    return typeof n === "object" && n !== null && !!t1.$isElement;
+  },
+  $is_args1: true
+},
+
+FilteredElementList_removeRange_closure: {"": "Closure;",
+  call$1: function(el) {
+    return J.remove$0$ax(el);
+  },
+  $is_args1: true
+}}],
 ["", "tabletest.dart", , A, {
 main: function() {
   var rltable, user, i, t1, t2, mp, $arguments;
@@ -7891,6 +8355,24 @@ main: function() {
     }
     rltable.addRowAsMap$1(mp);
   }
+  P.Timer_Timer$periodic(P.Duration$(0, 0, 0, 50, 0, 0), new A.main_closure(rltable, C.C__Random));
+  P.Timer_Timer$periodic(P.Duration$(0, 0, 0, 50, 0, 0), new A.main_closure0(rltable, C.C__Random));
+},
+
+main_closure: {"": "Closure;rltable_0,rnd_1",
+  call$1: function(t) {
+    var t1 = this.rnd_1;
+    this.rltable_0.updateRow$2("" + t1.nextInt$1(100), H.fillLiteralMap(["Qty", t1.nextInt$1(100)], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
+  },
+  $is_args1: true
+},
+
+main_closure0: {"": "Closure;rltable_2,rnd_3",
+  call$1: function(t) {
+    var t1 = this.rnd_3;
+    this.rltable_2.updateRow$2("" + t1.nextInt$1(100), H.fillLiteralMap(["Price", t1.nextInt$1(10000) / 100], P.LinkedHashMap_LinkedHashMap(null, null, null, null, null)));
+  },
+  $is_args1: true
 }},
 1],
 ]);
@@ -7940,16 +8422,19 @@ J.JSNumber.$isObject = true;
 P.Duration.$isComparable = true;
 P.Duration.$asComparable = [P.Duration];
 P.Duration.$isObject = true;
-W.TableCellElement.$isElement = true;
-W.TableCellElement.$isNode = true;
-W.TableCellElement.$isObject = true;
+W.Element.$isElement = true;
+W.Element.$isNode = true;
+W.Element.$isObject = true;
 W.TableRowElement.$isElement = true;
 W.TableRowElement.$isNode = true;
 W.TableRowElement.$isObject = true;
+W.TableCellElement.$isElement = true;
+W.TableCellElement.$isNode = true;
+W.TableCellElement.$isObject = true;
+W.NodeValidator.$isObject = true;
 W.Event.$isObject = true;
 W.MouseEvent.$isObject = true;
 W.KeyboardEvent.$isObject = true;
-W.NodeValidator.$isObject = true;
 P.ReceivePort.$isObject = true;
 H._IsolateEvent.$isObject = true;
 H._IsolateContext.$isObject = true;
@@ -7959,17 +8444,14 @@ P.Symbol.$isObject = true;
 P.StackTrace.$isStackTrace = true;
 P.StackTrace.$isObject = true;
 P.Object.$isObject = true;
-J.JSBool.$isbool = true;
-J.JSBool.$isObject = true;
 P.Function.$isFunction = true;
 P.Function.$isObject = true;
-P.Comparable.$isComparable = true;
-P.Comparable.$isObject = true;
-W.Element.$isElement = true;
-W.Element.$isNode = true;
-W.Element.$isObject = true;
+J.JSBool.$isbool = true;
+J.JSBool.$isObject = true;
 W._Html5NodeValidator.$is_Html5NodeValidator = true;
 W._Html5NodeValidator.$isObject = true;
+P.Comparable.$isComparable = true;
+P.Comparable.$isObject = true;
 P._EventSink.$is_EventSink = true;
 P._EventSink.$isObject = true;
 P.Future.$isFuture = true;
@@ -8060,9 +8542,11 @@ J.getInterceptor$x = function(receiver) {
   return J.getNativeInterceptor(receiver);
 };
 C.C__DelayedDone = new P._DelayedDone();
+C.C__Random = new P._Random();
 C.C__RootZone = new P._RootZone();
 C.Duration_0 = new P.Duration(0);
 C.EventStreamProvider_click = new W.EventStreamProvider("click");
+C.EventStreamProvider_dblclick = new W.EventStreamProvider("dblclick");
 C.EventStreamProvider_keydown = new W.EventStreamProvider("keydown");
 C.EventStreamProvider_mouseenter = new W.EventStreamProvider("mouseenter");
 C.EventStreamProvider_mouseleave = new W.EventStreamProvider("mouseleave");
@@ -8227,7 +8711,15 @@ $.Element__parseRange = null;
 $.Element__defaultValidator = null;
 $.Element__defaultSanitizer = null;
 $.Device__isOpera = null;
+$.Device__isIE = null;
+$.Device__isFirefox = null;
 $.Device__isWebKit = null;
+$.Device__cachedCssPrefix = null;
+J.$add$ns = function(receiver, a0) {
+  if (typeof receiver == "number" && typeof a0 == "number")
+    return receiver + a0;
+  return J.getInterceptor$ns(receiver).$add(receiver, a0);
+};
 J.$eq = function(receiver, a0) {
   if (receiver == null)
     return a0 == null;
@@ -8261,6 +8753,12 @@ J.$lt$n = function(receiver, a0) {
     return receiver < a0;
   return J.getInterceptor$n(receiver).$lt(receiver, a0);
 };
+J._replaceChild$2$x = function(receiver, a0, a1) {
+  return J.getInterceptor$x(receiver)._replaceChild$2(receiver, a0, a1);
+};
+J.addAll$1$ax = function(receiver, a0) {
+  return J.getInterceptor$ax(receiver).addAll$1(receiver, a0);
+};
 J.addCell$0$x = function(receiver) {
   return J.getInterceptor$x(receiver).addCell$0(receiver);
 };
@@ -8273,6 +8771,9 @@ J.addRow$0$x = function(receiver) {
 J.compareTo$1$ns = function(receiver, a0) {
   return J.getInterceptor$ns(receiver).compareTo$1(receiver, a0);
 };
+J.contains$2$asx = function(receiver, a0, a1) {
+  return J.getInterceptor$asx(receiver).contains$2(receiver, a0, a1);
+};
 J.createFragment$2$treeSanitizer$x = function(receiver, a0, a1) {
   return J.getInterceptor$x(receiver).createFragment$2$treeSanitizer(receiver, a0, a1);
 };
@@ -8282,6 +8783,9 @@ J.createFragment$3$treeSanitizer$validator$x = function(receiver, a0, a1, a2) {
 J.elementAt$1$ax = function(receiver, a0) {
   return J.getInterceptor$ax(receiver).elementAt$1(receiver, a0);
 };
+J.endsWith$1$s = function(receiver, a0) {
+  return J.getInterceptor$s(receiver).endsWith$1(receiver, a0);
+};
 J.forEach$1$ax = function(receiver, a0) {
   return J.getInterceptor$ax(receiver).forEach$1(receiver, a0);
 };
@@ -8290,6 +8794,9 @@ J.get$attributes$x = function(receiver) {
 };
 J.get$cells$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$cells(receiver);
+};
+J.get$children$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$children(receiver);
 };
 J.get$client$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$client(receiver);
@@ -8345,20 +8852,41 @@ J.remove$0$ax = function(receiver) {
 J.removeEventListener$3$x = function(receiver, a0, a1, a2) {
   return J.getInterceptor$x(receiver).removeEventListener$3(receiver, a0, a1, a2);
 };
+J.replaceWith$1$x = function(receiver, a0) {
+  return J.getInterceptor$x(receiver).replaceWith$1(receiver, a0);
+};
 J.send$1$x = function(receiver, a0) {
   return J.getInterceptor$x(receiver).send$1(receiver, a0);
 };
 J.set$background$x = function(receiver, value) {
   return J.getInterceptor$x(receiver).set$background(receiver, value);
 };
+J.set$backgroundColor$x = function(receiver, value) {
+  return J.getInterceptor$x(receiver).set$backgroundColor(receiver, value);
+};
 J.set$href$x = function(receiver, value) {
   return J.getInterceptor$x(receiver).set$href(receiver, value);
+};
+J.set$length$asx = function(receiver, value) {
+  return J.getInterceptor$asx(receiver).set$length(receiver, value);
+};
+J.set$paddingBottom$x = function(receiver, value) {
+  return J.getInterceptor$x(receiver).set$paddingBottom(receiver, value);
+};
+J.set$paddingTop$x = function(receiver, value) {
+  return J.getInterceptor$x(receiver).set$paddingTop(receiver, value);
+};
+J.set$transition$x = function(receiver, value) {
+  return J.getInterceptor$x(receiver).set$transition(receiver, value);
 };
 J.set$width$x = function(receiver, value) {
   return J.getInterceptor$x(receiver).set$width(receiver, value);
 };
 J.setInnerHtml$1$x = function(receiver, a0) {
   return J.getInterceptor$x(receiver).setInnerHtml$1(receiver, a0);
+};
+J.substring$2$s = function(receiver, a0, a1) {
+  return J.getInterceptor$s(receiver).substring$2(receiver, a0, a1);
 };
 J.toList$0$ax = function(receiver) {
   return J.getInterceptor$ax(receiver).toList$0(receiver);

@@ -1,5 +1,7 @@
 import 'dart:html';
 import 'reallive/RLTable.dart';
+import 'dart:async';
+import 'dart:math';
 
 
 void main() {
@@ -46,5 +48,16 @@ void main() {
     }
     rltable.addRowAsMap(mp);
   }
+  var rnd = new Random();
+  new Timer.periodic(new Duration(milliseconds: 50), (t) { 
+      rltable.updateRow("${rnd.nextInt(100)}", { "Qty":rnd.nextInt(100) }); 
+    } 
+  );
+  
+  new Timer.periodic(new Duration(milliseconds: 50), (t) { 
+      rltable.updateRow("${rnd.nextInt(100)}", { "Price":rnd.nextInt(10000)/100 }); 
+    } 
+  );
+  
 
 }
