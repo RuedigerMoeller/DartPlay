@@ -5,9 +5,23 @@
 tr, td {
   padding: 3px;
 }
+
+td {overflow:hidden;}
+
+tbody tr:hover { background: #9cF; }
+
+tbody tr:nth-child(odd):hover {
+  background: #9cF;
+}
+
+tr {
+  transition: background-color .3s ease-out;
+}
+
 tbody tr:nth-child(odd) {
   background: #eee;
 }
+
 
 .arrow-n,
 .arrow-e,
@@ -74,20 +88,20 @@ tbody tr:nth-child(odd) {
     
     <p>Hello world from Dart!</p>
     <div id='table_id-header-pane' 
-         style="overflow: hidden; padding: 1px; 
+         style="overflow: hidden; padding: 1px;  width:600px;
          ">
     <table id="table_id-header"
-           style="color:#ffffff; table-layout:fixed; }">
+           style="color:#ffffff; table-layout:fixed; overflow: hidden; }">
       <tbody>
       </tbody>
     </table>
     </div>
     <div id='table_id-pane' 
          style="
-           overflow: scroll; padding: 1px; height: 400px; width: 90%;
+           overflow: scroll; padding: 1px; height: 400px; width: 616px; 
            -webkit-touch-callout: none; -webkit-user-select: none;
            -khtml-user-select: none; -moz-user-select: none;
-           -ms-user-select: none; user-select: none;
+           -ms-user-select: none; user-select: none; 
          ">
     <table id="table_id"
            style="border-collapse:collapse; table-layout:fixed"

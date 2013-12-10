@@ -359,15 +359,11 @@ RLTable: {"": "Object;selectedRowId,table,tableHeader,rowIdCnt,headerRenderer,ro
     newRow = J.$index$asx(J.get$rows$x(this.tableHeader), 0);
     J.get$attributes$x(newRow)._element.setAttribute("t_id", "header");
     this.headerRenderer.renderRow$4("header", newRow, header, this.renderStyle);
-    this.adjustHeaderWidth$0();
+    this.adjustColWidthFromHeader$0();
   },
-  adjustTWidth$0: function() {
-    J.set$width$x(this.headerPane.style, H.S(this.pane.clientWidth) + "px");
-  },
-  adjustHeaderWidth$0: function() {
-    var t1, hd, bd;
+  adjustColWidthFromHeader$0: function() {
+    var t1, hd, bd, t2, t3, t4, t5;
     t1 = {};
-    this.adjustTWidth$0();
     if (J.get$length$asx(J.get$rows$x(this.tableHeader)) < 1 || J.get$length$asx(J.get$rows$x(this.table)) < 1)
       return;
     hd = J.get$cells$x(J.$index$asx(J.get$rows$x(this.tableHeader), 0));
@@ -375,7 +371,35 @@ RLTable: {"": "Object;selectedRowId,table,tableHeader,rowIdCnt,headerRenderer,ro
     if (hd._list.length < 1 || bd._list.length < 1)
       return;
     t1.index_0 = 0;
-    hd.forEach$1(hd, new N.RLTable_adjustHeaderWidth_closure(t1, bd, 2));
+    t1.prevBody_1 = null;
+    t1.prevHeader_2 = null;
+    hd.forEach$1(hd, new N.RLTable_adjustColWidthFromHeader_closure(t1, bd));
+    t2 = t1.prevHeader_2;
+    if (t2 != null) {
+      t2 = J.get$marginEdge$x(t2);
+      t3 = t2._element.offsetWidth;
+      t2 = t2._addOrSubtractToBoxModel$2($.get$_WIDTH(), "margin");
+      if (typeof t3 !== "number")
+        throw t3.$add();
+      t4 = t1.prevBody_1;
+      t4.toString;
+      t4 = new W._MarginCssRect(t4, 0, 0, 0, 0);
+      t5 = t4._element.offsetWidth;
+      t4 = t4._addOrSubtractToBoxModel$2($.get$_WIDTH(), "margin");
+      if (typeof t5 !== "number")
+        throw t5.$add();
+      if (t3 + t2 - 4 < t5 + t4) {
+        t2 = J.get$contentEdge$x(t1.prevHeader_2);
+        t1 = t1.prevBody_1;
+        t1.toString;
+        t1 = new W._ContentCssRect(t1, 0, 0, 0, 0);
+        t3 = t1._element.offsetWidth;
+        t1 = t1._addOrSubtractToBoxModel$2($.get$_WIDTH(), "content");
+        if (typeof t3 !== "number")
+          throw t3.$add();
+        t2.set$width(t2, t3 + t1 + 4);
+      }
+    }
   },
   setHeaderSortArrow$2: function(field, up) {
     var t1 = J.get$cells$x(J.$index$asx(J.get$rows$x(this.tableHeader), 0));
@@ -389,7 +413,7 @@ RLTable: {"": "Object;selectedRowId,table,tableHeader,rowIdCnt,headerRenderer,ro
       newValues.forEach$1(newValues, new N.RLTable_updateRow_closure(data));
       t1 = J.get$cells$x(this.findRow$1(rowId));
       t1.forEach$1(t1, new N.RLTable_updateRow_closure0(this, newValues));
-      this.adjustHeaderWidth$0();
+      this.adjustColWidthFromHeader$0();
     }
   },
   addRowWithId$2: function(id, data) {
@@ -400,7 +424,7 @@ RLTable: {"": "Object;selectedRowId,table,tableHeader,rowIdCnt,headerRenderer,ro
     t1 = this.rows;
     t1.$indexSet(t1, id, data);
     this.rowRenderer.renderRow$4(id, newRow, data, this.renderStyle);
-    this.adjustHeaderWidth$0();
+    this.adjustColWidthFromHeader$0();
   },
   addRowAsMap$1: function(data) {
     var newRow, id, t1;
@@ -412,7 +436,7 @@ RLTable: {"": "Object;selectedRowId,table,tableHeader,rowIdCnt,headerRenderer,ro
     t1 = this.rows;
     t1.$indexSet(t1, id, new N.RowMapAdapter(data, H.Primitives_parseInt(id, null, null)));
     this.rowRenderer.renderRow$4(id, newRow, t1.$index(t1, id), this.renderStyle);
-    this.adjustHeaderWidth$0();
+    this.adjustColWidthFromHeader$0();
   },
   sort$2: function(_, field, up) {
     var t1, list;
@@ -435,7 +459,6 @@ RLTable: {"": "Object;selectedRowId,table,tableHeader,rowIdCnt,headerRenderer,ro
     this.headerPane = document.querySelector(t1);
     t1 = id + "-header";
     this.tableHeader = document.querySelector(t1);
-    this.adjustTWidth$0();
     t1 = new W._EventStream(window, C.EventStreamProvider_resize._eventType, false);
     H.setRuntimeTypeInfo(t1, [null]);
     t2 = new W._EventStreamSubscription(0, t1._target, t1._eventType, W._wrapZone(new N.RLTable_closure(this)), t1._useCapture);
@@ -488,7 +511,7 @@ RLTable$: function(id) {
 
 RLTable_closure: {"": "Closure;this_0",
   call$1: function(ev) {
-    this.this_0.adjustTWidth$0();
+    this.this_0.adjustColWidthFromHeader$0();
   },
   $is_args1: true
 },
@@ -574,26 +597,53 @@ RLTable_clearSelection_closure: {"": "Closure;this_0",
   $is_args1: true
 },
 
-RLTable_adjustHeaderWidth_closure: {"": "Closure;box_0,bd_1,off_2",
+RLTable_adjustColWidthFromHeader_closure: {"": "Closure;box_0,bd_1",
   call$1: function(headCell) {
-    var t1, t2, t3, t4, t5, t6, width;
+    var t1, t2, t3, bodyCell, offR, offH, t4, t5, t6;
     t1 = this.box_0;
     t2 = t1.index_0;
     t3 = this.bd_1._list;
     if (t2 < 0 || t2 >= t3.length)
       throw H.ioore(t3, t2);
-    t2 = J.get$client$x(t3[t2]).width;
-    t4 = this.off_2;
-    if (typeof t2 !== "number")
-      throw t2.$sub();
-    t5 = J.getInterceptor$x(headCell);
-    t6 = t5.get$client(headCell);
-    width = P.max(t2 - t4, t6.get$width(t6));
-    J.set$width$x(t5.get$style(headCell), "" + width + "px");
-    t5 = t1.index_0;
-    if (t5 < 0 || t5 >= t3.length)
-      throw H.ioore(t3, t5);
-    J.set$width$x(J.get$style$x(t3[t5]), "" + (width + t4) + "px");
+    bodyCell = t3[t2];
+    offR = J.get$offset$x(bodyCell);
+    offH = J.get$offset$x(headCell);
+    t2 = t1.prevHeader_2;
+    if (t2 != null) {
+      t3 = offR.left;
+      t4 = offH.get$left(offH);
+      if (typeof t3 !== "number")
+        throw t3.$lt();
+      if (typeof t4 !== "number")
+        throw H.iae(t4);
+      if (t3 < t4) {
+        t2 = t1.prevBody_1;
+        t2.toString;
+        t2 = new W._ContentCssRect(t2, 0, 0, 0, 0);
+        t4 = t2._element.offsetWidth;
+        t5 = t2._addOrSubtractToBoxModel$2($.get$_WIDTH(), "content");
+        if (typeof t4 !== "number")
+          throw t4.$add();
+        t6 = offH.left;
+        if (typeof t6 !== "number")
+          throw t6.$sub();
+        t2.set$width(t2, t4 + t5 + (t6 - t3));
+      } else {
+        t4 = offH.left;
+        if (typeof t4 !== "number")
+          throw t4.$lt();
+        if (t4 < t3) {
+          t2 = J.get$contentEdge$x(t2);
+          t5 = t2._element.offsetWidth;
+          t6 = t2._addOrSubtractToBoxModel$2($.get$_WIDTH(), "content");
+          if (typeof t5 !== "number")
+            throw t5.$add();
+          t2.set$width(t2, t5 + t6 + (t3 - t4));
+        }
+      }
+    }
+    t1.prevHeader_2 = headCell;
+    t1.prevBody_1 = bodyCell;
     t1.index_0 = t1.index_0 + 1;
   },
   $is_args1: true
@@ -1155,6 +1205,35 @@ JSString: {"": "String/Interceptor;",
   toLowerCase$0: function(receiver) {
     return receiver.toLowerCase();
   },
+  trim$0: function(receiver) {
+    var endIndex, startIndex, codeUnit, endIndex0, endIndex1;
+    for (endIndex = receiver.length, startIndex = 0; startIndex < endIndex;) {
+      if (startIndex >= endIndex)
+        H.throwExpression(P.RangeError$value(startIndex));
+      codeUnit = receiver.charCodeAt(startIndex);
+      if (codeUnit === 32 || codeUnit === 13 || J.JSString__isWhitespace(codeUnit))
+        ++startIndex;
+      else
+        break;
+    }
+    if (startIndex === endIndex)
+      return "";
+    for (endIndex0 = endIndex; true; endIndex0 = endIndex1) {
+      endIndex1 = endIndex0 - 1;
+      if (endIndex1 < 0)
+        H.throwExpression(P.RangeError$value(endIndex1));
+      if (endIndex1 >= endIndex)
+        H.throwExpression(P.RangeError$value(endIndex1));
+      codeUnit = receiver.charCodeAt(endIndex1);
+      if (codeUnit === 32 || codeUnit === 13 || J.JSString__isWhitespace(codeUnit))
+        ;
+      else
+        break;
+    }
+    if (startIndex === 0 && endIndex0 === endIndex)
+      return receiver;
+    return receiver.substring(startIndex, endIndex0);
+  },
   indexOf$2: function(receiver, pattern, start) {
     if (typeof start !== "number" || Math.floor(start) !== start)
       throw H.wrapException(new P.ArgumentError(start));
@@ -1166,6 +1245,9 @@ JSString: {"": "String/Interceptor;",
     if (startIndex < 0 || startIndex > receiver.length)
       throw H.wrapException(P.RangeError$range(startIndex, 0, receiver.length));
     return H.stringContainsUnchecked(receiver, other, startIndex);
+  },
+  contains$1: function($receiver, other) {
+    return this.contains$2($receiver, other, 0);
   },
   get$isEmpty: function(receiver) {
     return receiver.length === 0;
@@ -1204,7 +1286,49 @@ JSString: {"": "String/Interceptor;",
       throw H.wrapException(P.RangeError$value(index));
     return receiver[index];
   },
-  $isString: true
+  $isString: true,
+  static: {
+JSString__isWhitespace: function(codeUnit) {
+  if (codeUnit < 256)
+    switch (codeUnit) {
+      case 9:
+      case 10:
+      case 11:
+      case 12:
+      case 13:
+      case 32:
+      case 133:
+      case 160:
+        return true;
+      default:
+        return false;
+    }
+  switch (codeUnit) {
+    case 5760:
+    case 6158:
+    case 8192:
+    case 8193:
+    case 8194:
+    case 8195:
+    case 8196:
+    case 8197:
+    case 8198:
+    case 8199:
+    case 8200:
+    case 8201:
+    case 8202:
+    case 8232:
+    case 8233:
+    case 8239:
+    case 8287:
+    case 12288:
+    case 65279:
+      return true;
+    default:
+      return false;
+  }
+}}
+
 }}],
 ["_isolate_helper", "dart:_isolate_helper", , H, {
 _callInIsolate: function(isolate, $function) {
@@ -2161,6 +2285,21 @@ Primitives_parseInt: function(source, radix, handleError) {
   if (match == null)
     return handleError.call$1(source);
   return parseInt(source, 10);
+},
+
+Primitives_parseDouble: function(source, handleError) {
+  var result, trimmed;
+  handleError = H.Primitives__throwFormatException$closure;
+  if (!/^\s*[+-]?(?:Infinity|NaN|(?:\.\d+|\d+(?:\.\d*)?)(?:[eE][+-]?\d+)?)\s*$/.test(source))
+    return handleError.call$1(source);
+  result = parseFloat(source);
+  if (isNaN(result)) {
+    trimmed = C.JSString_methods.trim$0(source);
+    if (trimmed === "NaN" || trimmed === "+NaN" || trimmed === "-NaN")
+      return result;
+    return handleError.call$1(source);
+  }
+  return result;
 },
 
 Primitives_objectTypeName: function(object) {
@@ -5221,13 +5360,13 @@ _LinkedHashMap: {"": "Object;_collection$_length,_strings,_nums,_rest,_first,_la
       if (strings == null)
         return;
       cell = strings[key];
-      return cell == null ? null : cell.get$_value();
+      return cell == null ? null : cell.get$_collection$_value();
     } else if (typeof key === "number" && (key & 0x3ffffff) === key) {
       nums = this._nums;
       if (nums == null)
         return;
       cell = nums[key];
-      return cell == null ? null : cell.get$_value();
+      return cell == null ? null : cell.get$_collection$_value();
     } else {
       rest = this._rest;
       if (rest == null)
@@ -5236,7 +5375,7 @@ _LinkedHashMap: {"": "Object;_collection$_length,_strings,_nums,_rest,_first,_la
       index = this._findBucketIndex$2(bucket, key);
       if (index < 0)
         return;
-      return bucket[index].get$_value();
+      return bucket[index].get$_collection$_value();
     }
   },
   $indexSet: function(_, key, value) {
@@ -5268,7 +5407,7 @@ _LinkedHashMap: {"": "Object;_collection$_length,_strings,_nums,_rest,_first,_la
       else {
         index = this._findBucketIndex$2(bucket, key);
         if (index >= 0)
-          bucket[index].set$_value(value);
+          bucket[index].set$_collection$_value(value);
         else
           bucket.push(this._newLinkedCell$2(key, value));
       }
@@ -5290,7 +5429,7 @@ _LinkedHashMap: {"": "Object;_collection$_length,_strings,_nums,_rest,_first,_la
         return;
       cell = bucket.splice(index, 1)[0];
       this._unlinkCell$1(cell);
-      return cell.get$_value();
+      return cell.get$_collection$_value();
     }
   },
   clear$0: function(_) {
@@ -5309,7 +5448,7 @@ _LinkedHashMap: {"": "Object;_collection$_length,_strings,_nums,_rest,_first,_la
     cell = this._first;
     modifications = this._modifications;
     for (; cell != null;) {
-      action.call$2(cell.get$_key(), cell._value);
+      action.call$2(cell.get$_key(), cell._collection$_value);
       if (modifications !== this._modifications)
         throw H.wrapException(P.ConcurrentModificationError$(this));
       cell = cell._next;
@@ -5320,7 +5459,7 @@ _LinkedHashMap: {"": "Object;_collection$_length,_strings,_nums,_rest,_first,_la
     if (cell == null)
       table[key] = this._newLinkedCell$2(key, value);
     else
-      cell.set$_value(value);
+      cell.set$_collection$_value(value);
   },
   _removeHashTableEntry$2: function(table, key) {
     var cell;
@@ -5331,7 +5470,7 @@ _LinkedHashMap: {"": "Object;_collection$_length,_strings,_nums,_rest,_first,_la
       return;
     this._unlinkCell$1(cell);
     delete table[key];
-    return cell.get$_value();
+    return cell.get$_collection$_value();
   },
   _newLinkedCell$2: function(key, value) {
     var cell, last;
@@ -5399,7 +5538,7 @@ _LinkedHashMap_values_closure: {"": "Closure;this_0",
   $is_args1: true
 },
 
-LinkedHashMapCell: {"": "Object;_key<,_value@,_next@,_previous@"},
+LinkedHashMapCell: {"": "Object;_key<,_collection$_value@,_next@,_previous@"},
 
 LinkedHashMapKeyIterable: {"": "IterableBase;_map",
   get$length: function(_) {
@@ -6622,20 +6761,32 @@ DomException: {"": "Interceptor;",
   "%": "DOMException"
 },
 
-Element: {"": "Node;style=",
+Element: {"": "Node;",
   get$attributes: function(receiver) {
     return new W._ElementAttributeMap(receiver);
   },
   get$children: function(receiver) {
     return new W._ChildrenElementList(receiver, receiver.children);
   },
-  get$client: function(receiver) {
-    var t1 = new P.Rectangle(receiver.clientLeft, receiver.clientTop, receiver.clientWidth, receiver.clientHeight);
+  getComputedStyle$1: function(receiver, pseudoElement) {
+    return window.getComputedStyle(receiver, "");
+  },
+  getComputedStyle$0: function($receiver) {
+    return this.getComputedStyle$1($receiver, null);
+  },
+  get$offset: function(receiver) {
+    var t1 = new P.Rectangle(receiver.offsetLeft, receiver.offsetTop, receiver.offsetWidth, receiver.offsetHeight);
     H.setRuntimeTypeInfo(t1, [null]);
     return t1;
   },
   toString$0: function(receiver) {
     return receiver.localName;
+  },
+  get$contentEdge: function(receiver) {
+    return new W._ContentCssRect(receiver, 0, 0, 0, 0);
+  },
+  get$marginEdge: function(receiver) {
+    return new W._MarginCssRect(receiver, 0, 0, 0, 0);
   },
   createFragment$3$treeSanitizer$validator: function(receiver, html, treeSanitizer, validator) {
     var t1, t2, base, contextElement, fragment;
@@ -6702,6 +6853,9 @@ Element: {"": "Node;style=",
   },
   get$innerHtml: function(receiver) {
     return receiver.innerHTML;
+  },
+  getBoundingClientRect$0: function(receiver) {
+    return receiver.getBoundingClientRect();
   },
   $isElement: true,
   "%": ";Element"
@@ -6809,10 +6963,25 @@ MidiOutput: {"": "MidiPort;",
 MidiPort: {"": "EventTarget;", "%": "MIDIInput;MIDIPort"},
 
 MouseEvent: {"": "UIEvent;",
-  get$client: function(receiver) {
-    var t1 = new P.Point(receiver.clientX, receiver.clientY);
-    H.setRuntimeTypeInfo(t1, [null]);
-    return t1;
+  get$offset: function(receiver) {
+    var t1, t2, target, point;
+    if (!!receiver.offsetX) {
+      t1 = new P.Point(receiver.offsetX, receiver.offsetY);
+      H.setRuntimeTypeInfo(t1, [null]);
+      return t1;
+    } else {
+      t1 = W._convertNativeToDart_EventTarget(receiver.target);
+      t2 = J.getInterceptor(t1);
+      if (typeof t1 !== "object" || t1 === null || !t2.$isElement)
+        throw H.wrapException(P.UnsupportedError$("offsetX is only supported on elements"));
+      target = W._convertNativeToDart_EventTarget(receiver.target);
+      t1 = new P.Point(receiver.clientX, receiver.clientY);
+      H.setRuntimeTypeInfo(t1, [null]);
+      point = t1.$sub(t1, J.get$topLeft$x(J.getBoundingClientRect$0$x(target)));
+      t1 = new P.Point(J.toInt$0$n(point.x), J.toInt$0$n(point.y));
+      H.setRuntimeTypeInfo(t1, [null]);
+      return t1;
+    }
   },
   "%": "DragEvent|MSPointerEvent|MouseEvent|MouseScrollEvent|MouseWheelEvent|PointerEvent|WheelEvent"
 },
@@ -6896,6 +7065,9 @@ ProcessingInstruction: {"": "CharacterData;target=", "%": "ProcessingInstruction
 ProgressElement: {"": "HtmlElement;value=", "%": "HTMLProgressElement"},
 
 Range: {"": "Interceptor;",
+  getBoundingClientRect$0: function(receiver) {
+    return receiver.getBoundingClientRect();
+  },
   toString$0: function(receiver) {
     return receiver.toString();
   },
@@ -7069,6 +7241,11 @@ _ClientRect: {"": "Interceptor;height=,left=,top=,width=",
     t3 = J.get$hashCode$(receiver.width);
     t4 = J.get$hashCode$(receiver.height);
     return W._JenkinsSmiHash_finish(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(W._JenkinsSmiHash_combine(0, t1), t2), t3), t4));
+  },
+  get$topLeft: function(receiver) {
+    var t1 = new P.Point(receiver.left, receiver.top);
+    H.setRuntimeTypeInfo(t1, [null]);
+    return t1;
   },
   $isRectangle: true,
   $asRectangle: function() {
@@ -7308,6 +7485,53 @@ _ElementAttributeMap: {"": "_AttributeMap;_element",
   }
 },
 
+_ContentCssRect: {"": "CssRect;_element,left,top,width,height",
+  get$height: function(_) {
+    var t1, t2;
+    t1 = this._element.offsetHeight;
+    t2 = this._addOrSubtractToBoxModel$2($.get$_HEIGHT(), "content");
+    if (typeof t1 !== "number")
+      throw t1.$add();
+    return t1 + t2;
+  },
+  get$width: function(_) {
+    var t1, t2;
+    t1 = this._element.offsetWidth;
+    t2 = this._addOrSubtractToBoxModel$2($.get$_WIDTH(), "content");
+    if (typeof t1 !== "number")
+      throw t1.$add();
+    return t1 + t2;
+  },
+  set$width: function(_, newWidth) {
+    var t1;
+    if (typeof newWidth === "object" && newWidth !== null && !!C.JSNumber_methods.$isDimension) {
+      t1 = C.JSNumber_methods.get$value(newWidth);
+      t1.$lt(t1, 0);
+      J.set$width$x(this._element.style, H.S(newWidth._value) + newWidth._unit);
+    } else {
+      if (newWidth < 0)
+        newWidth = 0;
+      J.set$width$x(this._element.style, H.S(newWidth) + "px");
+    }
+  },
+  get$left: function(_) {
+    var t1, t2;
+    t1 = J.get$left$x(this._element.getBoundingClientRect());
+    t2 = this._addOrSubtractToBoxModel$2(["left"], "content");
+    if (typeof t1 !== "number")
+      throw t1.$sub();
+    return t1 - t2;
+  },
+  get$top: function(_) {
+    var t1, t2;
+    t1 = J.get$top$x(this._element.getBoundingClientRect());
+    t2 = this._addOrSubtractToBoxModel$2(["top"], "content");
+    if (typeof t1 !== "number")
+      throw t1.$sub();
+    return t1 - t2;
+  }
+},
+
 _BorderCssRect: {"": "CssRect;_element,left,top,width,height",
   get$height: function(_) {
     return this._element.offsetHeight;
@@ -7323,11 +7547,105 @@ _BorderCssRect: {"": "CssRect;_element,left,top,width,height",
   }
 },
 
+_MarginCssRect: {"": "CssRect;_element,left,top,width,height",
+  get$height: function(_) {
+    var t1, t2;
+    t1 = this._element.offsetHeight;
+    t2 = this._addOrSubtractToBoxModel$2($.get$_HEIGHT(), "margin");
+    if (typeof t1 !== "number")
+      throw t1.$add();
+    return t1 + t2;
+  },
+  get$width: function(_) {
+    var t1, t2;
+    t1 = this._element.offsetWidth;
+    t2 = this._addOrSubtractToBoxModel$2($.get$_WIDTH(), "margin");
+    if (typeof t1 !== "number")
+      throw t1.$add();
+    return t1 + t2;
+  },
+  get$left: function(_) {
+    var t1, t2;
+    t1 = J.get$left$x(this._element.getBoundingClientRect());
+    t2 = this._addOrSubtractToBoxModel$2(["left"], "margin");
+    if (typeof t1 !== "number")
+      throw t1.$sub();
+    return t1 - t2;
+  },
+  get$top: function(_) {
+    var t1, t2;
+    t1 = J.get$top$x(this._element.getBoundingClientRect());
+    t2 = this._addOrSubtractToBoxModel$2(["top"], "margin");
+    if (typeof t1 !== "number")
+      throw t1.$sub();
+    return t1 - t2;
+  }
+},
+
 CssRect: {"": "MutableRectangle;",
+  _addOrSubtractToBoxModel$2: function(dimensions, augmentingMeasurement) {
+    var styles, t1, t2, t3, t4, val, measurement, propValue, t5;
+    styles = J.getComputedStyle$0$x(this._element);
+    for (t1 = new H.ListIterator(dimensions, dimensions.length, 0, null), t2 = augmentingMeasurement === "margin", t3 = !t2, t4 = augmentingMeasurement === "content", val = 0; t1.moveNext$0();) {
+      measurement = t1._current;
+      if (t2) {
+        propValue = styles.getPropertyValue(augmentingMeasurement + "-" + H.S(measurement));
+        t5 = W.Dimension$css(propValue != null ? propValue : "")._value;
+        if (typeof t5 !== "number")
+          throw H.iae(t5);
+        val += t5;
+      }
+      if (t4) {
+        propValue = styles.getPropertyValue("padding-" + H.S(measurement));
+        t5 = W.Dimension$css(propValue != null ? propValue : "")._value;
+        if (typeof t5 !== "number")
+          throw H.iae(t5);
+        val -= t5;
+      }
+      if (t3) {
+        propValue = styles.getPropertyValue("border-" + H.S(measurement) + "-width");
+        t5 = W.Dimension$css(propValue != null ? propValue : "")._value;
+        if (typeof t5 !== "number")
+          throw H.iae(t5);
+        val -= t5;
+      }
+    }
+    return val;
+  },
   $asRectangle: function() {
     return [J.JSNumber];
   },
   $isRectangle: true
+},
+
+Dimension: {"": "Object;_value,_unit",
+  toString$0: function(_) {
+    return H.S(this._value) + this._unit;
+  },
+  Dimension$css$1: function(cssValue) {
+    var t1, t2, t3;
+    if (cssValue === "")
+      cssValue = "0px";
+    if (J.getInterceptor$s(cssValue).endsWith$1(cssValue, "%"))
+      this._unit = "%";
+    else
+      this._unit = C.JSString_methods.substring$1(cssValue, cssValue.length - 2);
+    t1 = C.JSString_methods.contains$1(cssValue, ".");
+    t2 = cssValue.length;
+    t3 = this._unit;
+    if (t1)
+      this._value = H.Primitives_parseDouble(C.JSString_methods.substring$2(cssValue, 0, t2 - t3.length), null);
+    else
+      this._value = H.Primitives_parseInt(C.JSString_methods.substring$2(cssValue, 0, t2 - t3.length), null, null);
+  },
+  $isDimension: true,
+  static: {
+Dimension$css: function(cssValue) {
+  var t1 = new W.Dimension(null, null);
+  t1.Dimension$css$1(cssValue);
+  return t1;
+}}
+
 },
 
 EventStreamProvider: {"": "Object;_eventType"},
@@ -7791,14 +8109,6 @@ _JenkinsSmiHash_finish0: function(hash) {
   return 536870911 & hash + ((16383 & hash) << 15 >>> 0);
 },
 
-max: function(a, b) {
-  if (typeof b !== "number")
-    throw H.wrapException(new P.ArgumentError(b));
-  if (a > b)
-    return a;
-  return b;
-},
-
 _Random: {"": "Object;",
   nextInt$1: function(max) {
     if (max < 0)
@@ -7836,6 +8146,24 @@ Point: {"": "Object;x,y",
     t1 = J.get$hashCode$(this.x);
     t2 = J.get$hashCode$(this.y);
     return P._JenkinsSmiHash_finish0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(0, t1), t2));
+  },
+  $sub: function(_, other) {
+    var t1, t2, t3, t4;
+    t1 = this.x;
+    t2 = other.x;
+    if (typeof t1 !== "number")
+      throw t1.$sub();
+    if (typeof t2 !== "number")
+      throw H.iae(t2);
+    t3 = this.y;
+    t4 = other.y;
+    if (typeof t3 !== "number")
+      throw t3.$sub();
+    if (typeof t4 !== "number")
+      throw H.iae(t4);
+    t4 = new P.Point(t1 - t2, t3 - t4);
+    H.setRuntimeTypeInfo(t4, [H.getRuntimeTypeArgument(this, "Point", 0)]);
+    return t4;
   },
   $isPoint: true
 },
@@ -7878,6 +8206,14 @@ _RectangleBase: {"": "Object;",
     t3 = J.get$hashCode$(this.get$width(this));
     t4 = J.get$hashCode$(this.get$height(this));
     return P._JenkinsSmiHash_finish0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(P._JenkinsSmiHash_combine0(0, t1), t2), t3), t4));
+  },
+  get$topLeft: function(_) {
+    var t1, t2;
+    t1 = this.get$left(this);
+    t2 = this.get$top(this);
+    t2 = new P.Point(t1, t2);
+    H.setRuntimeTypeInfo(t2, [H.getRuntimeTypeArgument(this, "_RectangleBase", 0)]);
+    return t2;
   }
 },
 
@@ -8798,8 +9134,8 @@ J.get$cells$x = function(receiver) {
 J.get$children$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$children(receiver);
 };
-J.get$client$x = function(receiver) {
-  return J.getInterceptor$x(receiver).get$client(receiver);
+J.get$contentEdge$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$contentEdge(receiver);
 };
 J.get$error$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$error(receiver);
@@ -8822,17 +9158,20 @@ J.get$left$x = function(receiver) {
 J.get$length$asx = function(receiver) {
   return J.getInterceptor$asx(receiver).get$length(receiver);
 };
+J.get$marginEdge$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$marginEdge(receiver);
+};
 J.get$name$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$name(receiver);
 };
 J.get$nodes$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$nodes(receiver);
 };
+J.get$offset$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$offset(receiver);
+};
 J.get$rows$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$rows(receiver);
-};
-J.get$style$x = function(receiver) {
-  return J.getInterceptor$x(receiver).get$style(receiver);
 };
 J.get$target$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$target(receiver);
@@ -8840,8 +9179,17 @@ J.get$target$x = function(receiver) {
 J.get$top$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$top(receiver);
 };
+J.get$topLeft$x = function(receiver) {
+  return J.getInterceptor$x(receiver).get$topLeft(receiver);
+};
 J.get$value$x = function(receiver) {
   return J.getInterceptor$x(receiver).get$value(receiver);
+};
+J.getBoundingClientRect$0$x = function(receiver) {
+  return J.getInterceptor$x(receiver).getBoundingClientRect$0(receiver);
+};
+J.getComputedStyle$0$x = function(receiver) {
+  return J.getInterceptor$x(receiver).getComputedStyle$0(receiver);
 };
 J.map$1$ax = function(receiver, a0) {
   return J.getInterceptor$ax(receiver).map$1(receiver, a0);
@@ -8887,6 +9235,9 @@ J.setInnerHtml$1$x = function(receiver, a0) {
 };
 J.substring$2$s = function(receiver, a0, a1) {
   return J.getInterceptor$s(receiver).substring$2(receiver, a0, a1);
+};
+J.toInt$0$n = function(receiver) {
+  return J.getInterceptor$n(receiver).toInt$0(receiver);
 };
 J.toList$0$ax = function(receiver) {
   return J.getInterceptor$ax(receiver).toList$0(receiver);
@@ -8965,6 +9316,12 @@ Isolate.$lazy($, "_toStringList", "Maps__toStringList", "get$Maps__toStringList"
 });
 Isolate.$lazy($, "_safeConsole", "Console__safeConsole", "get$Console__safeConsole", function() {
   return new W.Console();
+});
+Isolate.$lazy($, "_HEIGHT", "_HEIGHT", "get$_HEIGHT", function() {
+  return ["top", "bottom"];
+});
+Isolate.$lazy($, "_WIDTH", "_WIDTH", "get$_WIDTH", function() {
+  return ["right", "left"];
 });
 Isolate.$lazy($, "_allowedElements", "_Html5NodeValidator__allowedElements", "get$_Html5NodeValidator__allowedElements", function() {
   var t1 = P.LinkedHashSet_LinkedHashSet(null, null, null, null);

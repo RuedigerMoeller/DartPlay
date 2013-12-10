@@ -4,7 +4,7 @@ import 'dart:math' as math;
 
 class RLTable {
 
-  static var selectedStyle = "background-color:#00c0ff;";
+  static var selectedStyle = "background-color:#00A7F2;";
   static var caretStyleNoBG = "outline: 1px dashed black;";
   static var caretStyle = "outline: 1px dashed black; background-color:rgba(100%,100%,100%,0.7);";
   static var selectedCaretStyle = selectedStyle+" "+caretStyleNoBG;
@@ -35,7 +35,7 @@ class RLTable {
     adjustTWidth();
     
     window.onResize.listen( (ev) { 
-        adjustTWidth(); 
+        adjustColWidthFromHeader(); 
       } 
     );
     
@@ -203,14 +203,14 @@ class RLTable {
     TableRowElement newRow = tableHeader.rows[0];
     newRow.attributes['t_id'] = "header";
     headerRenderer.renderRow("header", newRow, header, renderStyle);
-    adjustHeaderWidth();
+    adjustColWidthFromHeader();
   }
   
   adjustTWidth() {
-    headerPane.style.width = '${pane.clientWidth}px';
+    headerPane.contentEdge.width = pane.contentEdge.width - 16;
   }
   
-  adjustHeaderWidth() {
+  adjustColWidthFromHeader() {
     adjustTWidth();
     if ( tableHeader.rows.length < 1 || table.rows.length < 1 )
       return;
@@ -220,14 +220,27 @@ class RLTable {
       return;
     num index = 0;
     int off = 2;
+    var prevBody; var prevHeader;
     hd.forEach((headCell) {
-      // fixme try marginEdge
-       var width = math.max(bd[index].client.width-off, headCell.client.width);
-       headCell.style.width = '${width}px';  
-       bd[index].style.width='${width+off}px';
+       var bodyCell = bd[index];
+       var offR = bodyCell.offset;
+       var offH = headCell.offset;
+       if ( prevHeader != null ) {
+         if ( offR.left < offH.left ) {
+           prevBody.contentEdge.width += offH.left-offR.left;
+         } else if ( offH.left < offR.left ) {
+           prevHeader.contentEdge.width += offR.left-offH.left;
+         }
+       }
+       prevHeader = headCell; prevBody = bodyCell;
        index++;
      }
     );
+    if ( prevHeader != null ) {
+      if ( prevHeader.marginEdge.width-off*2 < prevBody.marginEdge.width ) {
+        prevHeader.contentEdge.width = prevBody.contentEdge.width+off*2; 
+      }
+    }
   }
   
   String upArrow = ' <span class="arrow-n"></span>';
@@ -244,6 +257,8 @@ class RLTable {
        }
     });
   }
+
+  var colResizeUnderway = 0;
   
   updateRow(String rowId, Map newValues) {
     RLTableRowData data = rows[rowId];
@@ -263,7 +278,13 @@ class RLTable {
           );
         }
       });
-      adjustHeaderWidth();
+      colResizeUnderway++;
+      new Timer(new Duration(milliseconds:500), () {
+        if ( colResizeUnderway == 1  )
+          adjustColWidthFromHeader();
+        colResizeUnderway--;
+      } 
+      );
     }
   }
   
@@ -277,7 +298,7 @@ class RLTable {
     newRow.attributes['t_id'] = id;
     rows[id] = data;
     rowRenderer.renderRow(id, newRow, data, renderStyle);
-    adjustHeaderWidth();
+    adjustColWidthFromHeader();
   }
 
   removeRow(String rowId) {
@@ -286,7 +307,7 @@ class RLTable {
     selectedRows[rowId] = null;
     if ( selectedRowId == rowId )
       selectedRowId = null;
-    adjustHeaderWidth();
+    adjustColWidthFromHeader();
   }
   
   addRowAsMap(Map data) {
@@ -295,13 +316,18 @@ class RLTable {
     newRow.attributes['t_id'] = id;
     rows[id] = new RowMapAdapter(data, int.parse(id));
     rowRenderer.renderRow(id, newRow, rows[id], renderStyle);
-    adjustHeaderWidth();
+    adjustColWidthFromHeader();
   }
 
   sort( String field, bool up ) {
     List list = table.rows.map((row) { return rows[row.attributes['t_id']]; } ).toList(growable: false);
     list.sort( (idA,idB) {
-       return idA.getValue(field).compareTo(idB.getValue(field)) * (up?-1:1);
+       var a = idA.getValue(field);
+       var b = idB.getValue(field);
+       if ( a == null ) {
+         return b == null ? 0 : (up?-1:1); 
+       }
+       return b.compareTo(b) * (up?-1:1);
     });
     
     table.rows.toList(growable: false).forEach((row) { row.remove();} );
@@ -430,7 +456,7 @@ class RLTableHeaderRowRenderer extends RLTableRowRenderer {
 }
 
 class RLTableRowRenderer {
-  
+
   renderRow( String rowId, TableRowElement target, RLTableRowData row, RLTableRenderSpec style ) {    
     style.getFieldNames(row).forEach( 
         (f) {
