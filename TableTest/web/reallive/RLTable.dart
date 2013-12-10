@@ -1,8 +1,10 @@
 import 'dart:html';
 import 'dart:async';
 import 'dart:math' as math;
+import '../packages/polymer/polymer.dart';
 
-class RLTable {
+@CustomTag('reallive-table')
+class RLTable extends PolymerElement {
 
   static var selectedStyle = "background-color:#00A7F2;";
   static var caretStyleNoBG = "outline: 1px dashed black;";
@@ -26,7 +28,12 @@ class RLTable {
   bool singleSel = true;
   bool upDown = true;
   
-  RLTable(String id) {
+  RLTable.created() : super.created(); 
+  
+  void enteredView() {
+    super.enteredView();
+    
+    id = 'table_id';
     renderStyle = new DefaultRenderSpec(defValRend);
     table = querySelector(id);
     pane = querySelector(id+"-pane");
