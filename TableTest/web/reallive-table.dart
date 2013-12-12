@@ -22,7 +22,7 @@ class RLTable extends PolymerElement {
 
   HtmlElement pane, headerPane;
   Map selectedRows = new Map();
-  Map<String,RLTableRowData> rows = new Map();
+  Map<String,RLDataRow> rows = new Map();
 
   bool singleSel = true;
   bool upDown = true;
@@ -204,10 +204,10 @@ class RLTable extends PolymerElement {
   }
   
   setHeaderFromList(List values) {
-    setHeader(new ListRowMapAdapter(values));
+    setHeader(new RLListRowData(values));
   }
 
-  setHeader(RLTableRowData header) {
+  setHeader(RLDataRow header) {
     if ( tableHeader.rows.length == 0 ) {
       tableHeader.addRow();
     }
@@ -272,7 +272,7 @@ class RLTable extends PolymerElement {
   var colResizeUnderway = 0;
   
   updateRow(String rowId, Map newValues) {
-    RLTableRowData data = rows[rowId];
+    RLDataRow data = rows[rowId];
     if ( data != null ) {
       newValues.forEach( (key,val) => data.setValue(key, val) );
       TableRowElement row = findRow(rowId);
@@ -299,12 +299,12 @@ class RLTable extends PolymerElement {
     }
   }
   
-  addRow(RLTableRowData data) {
+  addRow(RLDataRow data) {
     var id = createRowId();
     addRowWithId(id,data);
   }
 
-  addRowWithId(var id, RLTableRowData data) {
+  addRowWithId(var id, RLDataRow data) {
     TableRowElement newRow = table.addRow();
     newRow.attributes['t_id'] = id;
     rows[id] = data;
@@ -325,7 +325,7 @@ class RLTable extends PolymerElement {
     TableRowElement newRow = table.addRow();
     var id = createRowId(); 
     newRow.attributes['t_id'] = id;
-    rows[id] = new RowMapAdapter(data, int.parse(id));
+    rows[id] = new RLMapRowData(data, int.parse(id));
     rowRenderer.renderRow(id, newRow, rows[id], renderStyle);
     adjustColWidthFromHeader();
   }
@@ -352,8 +352,8 @@ class RLTable extends PolymerElement {
 }
 
 abstract class RLTableRenderSpec {
-  List<String> getFieldNames(RLTableRowData row);
-  RLValueRenderer getRendererFor(String field, RLTableRowData row);
+  List<String> getFieldNames(RLDataRow row);
+  RLValueRenderer getRendererFor(String field, RLDataRow row);
   
   String getHeaderVale(String f) {
     return f;
@@ -365,27 +365,27 @@ class DefaultRenderSpec extends RLTableRenderSpec {
   
   DefaultRenderSpec(this.defValRend);
 
-  List<String> getFieldNames(RLTableRowData row) {
+  List<String> getFieldNames(RLDataRow row) {
     return row.getFieldNames();
   }
   
-  RLValueRenderer getRendererFor(String field, RLTableRowData row) {
+  RLValueRenderer getRendererFor(String field, RLDataRow row) {
     return defValRend;  
   }
   
 }
 
-abstract class RLTableRowData {
+abstract class RLDataRow {
   List<String> getFieldNames();
   getValue( String fieldName );
   setValue( String fieldName, value );
   num getId();  
 }
 
-class ListRowMapAdapter extends RLTableRowData {
+class RLListRowData extends RLDataRow {
   List data;
   
-  ListRowMapAdapter(this.data);
+  RLListRowData(this.data);
   
   List<String> getFieldNames() => data;
   getValue( String fieldName ) => fieldName;
@@ -394,7 +394,7 @@ class ListRowMapAdapter extends RLTableRowData {
   
 }
 
-class HeaderRowMapAdapter extends RLTableRowData {
+class HeaderRowMapAdapter extends RLDataRow {
   Map data;
   
   HeaderRowMapAdapter(this.data);
@@ -406,11 +406,11 @@ class HeaderRowMapAdapter extends RLTableRowData {
   
 }
 
-class RowMapAdapter extends RLTableRowData {
+class RLMapRowData extends RLDataRow {
   Map data;
   num rowId;
   
-  RowMapAdapter(this.data,this.rowId);
+  RLMapRowData(this.data,this.rowId);
   
   List<String> getFieldNames() => new List.from(data.keys);
   getValue( String fieldName ) => data[fieldName];
@@ -440,7 +440,7 @@ class RLTableHeaderRowRenderer extends RLTableRowRenderer {
   String headerBG = "#008DCC";
   String headerBGHover = "#00C3FF";
   
-  renderRow( String rowId, TableRowElement target, RLTableRowData row, RLTableRenderSpec style ) {    
+  renderRow( String rowId, TableRowElement target, RLDataRow row, RLTableRenderSpec style ) {    
     style.getFieldNames(row).forEach( 
         (f) {
           var value = row.getValue(f);
@@ -468,7 +468,7 @@ class RLTableHeaderRowRenderer extends RLTableRowRenderer {
 
 class RLTableRowRenderer {
 
-  renderRow( String rowId, TableRowElement target, RLTableRowData row, RLTableRenderSpec style ) {    
+  renderRow( String rowId, TableRowElement target, RLDataRow row, RLTableRenderSpec style ) {    
     style.getFieldNames(row).forEach( 
         (f) {
           var value = row.getValue(f);

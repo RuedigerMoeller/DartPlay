@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'package:polymer/polymer.dart';
 import 'reallive-table.dart';
+import 'reallive-text.dart';
 import 'dart:async';
 import 'dart:math';
 
