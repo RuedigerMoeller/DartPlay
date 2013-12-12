@@ -1,41 +1,17 @@
 import 'dart:html';
-import 'reallive/RLTable.dart';
+import 'package:polymer/polymer.dart';
+import 'reallive-table.dart';
 import 'dart:async';
 import 'dart:math';
 
-
 void main() {
-
-  RLTable rltable = new RLTable("#table_id");
+  initPolymer();
+  
+  RLTable rltable = querySelector("#apptable").xtag;
+  RLTable rltable1 = querySelector("#apptable1").xtag;
   
   TableElement table = rltable.table; // just for sample data
-//  for ( var i = 0; i < 500; i++ ) {
-//    var row = table.addRow();
-//    row.attributes['t_id'] = '$i';
-//
-//    var cell = row.addCell();
-//    cell.attributes['t_id'] = '$i';
-//
-//    String test = '$i';
-//    cell.setInnerHtml( test );
-//    
-//    cell = row.addCell(); 
-//    cell.attributes['t_id'] = '$i';
-//    cell.setInnerHtml("Hallo " );
-//
-//    cell = row.addCell();
-//    cell.attributes['t_id'] = '$i';
-//    cell.setInnerHtml("longer pokiger text, oid asodi aosid hadsj qwjeq as " );
-//
-//    cell = row.addCell();
-//    cell.attributes['t_id'] = '$i';
-//    cell.setInnerHtml("<font color=red>99.34</font>" );
-//
-//    cell = row.addCell();
-//    cell.attributes['t_id'] = '$i';
-//    cell.setInnerHtml("<font color=green>99.34</font>" );
-//  }
-  
+  TableElement table1 = rltable1.table; // just for sample data
   List user = ["Reudi", "Emil", "Felix", "Anita", "Ex*"];
 
   for ( var i = 0; i < 100; i++ ) {
@@ -45,19 +21,22 @@ void main() {
                };
     if ( i == 1 ) {
       rltable.setHeaderFromList(mp.keys.toList(growable: false));
+      rltable1.setHeaderFromList(mp.keys.toList(growable: false));
     }
     rltable.addRowAsMap(mp);
+    rltable1.addRowAsMap(mp);
   }
   var rnd = new Random();
   new Timer.periodic(new Duration(milliseconds: 50), (t) { 
-      rltable.updateRow("${rnd.nextInt(100)}", { "Qty":rnd.nextInt(100) }); 
+    rltable.updateRow("${rnd.nextInt(100)}", { "Qty":rnd.nextInt(100) }); 
+    rltable1.updateRow("${rnd.nextInt(100)}", { "Qty":rnd.nextInt(100) }); 
     } 
   );
   
   new Timer.periodic(new Duration(milliseconds: 50), (t) { 
-      rltable.updateRow("${rnd.nextInt(100)}", { "Price":rnd.nextInt(10000)/100 }); 
+    rltable.updateRow("${rnd.nextInt(100)}", { "Price":rnd.nextInt(10000)/100 }); 
+    rltable1.updateRow("${rnd.nextInt(100)}", { "Price":rnd.nextInt(10000)/100 }); 
     } 
   );
   
-
 }

@@ -1,0 +1,35 @@
+---
+build.dart --machine --changed=web\tabletest.html
+
+build.dart finished [687 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart.js --changed=web\tabletest.dart.js.deps --changed=web\tablete...
+
+build.dart finished [728 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart.js --changed=web\tabletest.dart.js.deps --changed=web\tablete...
+
+build.dart finished [778 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart.js --changed=web\tabletest.dart.js.map --changed=web\tabletes...
+
+build.dart finished [725 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart.js --changed=web\tabletest.dart.js.deps
+
+build.dart finished [740 ms]
+
+---
+build.dart --machine --changed=pubspec.yaml
+
+build.dart finished [695 ms]
+
+---
+build.dart --machine --changed=pubspec.yaml
+
+build.dart finished [707 ms]
+

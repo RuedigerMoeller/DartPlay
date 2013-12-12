@@ -2,5 +2,8 @@ name: TableTest
 author: Ruediger Moeller
 description: A sample web application
 dependencies:
-  browser: any
   polymer: any
+transformers:
+- polymer:
+    entry_points: web/tabletest.html
+  
