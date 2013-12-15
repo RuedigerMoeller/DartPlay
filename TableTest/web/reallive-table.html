@@ -1,18 +1,18 @@
 <polymer-element name="reallive-table">
-  <template>
+  <template name="table-template">
 <style type="text/css" scoped>
     
-    scope: tr, td { padding: 3px; }
-    scope: td {overflow:hidden;}
-    tbody tr:hover { background: #9cF; }
-    tbody tr:nth-child(odd):hover { background: #9cF; }
+    tr, td { padding: 3px; }
+    td {overflow:hidden;}
+    tbody tr:hover { background: #ccc; }
+    tbody tr:nth-child(odd):hover { background: #ccc; }
     tr { transition: background-color .3s ease-out; }
     tbody tr:nth-child(odd) { background: #eee; }
 
-    scope: .arrow-n,
-    scope: .arrow-e,
-    scope: .arrow-s,
-    scope: .arrow-w {
+    .arrow-n,
+    .arrow-e,
+    .arrow-s,
+    .arrow-w {
       border-style: dashed;
       border-color: transparent;
       border-width: 0.53em;
@@ -27,28 +27,28 @@
       width: 0;
     }
     
-    scope: .arrow-n {
+    .arrow-n {
       border-bottom-width: 1em;
       border-bottom-style: solid;
       border-bottom-color: #ffffff;
       bottom: 0.25em;
     }
     
-    scope: .arrow-e {
+    .arrow-e {
       border-left-width: 1em;
       border-left-style: solid;
       border-left-color: #ffffff;
       left: 0.25em;
     }
                         
-    scope: .arrow-s {
+    .arrow-s {
       border-top-width: 1em;
       border-top-style: solid;
       border-top-color: #ffffff;
       top: 0.25em;
     }
     
-    scope: .arrow-w {
+    .arrow-w {
       border-right-width: 1em;
       border-right-style: solid;
       border-right-color: #ffffff;
@@ -56,9 +56,12 @@
     }
     
     </style>
-      
+    
+    <div style="top: -10000px; left: -10000px; width:0px; height:0px; position:absolute;">
+       <input type="text" name="focus" id="keys" enableKeys=false style="width:0px; height:0px; position:absolute; border: none;">
+    </div>
     <div id='header-pane' 
-       style="overflow: hidden; padding: 1px;  width:600px;
+       style="overflow: hidden; padding: 1px;  width:{{spaneWidth}}px;
        ">
       <table id="header"
              style="color:#ffffff; table-layout:fixed; overflow: hidden; }">
@@ -67,7 +70,7 @@
     </div>
     <div id='pane' 
          style="
-           overflow: scroll; padding: 1px; height: 400px; width: 616px; 
+           overflow: scroll; padding: 1px; height: {{spaneHeight;}}px; width: {{spaneWidth+16}}px; 
            -webkit-touch-callout: none; -webkit-user-select: none;
            -khtml-user-select: none; -moz-user-select: none;
            -ms-user-select: none; user-select: none; 

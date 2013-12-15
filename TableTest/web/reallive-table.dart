@@ -5,6 +5,9 @@ import 'dart:async';
 @CustomTag('reallive-table')
 class RLTable extends PolymerElement {
 
+  @published int spaneWidth = 400;
+  @published int spaneHeight = 400;
+  
   static var selectedStyle = "background-color:#00A7F2;";
   static var caretStyleNoBG = "outline: 1px dashed black;";
   static var caretStyle = "outline: 1px dashed black; background-color:rgba(100%,100%,100%,0.7);";
@@ -21,11 +24,14 @@ class RLTable extends PolymerElement {
   RLTableRenderSpec renderStyle;
 
   HtmlElement pane, headerPane;
+  TextInputElement focusHidden;
   Map selectedRows = new Map();
   Map<String,RLDataRow> rows = new Map();
 
   bool singleSel = true;
   bool upDown = true;
+  
+  var onSelection;
 
   RLTable.created() : super.created() {
   }
@@ -35,6 +41,7 @@ class RLTable extends PolymerElement {
   }
 
   init() { 
+    focusHidden = shadowRoot.querySelector("#keys");
     table = shadowRoot.querySelector("#table");
     pane = shadowRoot.querySelector("#pane");
     headerPane = shadowRoot.querySelector("#header-pane");
@@ -62,6 +69,7 @@ class RLTable extends PolymerElement {
     });
     
     table.onClick.listen( (event) {
+        focusHidden.focus();
         var clickedElement = event.target.attributes['t_id'];
         changeCaret(clickedElement);
         changeSelection(clickedElement, ! isSelected(clickedElement) );
@@ -74,42 +82,59 @@ class RLTable extends PolymerElement {
       } 
     );
 
-    document.onKeyDown.listen( (event) {     
+    document.onKeyDown.listen( (event) {
+      if ( 
+           document.activeElement != focusHidden &&
+           document.activeElement != this
+          )
+        return;
       switch( event.keyCode ) {
         case 13: 
-        case 32: 
+//        case 32: 
         {
-          changeSelection(selectedRowId, ! isSelected(selectedRowId) );
-          event.preventDefault();
-          event.stopImmediatePropagation();
+          selectKeyTriggered(event);
         }
         break;
         case 38: 
         {
           // up
-          num index = findIndex(selectedRowId);
-          if ( index > 0 ) {
-            TableRowElement curr = changeCaret(findRowId(index-1));
-            if ( curr != null ) {
-              scrollVisible(curr);
-            }
-          }
-          event.preventDefault();
-          event.stopImmediatePropagation();
+          upKeyTriggered(event);
         }
         break;
         case 40:  
         { // down
-          num index = findIndex(selectedRowId);
-          TableRowElement curr = changeCaret(findRowId(index+1));
-          if ( curr != null ) {
-            scrollVisible(curr);
-          }
-          event.preventDefault();
-          event.stopImmediatePropagation();
+          downKeyTriggered(event);
         } 
       }
     });
+  }
+  
+  downKeyTriggered(KeyboardEvent event) {
+    num index = findIndex(selectedRowId);
+    TableRowElement curr = changeCaret(findRowId(index+1));
+    if ( curr != null ) {
+      scrollVisible(curr);
+    }
+    event.preventDefault();
+    event.stopImmediatePropagation();    
+  }
+  
+  upKeyTriggered(KeyboardEvent event) {
+    num index = findIndex(selectedRowId);
+    if ( index > 0 ) {
+      TableRowElement curr = changeCaret(findRowId(index-1));
+      if ( curr != null ) {
+        scrollVisible(curr);
+      }
+    }
+    event.preventDefault();
+    event.stopImmediatePropagation();    
+  }
+
+  selectKeyTriggered(KeyboardEvent event) {
+    changeSelection(selectedRowId, ! isSelected(selectedRowId) );
+    event.preventDefault();
+    event.stopImmediatePropagation();    
   }
   
   scrollVisible(TableRowElement cur) {
@@ -152,8 +177,20 @@ class RLTable extends PolymerElement {
 
   bool isSelected(String rowId) => selectedRows[rowId] != null;
   
+  RLDataRow singleSelection() {
+    if ( selectedRows.length == 0 )
+      return null;
+    return rows[selectedRows.keys.first];
+  }
+  
+  focus() {
+    focusHidden.focus();
+  }
+  
   clearSelection() {
     selectedRows.keys.forEach((r) => changeSelection(r, false) );
+    if ( onSelection != null )
+      onSelection();
   }
   
   TableRowElement changeSelection( String rowId, bool sel ) {
@@ -176,6 +213,8 @@ class RLTable extends PolymerElement {
         current.attributes['style'] = rowId == selectedRowId ? caretStyle : defaultStyle;
       }
     }
+    if ( onSelection != null )
+      onSelection();
     return current;
   }
   
@@ -299,6 +338,8 @@ class RLTable extends PolymerElement {
     }
   }
   
+  int get rowCount => rows.length;
+  
   addRow(RLDataRow data) {
     var id = createRowId();
     addRowWithId(id,data);
@@ -330,19 +371,26 @@ class RLTable extends PolymerElement {
     adjustColWidthFromHeader();
   }
 
-  sort( String field, bool up ) {
-    List list = table.rows.map((row) { return rows[row.attributes['t_id']]; } ).toList(growable: false);
-    list.sort( (idA,idB) {
-       var a = idA.getValue(field);
-       var b = idB.getValue(field);
-       if ( a == null ) {
-         return b == null ? 0 : (up?-1:1); 
-       }
-       return b.compareTo(b) * (up?-1:1);
-    });
-    
+  removeAllRows() {
     table.rows.toList(growable: false).forEach((row) { row.remove();} );
     rows.clear();
+    selectedRows.clear();
+  }
+  
+  var listSorter = (idA,idB, field, up) {
+    var a = idA.getValue(field);
+    var b = idB.getValue(field);
+    if ( a == null ) {
+      return b == null ? 0 : (up?-1:1); 
+    }
+    return b.compareTo(b) * (up?-1:1);
+  };
+  
+  sort( String field, bool up ) {
+    List list = table.rows.map((row) { return rows[row.attributes['t_id']]; } ).toList(growable: false);
+    list.sort( (idA,idB) => listSorter(idA,idB,field,up) );
+
+    removeAllRows();
     list.forEach((rowData) {
       addRowWithId("${rowData.getId()}",rowData);
     });

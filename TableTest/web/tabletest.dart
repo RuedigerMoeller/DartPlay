@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:math';
 
 void main() {
+  
   initPolymer();
   
   RLTable rltable = querySelector("#apptable").xtag;
