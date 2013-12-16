@@ -7,6 +7,7 @@ class RLTable extends PolymerElement {
 
   @published int spaneWidth = 400;
   @published int spaneHeight = 400;
+  @published String overflowX = "scroll";
   
   static var selectedStyle = "background-color:#00A7F2;";
   static var caretStyleNoBG = "outline: 1px dashed black;";
@@ -181,6 +182,11 @@ class RLTable extends PolymerElement {
     if ( selectedRows.length == 0 )
       return null;
     return rows[selectedRows.keys.first];
+  }
+  
+  setTableWidth( num x ) {
+    headerPane.style.width = x.toString()+"px";
+    pane.style.width = (x+16).toString()+"px";
   }
   
   focus() {
@@ -383,7 +389,7 @@ class RLTable extends PolymerElement {
     if ( a == null ) {
       return b == null ? 0 : (up?-1:1); 
     }
-    return b.compareTo(b) * (up?-1:1);
+    return a.compareTo(b) * (up?-1:1);
   };
   
   sort( String field, bool up ) {

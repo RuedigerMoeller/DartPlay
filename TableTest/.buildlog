@@ -981,3 +981,83 @@ build.dart --machine --changed=web\reallive-text.dart
 
 build.dart finished [686 ms]
 
+---
+build.dart --machine --changed=build\tabletest.css --changed=build\tabletest.dart.js --changed=build\tabletest....
+
+build.dart finished [699 ms]
+
+---
+build.dart --machine --changed=web\reallive-text.html
+
+build.dart finished [728 ms]
+
+---
+build.dart --machine --changed=web\reallive-table.dart
+
+build.dart finished [718 ms]
+
+---
+build.dart --machine --changed=web\reallive-table.html
+
+build.dart finished [754 ms]
+
+---
+build.dart --machine --changed=web\reallive-text.html
+
+build.dart finished [698 ms]
+
+---
+build.dart --machine --changed=web\reallive-text.dart
+
+build.dart finished [702 ms]
+
+---
+build.dart --machine --changed=web\reallive-text.dart
+
+build.dart finished [702 ms]
+
+---
+build.dart --machine --changed=web\reallive-table.dart
+
+build.dart finished [665 ms]
+
+---
+build.dart --machine --changed=web\reallive-table.dart
+
+build.dart finished [667 ms]
+
+---
+build.dart --machine --changed=web\reallive-text.dart
+
+build.dart finished [692 ms]
+
+---
+build.dart --machine --changed=web\reallive-text.dart
+
+build.dart finished [707 ms]
+
+---
+build.dart --machine --changed=web\tabletest.html
+
+build.dart finished [720 ms]
+
+---
+build.dart --machine --changed=web\tabletest.html
+
+build.dart finished [705 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [697 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [703 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [694 ms]
+

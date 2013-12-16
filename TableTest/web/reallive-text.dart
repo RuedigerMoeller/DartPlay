@@ -110,6 +110,8 @@ class RLText extends PolymerElement {
       div.style.height = min(200,height).toString() + "px";
       div.style.width =  (table.table.marginEdge.width+4).toString() + "px";;
       div.style.display="inline";
+      num width = table.table.marginEdge.width+4;
+      table.setTableWidth(width);
     } else {
       div.style.display="none";
     }

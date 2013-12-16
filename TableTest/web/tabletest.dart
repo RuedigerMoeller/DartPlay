@@ -11,6 +11,9 @@ void main() {
   
   RLTable rltable = querySelector("#apptable").xtag;
   RLTable rltable1 = querySelector("#apptable1").xtag;
+  RLTable rltable2 = querySelector("#apptable2").xtag;
+  
+  List<RLTable> tables = [rltable,rltable1,rltable2]; 
   
   TableElement table = rltable.table; // just for sample data
   TableElement table1 = rltable1.table; // just for sample data
@@ -22,23 +25,14 @@ void main() {
                "NotSoShort":".","Langtext":"blubb blubb blubb blubb blubb blubb blubb blubb", 
                };
     if ( i == 1 ) {
-      rltable.setHeaderFromList(mp.keys.toList(growable: false));
-      rltable1.setHeaderFromList(mp.keys.toList(growable: false));
+      tables.forEach((T) => T.setHeaderFromList(mp.keys.toList(growable: false)));
     }
-    rltable.addRowAsMap(mp);
-    rltable1.addRowAsMap(mp);
+    tables.forEach((T) => T.addRowAsMap(mp) );
   }
   var rnd = new Random();
   new Timer.periodic(new Duration(milliseconds: 50), (t) { 
-    rltable.updateRow("${rnd.nextInt(100)}", { "Qty":rnd.nextInt(100) }); 
-    rltable1.updateRow("${rnd.nextInt(100)}", { "Qty":rnd.nextInt(100) }); 
+      tables.forEach((T) => T.updateRow("${rnd.nextInt(100)}", { "Qty":rnd.nextInt(100) }));
     } 
   );
-  
-  new Timer.periodic(new Duration(milliseconds: 50), (t) { 
-    rltable.updateRow("${rnd.nextInt(100)}", { "Price":rnd.nextInt(10000)/100 }); 
-    rltable1.updateRow("${rnd.nextInt(100)}", { "Price":rnd.nextInt(10000)/100 }); 
-    } 
-  );
-  
+    
 }
