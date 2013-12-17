@@ -9,6 +9,23 @@ void main() {
   
   initPolymer();
   
+  WebSocket ws = new WebSocket("ws://localhost:8089/"); 
+  
+  ws.onOpen.listen((T) {
+    print(T);
+    new Timer.periodic(new Duration(milliseconds: 2000), (t) { 
+        ws.sendString("Hello from dart");
+      } 
+    );
+  });
+  
+  ws.onMessage.listen((MessageEvent e) { 
+    print("received:${e.data}"); } 
+  );
+  ws.onError.listen((e) { 
+    print("error:$e"); } 
+  );
+  
   RLTable rltable = querySelector("#apptable").xtag;
   RLTable rltable1 = querySelector("#apptable1").xtag;
   RLTable rltable2 = querySelector("#apptable2").xtag;
