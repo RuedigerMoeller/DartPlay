@@ -2,29 +2,28 @@ import 'dart:html';
 import 'package:polymer/polymer.dart';
 import 'reallive-table.dart';
 import 'reallive-text.dart';
+import 'dson/dson.dart';
+import 'protocol/RealLive.dart';
 import 'dart:async';
 import 'dart:math';
+import 'dart:convert';
 
 void main() {
   
   initPolymer();
+  DSON.classFactory = new RealLiveFactory();
   
-  WebSocket ws = new WebSocket("ws://localhost:8089/"); 
+  DsonWebSocket socket = new DsonWebSocket("ws://localhost:8089/"); 
+
+  socket.onMessage = (msg) {
+    print( "message" + msg.toString() );
+  };
+  socket.onLogin = () { print( "login "+(socket.responseHandlers.length.toString() ) ); };  
+  AuthReq login = new AuthReq();
+  login.userName = "Me";
+  login.passWord = "Don't bother";
+  socket.authenticate(login, (resp) => resp is AuthResponse );
   
-  ws.onOpen.listen((T) {
-    print(T);
-    new Timer.periodic(new Duration(milliseconds: 2000), (t) { 
-        ws.sendString("Hello from dart");
-      } 
-    );
-  });
-  
-  ws.onMessage.listen((MessageEvent e) { 
-    print("received:${e.data}"); } 
-  );
-  ws.onError.listen((e) { 
-    print("error:$e"); } 
-  );
   
   RLTable rltable = querySelector("#apptable").xtag;
   RLTable rltable1 = querySelector("#apptable1").xtag;
