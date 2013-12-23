@@ -445,7 +445,10 @@ final int OPEN = 1;
 final int CLOSING = 2;
 final int CLOSED = 3;
 
+DsonWebSocket DSONSocket;
+
 class DsonWebSocket {
+  
   WebSocket socket;
   bool log = true;
   var authRequest;
@@ -460,12 +463,24 @@ class DsonWebSocket {
   var onDecodingException = (e) => print( "exception in decoding:$e" );
   var onLogin = () => print("logged in");
   
-  DsonWebSocket( String url ) {
+  factory DsonWebSocket(String url) {
+    if ( DSONSocket == null )
+      DSONSocket = new DsonWebSocket._fromURL(url);
+    return DSONSocket;
+  }
+
+  factory DsonWebSocket.fromWS(WebSocket aSocket) {
+    if ( DSONSocket == null )
+      DSONSocket = new DsonWebSocket._fromWS(aSocket);
+    return DSONSocket;
+  }
+  
+  DsonWebSocket._fromURL( String url ) {
     socket = new WebSocket(url);
     init();
   }
   
-  DsonWebSocket.fromWS(WebSocket aSocket) {
+  DsonWebSocket._fromWS(WebSocket aSocket) {
     socket = aSocket;
     init();
   }
@@ -507,18 +522,20 @@ class DsonWebSocket {
   }
   
   _auth() {
-    sendForResponse(
-        authRequest, 
-        (resp) { 
-          bool res = authHandler(resp); 
-          if (res) { 
-            loggedIn = true;
-            onLogin();
-          }
-        }, 
-        10000, 
-        false
-      );
+    if ( authRequest != null ) {
+      sendForResponse(
+          authRequest, 
+          (resp) { 
+            bool res = authHandler(resp); 
+            if (res) { 
+              loggedIn = true;
+              onLogin();
+            }
+          }, 
+          10000, 
+          false
+        );
+    }
   }
 
   bool isOpen() => socket.readyState == OPEN;  

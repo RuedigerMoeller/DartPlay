@@ -2,6 +2,7 @@ import 'dart:html';
 import 'package:polymer/polymer.dart';
 import 'reallive-table.dart';
 import 'reallive-text.dart';
+import 'reallive-login.dart';
 import 'dson/dson.dart';
 import 'protocol/RealLive.dart';
 import 'dart:async';
@@ -18,12 +19,7 @@ void main() {
   socket.onMessage = (msg) {
     print( "message" + msg.toString() );
   };
-  socket.onLogin = () { print( "login "+(socket.responseHandlers.length.toString() ) ); };  
-  AuthReq login = new AuthReq();
-  login.userName = "Me";
-  login.passWord = "Don't bother";
-  socket.authenticate(login, (resp) => resp is AuthResponse );
-  
+  socket.onLogin = () { print( "login "+(socket.responseHandlers.length.toString() ) ); };    
   
   RLTable rltable = querySelector("#apptable").xtag;
   RLTable rltable1 = querySelector("#apptable1").xtag;

@@ -1,0 +1,50 @@
+<polymer-element name="reallive-login">
+  <template>
+    <style>
+      div.fadeMe {
+        transition: opacity 1s;
+        transition: width 1s;
+        opacity:    1; 
+        background: rgba(0,0,0,0.5); 
+        width:      100%;
+        height:     100%; 
+        z-index:    10;
+        top:        0; 
+        left:       0; 
+        position:   fixed; 
+        overflow:hidden;
+      }
+    </style>
+    <div class="fadeMe" id="glasspane">
+    <div style=" position:absolute;
+                     top:50%;
+                     left:50%;
+                     background-color:white;
+                     overflow:hidden;
+                     margin-left:-100px;
+                     margin-top:-100px ">
+        <p>
+        <table width="80%" align="center" style="background-color: white; margin:20px; " >
+          <tr>
+              <td><font size="+1">Login</font></td>
+          </tr>
+          <tr><td>&nbsp;</td></tr>
+          <tr>
+              <td>User:</td><td><input type='text' id='user'></td>
+          </tr>
+          <tr>
+              <td>Password:</td><td><input type='password' id='pwd'></td>
+          </tr>
+          <tr>
+              <td></td><td align="right"><input type='button' id='login' value="Log In"></td>
+          </tr>
+          <tr>
+              <td colspan=2 id="status" align="center" style="vertical-align: baseline;"></td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+  </template>  
+  <script type="application/dart" src="reallive-login.dart"></script>
+</polymer-element>
