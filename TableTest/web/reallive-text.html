@@ -1,0 +1,20 @@
+<polymer-element name="reallive-text">
+  <link rel="import" href="reallive-table.html">
+  <template>
+    <style>
+      tbody tr:hover { background: #ccc; }
+      tbody tr:nth-child(odd):hover { background: #ccc; }
+    </style>
+    <input type="text" name="fname" id="text" enableKeys=false>
+    <div id="completion" style="
+    top:15px;
+    right:10px;
+    width:25px;
+    height:25px;
+    position:absolute;
+    ">
+    <reallive-table id="compltable" spaneHeight="100" spaneWidth="400" overflowX="hidden"></reallive-table>
+    </div>    
+  </template>  
+  <script type="application/dart" src="reallive-text.dart"></script>
+</polymer-element>

@@ -1,41 +1,34 @@
 import 'dart:html';
-import 'reallive/RLTable.dart';
+import 'package:polymer/polymer.dart';
+import 'reallive-table.dart';
+import 'reallive-text.dart';
+import 'reallive-login.dart';
+import 'dson/dson.dart';
+import 'protocol/RealLive.dart';
 import 'dart:async';
 import 'dart:math';
-
+import 'dart:convert';
 
 void main() {
+  
+  initPolymer();
+  DSON.classFactory = new RealLiveFactory();
+  
+  DsonWebSocket socket = new DsonWebSocket("ws://localhost:8089/"); 
 
-  RLTable rltable = new RLTable("#table_id");
+  socket.onMessage = (msg) {
+    print( "message" + msg.toString() );
+  };
+  socket.onLogin = () { print( "login "+(socket.responseHandlers.length.toString() ) ); };    
+  
+  RLTable rltable = querySelector("#apptable").xtag;
+  RLTable rltable1 = querySelector("#apptable1").xtag;
+  RLTable rltable2 = querySelector("#apptable2").xtag;
+  
+  List<RLTable> tables = [rltable,rltable1,rltable2]; 
   
   TableElement table = rltable.table; // just for sample data
-//  for ( var i = 0; i < 500; i++ ) {
-//    var row = table.addRow();
-//    row.attributes['t_id'] = '$i';
-//
-//    var cell = row.addCell();
-//    cell.attributes['t_id'] = '$i';
-//
-//    String test = '$i';
-//    cell.setInnerHtml( test );
-//    
-//    cell = row.addCell(); 
-//    cell.attributes['t_id'] = '$i';
-//    cell.setInnerHtml("Hallo " );
-//
-//    cell = row.addCell();
-//    cell.attributes['t_id'] = '$i';
-//    cell.setInnerHtml("longer pokiger text, oid asodi aosid hadsj qwjeq as " );
-//
-//    cell = row.addCell();
-//    cell.attributes['t_id'] = '$i';
-//    cell.setInnerHtml("<font color=red>99.34</font>" );
-//
-//    cell = row.addCell();
-//    cell.attributes['t_id'] = '$i';
-//    cell.setInnerHtml("<font color=green>99.34</font>" );
-//  }
-  
+  TableElement table1 = rltable1.table; // just for sample data
   List user = ["Reudi", "Emil", "Felix", "Anita", "Ex*"];
 
   for ( var i = 0; i < 100; i++ ) {
@@ -44,20 +37,14 @@ void main() {
                "NotSoShort":".","Langtext":"blubb blubb blubb blubb blubb blubb blubb blubb", 
                };
     if ( i == 1 ) {
-      rltable.setHeaderFromList(mp.keys.toList(growable: false));
+      tables.forEach((T) => T.setHeaderFromList(mp.keys.toList(growable: false)));
     }
-    rltable.addRowAsMap(mp);
+    tables.forEach((T) => T.addRowAsMap(mp) );
   }
   var rnd = new Random();
   new Timer.periodic(new Duration(milliseconds: 50), (t) { 
-      rltable.updateRow("${rnd.nextInt(100)}", { "Qty":rnd.nextInt(100) }); 
+      tables.forEach((T) => T.updateRow("${rnd.nextInt(100)}", { "Qty":rnd.nextInt(100) }));
     } 
   );
-  
-  new Timer.periodic(new Duration(milliseconds: 50), (t) { 
-      rltable.updateRow("${rnd.nextInt(100)}", { "Price":rnd.nextInt(10000)/100 }); 
-    } 
-  );
-  
-
+    
 }
