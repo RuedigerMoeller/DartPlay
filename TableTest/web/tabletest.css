@@ -11,12 +11,22 @@ h1, p {
   color: #333;
 }
 
-#sample_container_id {
-  width: 100%;
-  height: 400px;
-  position: relative;
-  border: 1px solid #ccc;
-  background-color: #fff;
+.triangle-isosceles {
+  position:relative;
+  padding:5px 8px;
+  color:#fff;
+  background:#a00; 
 }
 
-
+.triangle-isosceles:after {
+  content:"";
+  position:absolute;
+  bottom:-8px; /* value = - border-top-width - border-bottom-width */
+  left:8px; /* controls horizontal position */
+  border-width:8px 5px 0; /* vary these values to change the angle of the vertex */
+  border-style:solid;
+  border-color:#a00 transparent;
+    /* reduce the damage in FF3.0 */
+    display:block; 
+    width:0;
+}

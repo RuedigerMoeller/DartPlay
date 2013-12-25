@@ -9,37 +9,43 @@
     <link rel="import" href="reallive-table.html">
     <link rel="import" href="reallive-text.html">
     <link rel="import" href="reallive-login.html">
+    <link rel="import" href="reallive-appbar.html">
 
     <!--<script type="application/dart">export 'package:polymer/init.dart';</script>-->
     <script type="application/dart" src="tabletest.dart"></script>
     <script src="packages/browser/dart.js"></script>
   </head>
-  <body>
-    <h1>RealLive Table Grid</h1>
-    
-    <p>Hello world from RealLive</p>
-    
-    <table> 
-      <tr>
-        <td>
-          <reallive-table id="apptable" spaneWidth="300">
-          </reallive-table> 
-        </td>
-        <td>&nbsp;</td>
-        <td> 
-          <reallive-table id="apptable1" spaneWidth="300">
-          </reallive-table>
-        </td>
-        <td> 
-          <reallive-table id="apptable2" spaneWidth="300">
-          </reallive-table>
-        </td>
-      </tr>
-    </table> 
-    
-    
-    <reallive-text></reallive-text> 
-    
+  <body style="margin:0;" height="100%">
     <reallive-login></reallive-login>
+    <table style="margin:0; border:0px;" >
+    <tr>
+      <td valign="top" bgcolor="#006A99">
+        <reallive-appbar></reallive-appbar>
+      </td>
+      <td valign="top">
+        <table> 
+          <tr>
+            <td>
+              <reallive-table id="apptable" spaneWidth="300">
+              </reallive-table> 
+            </td>
+            <td>&nbsp;</td>
+            <td> 
+              <reallive-table id="apptable1" spaneWidth="300">
+              </reallive-table>
+            </td>
+            <td> 
+              <reallive-table id="apptable2" spaneWidth="300">
+              </reallive-table>
+            </td>
+          </tr>
+        </table> 
+            
+        <reallive-text></reallive-text> 
+        
+      </td>
+    </tr>
+    </table>
+
   </body>
 </html>

@@ -21,6 +21,7 @@ class RLText extends PolymerElement {
   void init() {
     textField = shadowRoot.querySelector("#text");
     div = shadowRoot.querySelector("#completion");
+    div.style.display="none";
     table = shadowRoot.querySelector("#compltable").xtag;
     table.onSelection = () {
       var row = table.singleSelection();
@@ -58,15 +59,23 @@ class RLText extends PolymerElement {
       }        
     });
     
-    textField.onInput.listen((E) {
-        print( textField.value );
-        if ( textField.value.length > 0 ) {
-          showCompletion(textField.value);
-        } else {
-          closePopup();
-        }
-      } 
-    );
+    var onInput = (E) {
+      print( textField.value );
+      if ( textField.value.length > 0 ) {
+        showCompletion(textField.value);
+      } else {
+        closePopup();
+      }
+    }; 
+    
+    var onContext = (E) {
+      showCompletion("");
+      E.preventDefault();
+      E.stopImmediatePropagation();    
+    }; 
+
+    textField.onInput.listen( onInput );
+    textField.onContextMenu.listen( onContext );
 
     setCompletionList(
     [ 

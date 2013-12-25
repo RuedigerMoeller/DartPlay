@@ -9,7 +9,7 @@ class RLTable extends PolymerElement {
   @published int spaneHeight = 400;
   @published String overflowX = "scroll";
   
-  static var selectedStyle = "background-color:#00A7F2;";
+  static var selectedStyle = "background-color:#008DCC; color:#fff;";
   static var caretStyleNoBG = "outline: 1px dashed black;";
   static var caretStyle = "outline: 1px dashed black; background-color:rgba(100%,100%,100%,0.7);";
   static var selectedCaretStyle = selectedStyle+" "+caretStyleNoBG;
@@ -491,8 +491,8 @@ class RLValueRenderer {
 
 class RLTableHeaderRowRenderer extends RLTableRowRenderer {
 
-  String headerBG = "#008DCC";
-  String headerBGHover = "#00C3FF";
+  String headerBG = "#006A99";
+  String headerBGHover = "#008DCC";
   
   renderRow( String rowId, TableRowElement target, RLDataRow row, RLTableRenderSpec style ) {    
     style.getFieldNames(row).forEach( 

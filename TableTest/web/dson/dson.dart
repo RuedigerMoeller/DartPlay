@@ -459,6 +459,8 @@ class DsonWebSocket {
   Set subscriptions = new Set();
   bool loggedIn = false;
   
+  // server induced messages which are not responses of
+  // a client request
   var onMessage = (msg) => print( "unhandled dson received "+msg );
   var onDecodingException = (e) => print( "exception in decoding:$e" );
   var onLogin = () => print("logged in");
