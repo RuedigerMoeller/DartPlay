@@ -1,0 +1,41 @@
+<polymer-element name="reallive-appbar">
+  <template>
+    <style>
+      table, tr {
+        padding: 0px; margin:0; overflow: hidden;
+        border: 0px; font-size: 14px; font-weight:bold; 
+        transition: background-color .1s ease-in;
+      }
+      tbody tr:hover {
+        background: #008DCC; 
+      }
+      tbody td:hover {
+        background: #008DCC;
+      }
+      td {
+        background-color: #006A99;
+        color: #fff;
+        padding: 12px;
+        text-align: right;
+        transition: background-color .1s ease-in;
+      }
+    </style>
+    
+    <table width="100px">
+      <tr><td>
+        Monitor 
+      </td></tr>
+      
+      <tr><td>
+        Schema 
+      </td></tr>
+    
+      <tr><td>
+        Tables 
+      </td></tr>
+      
+    </table>
+    
+  </template>  
+  <script type="application/dart" src="reallive-appbar.dart"></script>
+</polymer-element>

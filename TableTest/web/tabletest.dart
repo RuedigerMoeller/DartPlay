@@ -12,14 +12,15 @@ import 'dart:convert';
 void main() {
   
   initPolymer();
-  DSON.classFactory = new RealLiveFactory();
-  
+  // init communication
+  DSON.classFactory = new RealLiveFactory();  
   DsonWebSocket socket = new DsonWebSocket("ws://localhost:8089/"); 
 
+  // server induced messages
   socket.onMessage = (msg) {
     print( "message" + msg.toString() );
   };
-  socket.onLogin = () { print( "login "+(socket.responseHandlers.length.toString() ) ); };    
+  //socket.onLogin = () { print( "login "+(socket.responseHandlers.length.toString() ) ); };    
   
   RLTable rltable = querySelector("#apptable").xtag;
   RLTable rltable1 = querySelector("#apptable1").xtag;
