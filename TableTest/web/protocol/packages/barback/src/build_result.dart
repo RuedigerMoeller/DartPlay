@@ -4,6 +4,10 @@
 
 library barback.build_result;
 
+import 'dart:async';
+
+import 'package:stack_trace/stack_trace.dart';
+
 import 'errors.dart';
 import 'utils.dart';
 
@@ -45,14 +49,14 @@ class BuildResult {
     return "errors:\n" + errors.map((error) {
       var stackTrace = null;
       if (error is TransformerException || error is AssetLoadException) {
-        stackTrace = error.stackTrace.terse;
+        stackTrace = new Trace.from(error.stackTrace);
       }
 
       var msg = new StringBuffer();
       msg.write(prefixLines(error.toString()));
       if (stackTrace != null) {
         msg.write("\n\n");
-        msg.write("Stack chain:\n");
+        msg.write("Stack trace:\n");
         msg.write(prefixLines(stackTrace.toString()));
       }
       return msg.toString();

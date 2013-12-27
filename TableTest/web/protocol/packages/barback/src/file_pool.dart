@@ -8,8 +8,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:stack_trace/stack_trace.dart';
-
 import 'pool.dart';
 import 'utils.dart';
 
@@ -28,36 +26,36 @@ class FilePool {
   /// substantial additional throughput.
   final Pool _pool = new Pool(32, timeout: new Duration(seconds: 60));
 
-  /// Opens the file at [path] for reading.
+  /// Opens [file] for reading.
   ///
   /// When the returned stream is listened to, if there are too many files
   /// open, this will wait for a previously opened file to be closed and then
   /// try again.
-  Stream<List<int>> openRead(String path) {
+  Stream<List<int>> openRead(File file) {
     return futureStream(_pool.request().then((resource) {
-      return Chain.track(new File(path).openRead()).transform(
-          new StreamTransformer.fromHandlers(handleDone: (sink) {
+      return file.openRead().transform(new StreamTransformer.fromHandlers(
+          handleDone: (sink) {
         sink.close();
         resource.release();
       }));
     }));
   }
 
-  /// Reads [path] as a string using [encoding].
+  /// Reads [file] as a string using [encoding].
   ///
   /// If there are too many files open and the read fails, this will wait for
   /// a previously opened file to be closed and then try again.
-  Future<String> readAsString(String path, Encoding encoding) {
-    return _readAsBytes(path).then(encoding.decode);
+  Future<String> readAsString(File file, Encoding encoding) {
+    return _readAsBytes(file).then(encoding.decode);
   }
 
-  /// Reads [path] as a list of bytes, using [openRead] to retry if there are
+  /// Reads [file] as a list of bytes, using [openRead] to retry if there are
   /// failures.
-  Future<List<int>> _readAsBytes(String path) {
+  Future<List<int>> _readAsBytes(File file) {
     var completer = new Completer<List<int>>();
     var builder = new BytesBuilder();
 
-    openRead(path).listen(builder.add, onDone: () {
+    openRead(file).listen(builder.add, onDone: () {
       completer.complete(builder.takeBytes());
     }, onError: completer.completeError, cancelOnError: true);
 

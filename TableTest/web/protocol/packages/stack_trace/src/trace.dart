@@ -7,7 +7,6 @@ library trace;
 import 'dart:collection';
 import 'dart:math' as math;
 
-import 'chain.dart';
 import 'frame.dart';
 import 'lazy_trace.dart';
 import 'utils.dart';
@@ -93,7 +92,6 @@ class Trace implements StackTrace {
   /// a [Trace], it will be returned as-is.
   factory Trace.from(StackTrace trace) {
     if (trace is Trace) return trace;
-    if (trace is Chain) return trace.toTrace();
     return new LazyTrace(() => new Trace.parse(trace.toString()));
   }
 
@@ -174,14 +172,9 @@ class Trace implements StackTrace {
           .where((line) => line != '[native code]')
           .map((line) => new Frame.parseFirefox(line)));
 
-  /// Parses this package's string representation of a stack trace.
-  ///
-  /// This also parses string representations of [Chain]s. They parse to the
-  /// same trace that [Chain.toTrace] would return.
+  /// Parses this package's a string representation of a stack trace.
   Trace.parseFriendly(String trace)
       : this(trace.trim().split("\n")
-          // Filter out asynchronous gaps from [Chain]s.
-          .where((line) => !line.startsWith('====='))
           .map((line) => new Frame.parseFriendly(line)));
 
   /// Returns a new [Trace] comprised of [frames].
@@ -198,13 +191,10 @@ class Trace implements StackTrace {
   /// Returns a terser version of [this].
   ///
   /// This is accomplished by folding together multiple stack frames from the
-  /// core library or from this package, as in [foldFrames]. Remaining core
-  /// library frames have their libraries, "-patch" suffixes, and line numbers
-  /// removed.
+  /// core library, as in [foldFrames]. Remaining core library frames have their
+  /// libraries, "-patch" suffixes, and line numbers removed.
   Trace get terse {
-    return new Trace(foldFrames((frame) {
-      return frame.isCore || frame.package == 'stack_trace';
-    }).frames.map((frame) {
+    return new Trace(foldFrames((frame) => frame.isCore).frames.map((frame) {
       if (!frame.isCore) return frame;
       var library = frame.library.replaceAll(_terseRegExp, '');
       return new Frame(Uri.parse(library), null, null, frame.member);

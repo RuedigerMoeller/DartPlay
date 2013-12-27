@@ -128,7 +128,9 @@ class TransformNode {
 
     _isDirty = false;
 
-    return transformer.apply(transform).catchError((error, stack) {
+    return phase.cascade.graph.transformPool
+        .withResource(() => transformer.apply(transform))
+        .catchError((error, stack) {
       // If the transform became dirty while processing, ignore any errors from
       // it.
       if (_isDirty) return;

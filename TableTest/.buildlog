@@ -1146,3 +1146,83 @@ build.dart --machine --changed=web\tabletest.dart
 
 build.dart finished [683 ms]
 
+---
+build.dart --machine --full
+
+build.dart finished [2552 ms]
+
+---
+build.dart --machine --changed=web\dson\dson.dart
+
+build.dart finished [3615 ms]
+
+---
+build.dart --machine --changed=web\dson\dson.dart
+
+build.dart finished [791 ms]
+
+---
+build.dart --machine --changed=web\dson\dson.dart
+
+build.dart finished [801 ms]
+
+---
+build.dart --machine --changed=web\dson\dson.dart
+
+build.dart finished [798 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [812 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [827 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [1219 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [795 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [784 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [786 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [784 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [793 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [810 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [803 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [800 ms]
+

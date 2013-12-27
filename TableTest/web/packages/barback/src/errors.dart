@@ -4,6 +4,8 @@
 
 library barback.errors;
 
+import 'dart:async';
+
 import 'package:stack_trace/stack_trace.dart';
 
 import 'asset_id.dart';
@@ -113,11 +115,9 @@ class InvalidOutputException implements BarbackException {
 abstract class _WrappedException implements BarbackException {
   /// The wrapped exception.
   final error;
-  final Chain stackTrace;
+  final StackTrace stackTrace;
 
-  _WrappedException(this.error, StackTrace stackTrace)
-      : this.stackTrace = stackTrace == null ? null :
-            new Chain.forTrace(stackTrace);
+  _WrappedException(this.error, this.stackTrace);
 
   String get _message;
 
@@ -127,7 +127,7 @@ abstract class _WrappedException implements BarbackException {
     var stack = stackTrace;
     if (stack == null && error is Error) stack = error.stackTrace;
     if (stack != null) {
-      result = "$result\n${stackTrace.terse}";
+      result = "$result\n${new Trace.from(stack).terse}";
     }
 
     return result;

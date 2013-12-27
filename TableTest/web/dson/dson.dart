@@ -129,7 +129,14 @@ class DsonSerializer {
       out.write(';');
     }
   }
- 
+
+  bool isNullValue(Object fieldValue) {
+    if ( fieldValue is num ) {
+      return fieldValue != 0.0;
+    }
+    return fieldValue != null && fieldValue != false;
+  }
+
   encodeString( String string, StringBuffer out ) {
     if (string==null) {
       out.write("null");
@@ -191,6 +198,14 @@ class DsonDeserializer {
     return (num >= c_a && num <= c_z) || (num >= c_A && num <= c_Z );
   }
   
+  bool isIdChar( int num ) {
+    return isIdStart(num) || isDigit(num);
+  }
+
+  bool isIdStart( int num ) {
+    return isLetter(num) || num == '#'.codeUnitAt(0) || num == '\$'.codeUnitAt(0);
+  }
+
   bool isDigit( int num ) {
     return (num >= c_0 && num <= c_9);
   }
@@ -219,18 +234,39 @@ class DsonDeserializer {
       inp.back(1);
   }
 
+  mapLiteral( String s) {
+    if ( s=='y' || s == 'yes' || s == 'true')
+      return true;
+    if ( s=='n' || s == 'no' || s == 'false')
+      return false;
+    return null;
+  }
+  
   readObject() {
     skipWS();
     var type = readId();
+    var literal = mapLiteral(type);
+    if (literal != null )
+      return literal;
     skipWS();
     int ch = inp.readChar();
     if ( ch != c_CBraceOp ) {
 //      throw ("expected { at ${inp.position}");
       inp.back(1);
     }
+    String implied = null;
+    if (inp.peekChar()==c_DbP) { // implied attribute
+      implied = getImpliedAttr(type);
+      if (implied==null)
+        throw ("expected implied attribute");
+    }
     var res = createObjectInstance(type);
-    readFields(res, new TypeInfo(type));
+    readFields(implied,res, new TypeInfo(type));
     return res;
+  }
+  
+  getImpliedAttr(String type) {
+    return null;
   }
   
   createObjectInstance( String name ) {
@@ -245,17 +281,21 @@ class DsonDeserializer {
     return result;
   }
 
-  readFields(dynamic target, TypeInfo clz ) {
+  readFields(String implied, dynamic target, TypeInfo clz ) {
     while ( inp.peekChar() != c_CBraceCl && inp.peekChar() != c_Semi) {
       var name = readId();
       skipWS();
+      if (name.length==0)
+        name = implied;
       int ch = inp.readChar();
+      FieldInfo fieldInfo = new FieldInfo(clz,name);
       if ( ch == c_DbP ) {
         // key val
-        readValue(target, new FieldInfo(clz,name));
+        readValue(target, fieldInfo);
       } else {
-        // scalar ? => error
-        throw ("expected key value ${inp.position}'"+inp.getString(inp.position-10,10)+"'");
+        // assume boolean set by simple attribute occurence
+        setObjectValue(target, fieldInfo, true);
+        //throw ("expected key value ${inp.position}'"+inp.getString(inp.position-10,10)+"'");
       }
       skipWS();
     }
@@ -301,7 +341,7 @@ class DsonDeserializer {
       if ( ch == c_DbQU || ch == c_Qu ) {
         // string
         objects.add(readString());
-      } else if ( isLetter(ch) ) {
+      } else if ( isIdStart(ch) ) {
         // object
         objects.add(readObject());
       } else if ( isDigit(ch) || ch == c_Plus || ch == c_Minus || ch == c_Point ) {
@@ -390,7 +430,7 @@ class DsonDeserializer {
     skipWS();
     int pos = inp.position;
     int ch = inp.readChar();
-    while( (isLetter(ch) || isDigit(ch)) && ch != c_DbP ) {
+    while( isIdChar(ch) && ch != c_DbP ) {
       ch = inp.readChar();
     }
     inp.back(1);

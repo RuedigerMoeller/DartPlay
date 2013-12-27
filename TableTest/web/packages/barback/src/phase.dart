@@ -116,10 +116,8 @@ class Phase {
     _onDirtyPool.add(_onDirtyController.stream);
 
     for (var group in transformers.where((op) => op is TransformerGroup)) {
-      var runner = new GroupRunner(cascade, group);
-      _groups[group] = runner;
-      _onDirtyPool.add(runner.onDirty);
-      _onLogPool.add(runner.onLog);
+      _groups[group] = new GroupRunner(cascade, group);
+      _onDirtyPool.add(_groups[group].onDirty);
     }
   }
 
@@ -208,7 +206,6 @@ class Phase {
       var runner = new GroupRunner(cascade, added);
       _groups[added] = runner;
       _onDirtyPool.add(runner.onDirty);
-      _onLogPool.add(runner.onLog);
       for (var input in _inputs.values) {
         runner.addInput(input.input);
       }
