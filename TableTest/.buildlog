@@ -1481,3 +1481,193 @@ build.dart --machine --changed=web\dson\dson.dart
 
 build.dart finished [714 ms]
 
+---
+build.dart --machine --changed=web\reallive-login.dart
+
+build.dart finished [727 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [731 ms]
+
+---
+build.dart --machine --changed=web\reallive-login.dart
+
+build.dart finished [706 ms]
+
+---
+build.dart --machine --changed=web\reallive-login.dart
+
+build.dart finished [712 ms]
+
+---
+build.dart --machine --changed=web\reallive-login.dart
+
+build.dart finished [722 ms]
+
+---
+build.dart --machine --changed=web\reallive-login.dart
+
+build.dart finished [713 ms]
+
+---
+build.dart --machine --changed=web\reallive-login.dart
+
+build.dart finished [703 ms]
+
+---
+build.dart --machine --changed=web\reallive-login.dart
+
+build.dart finished [700 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [717 ms]
+
+---
+build.dart --machine --changed=web\reallive-util.dart
+
+build.dart finished [708 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [702 ms]
+
+---
+build.dart --machine --changed=web\protocol\RealLive.dart
+
+build.dart finished [822 ms]
+
+---
+build.dart --machine --changed=web\reallive-login.dart
+
+build.dart finished [707 ms]
+
+---
+build.dart --machine --changed=web\reallive-login.dart
+
+build.dart finished [703 ms]
+
+---
+build.dart --machine --changed=web\reallive-util.dart
+
+build.dart finished [685 ms]
+
+---
+build.dart --machine --changed=web\reallive-util.dart
+
+build.dart finished [683 ms]
+
+---
+build.dart --machine --changed=web\reallive-util.dart
+
+build.dart finished [687 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [678 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [705 ms]
+
+---
+build.dart --machine --changed=web\reallive-table.dart
+
+build.dart finished [680 ms]
+
+---
+build.dart --machine --changed=web\reallive-util.dart
+
+build.dart finished [682 ms]
+
+---
+build.dart --machine --changed=web\reallive-util.dart
+
+build.dart finished [679 ms]
+
+---
+build.dart --machine --changed=web\reallive-util.dart
+
+build.dart finished [694 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [685 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [687 ms]
+
+---
+build.dart --machine --changed=web\reallive-util.dart
+
+build.dart finished [693 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [679 ms]
+
+---
+build.dart --machine --changed=web\reallive-login.dart
+
+build.dart finished [798 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [686 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [682 ms]
+
+---
+build.dart --machine --changed=web\reallive-util.dart
+
+build.dart finished [680 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [685 ms]
+
+---
+build.dart --machine --changed=web\reallive-util.dart
+
+build.dart finished [697 ms]
+
+---
+build.dart --machine --changed=web\reallive-util.dart
+
+build.dart finished [686 ms]
+
+---
+build.dart --machine --changed=web\tabletest.dart
+
+build.dart finished [696 ms]
+
+---
+build.dart --machine --changed=web\reallive-util.dart
+
+build.dart finished [710 ms]
+
+---
+build.dart --machine --changed=web\reallive-table.dart
+
+build.dart finished [687 ms]
+
+---
+build.dart --machine --changed=web\reallive-table.dart
+
+build.dart finished [706 ms]
+

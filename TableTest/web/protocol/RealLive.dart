@@ -1,7 +1,7 @@
 
-class Schema /*implements DsonReflectable*/ {
+class Scheme /*implements DsonReflectable*/ {
 
-  dsonName() => 'Schema';
+  dsonName() => 'Scheme';
 
   List<TableMetaData> tables;
 
@@ -407,7 +407,7 @@ class AuthResponse /*implements DsonReflectable*/ {
 
   int reqId;
   int respToId;
-  Schema tables;
+  Scheme tables;
 
   operator []= ( String field, var val ) {
     switch (field) {
@@ -435,7 +435,7 @@ class AuthResponse /*implements DsonReflectable*/ {
 class RealLiveFactory {
   newInstance( String name ) {
     switch(name) {
-      case 'Schema': return new Schema();
+      case 'Scheme': return new Scheme();
       case 'TableMetaData': return new TableMetaData();
       case 'TableAttribute': return new TableAttribute();
       case 'AddRowMsg': return new AddRowMsg();

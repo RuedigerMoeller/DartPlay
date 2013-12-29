@@ -352,6 +352,7 @@ class RLTable extends PolymerElement {
   }
 
   addRowWithId(var id, RLDataRow data) {
+    id = id.toString();
     TableRowElement newRow = table.addRow();
     newRow.attributes['t_id'] = id;
     rows[id] = data;

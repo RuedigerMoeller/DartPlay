@@ -37,6 +37,7 @@ class RLLogin extends PolymerElement {
       DSONSocket.authenticate(login, (resp) { 
         bool success = resp is AuthResponse;
         if ( success ) {
+          LoginContext = new RLLoginContext(resp.tables);
           if ( onLoginSucc != null )
             onLoginSucc(resp);
           status.setInnerHtml("");
@@ -52,3 +53,5 @@ class RLLogin extends PolymerElement {
     });
   }
 }
+
+
