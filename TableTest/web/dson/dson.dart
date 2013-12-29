@@ -2,8 +2,6 @@ import "dart:core";
 import 'dart:html';
 import 'dart:async';
 
-//import '/C:/Users/ruedi/Documents/GitHub/DartPlay/TableTest/web/protocol/RealLive.dart';
-
 
 final c_a = 'a'.codeUnits[0];
 final c_z = 'z'.codeUnits[0]; 
@@ -92,8 +90,17 @@ class DsonSerializer {
     if ( obj is String ) {
       encodeString(obj,out);
       return;
-    } else
-    if ( obj is Map ) {
+    } else if ( obj is List ) {
+      out.writeln("[");
+      obj.forEach((v) {
+          out.write(indent+"    ");
+          serialize( v, out, indent+"    " );   
+          out.writeln();
+        }
+      );
+      out.write(indent+"  ");
+      out.write('] ');
+    } else if ( obj is Map ) {
       String type = obj['@type'];
       if ( type == null ) {
         type = "map";
@@ -116,17 +123,15 @@ class DsonSerializer {
       out.writeln();
       out.write(indent);
       out.writeln(obj.dsonName());
-      out.write(indent+"  ");
       obj.getFields().forEach((String field) {
         if ( obj[field] != null ) {
+          out.write(indent+"  ");
           out.write(field+":");
-          serialize( obj[field], out, indent+"    " );
-          out.write(' ');
+          serialize( obj[field], out, indent+"  " );
+          out.writeln();
         }
       });
-      out.writeln();
-      out.write(indent);
-      out.write(';');
+      out.writeln(';');
     }
   }
 
@@ -567,15 +572,15 @@ class DsonWebSocket {
     if ( authRequest != null ) {
       sendForResponse(
           authRequest, 
+          10000, 
+          false,
           (resp) { 
             bool res = authHandler(resp); 
             if (res) { 
               loggedIn = true;
               onLogin();
             }
-          }, 
-          10000, 
-          false
+          } 
         );
     }
   }
@@ -594,7 +599,7 @@ class DsonWebSocket {
     subscriptions.remove(rq);
   }
   
-  sendForResponse( var dsonObject, dynamic response(respMsgOrErrorOrTimeout), num timeoutMillis, bool subscribe ) {
+  sendForResponse( var dsonObject, num timeoutMillis, bool subscribe, dynamic response(respMsgOrErrorOrTimeout) ) {
     if ( isOpen() ) {
       final num rq = reqCount;
       dsonObject['reqId'] = reqCount++;

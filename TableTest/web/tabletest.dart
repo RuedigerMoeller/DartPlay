@@ -16,20 +16,32 @@ void main() {
   DSON.classFactory = new RealLiveFactory();  
   DsonWebSocket socket = new DsonWebSocket("ws://localhost:8089/"); 
 
+  RLTable rltable = querySelector("#apptable").xtag;
+
   // server induced messages
   socket.onMessage = (msg) {
     print( "message" + msg.toString() );
   };
-  //socket.onLogin = () { print( "login "+(socket.responseHandlers.length.toString() ) ); };    
+  socket.onLogin = () {
+    var query = new Request();
+    query.unparsedRequest = """
+      Query: 'sys.User' having: 
+        field: 'uid' equals: 'a';
+        subscribe
+      ;
+    """;
+    socket.sendForResponse(query,0,true,(bcast) {
+      if ( bcast is ErrorMsg )
+        print( "error:"+bcast.text );
+      else
+        print( "received "+DSON.encode(bcast));
+    });
+  };    
   
-  RLTable rltable = querySelector("#apptable").xtag;
-  RLTable rltable1 = querySelector("#apptable1").xtag;
-  RLTable rltable2 = querySelector("#apptable2").xtag;
   
-  List<RLTable> tables = [rltable,rltable1,rltable2]; 
+  List<RLTable> tables = [rltable]; 
   
   TableElement table = rltable.table; // just for sample data
-  TableElement table1 = rltable1.table; // just for sample data
   List user = ["Reudi", "Emil", "Felix", "Anita", "Ex*"];
 
   for ( var i = 0; i < 100; i++ ) {
