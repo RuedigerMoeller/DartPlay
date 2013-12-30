@@ -239,19 +239,22 @@ class DsonDeserializer {
       inp.back(1);
   }
 
+  String NULL_LITERAL = "_NULL_LITERAL_";
   mapLiteral( String s) {
     if ( s=='y' || s == 'yes' || s == 'true')
       return true;
     if ( s=='n' || s == 'no' || s == 'false')
       return false;
-    return null;
+    if ( s == 'null')
+      return null;
+    return NULL_LITERAL;
   }
   
   readObject() {
     skipWS();
     var type = readId();
     var literal = mapLiteral(type);
-    if (literal != null )
+    if (literal != NULL_LITERAL )
       return literal;
     skipWS();
     int ch = inp.readChar();

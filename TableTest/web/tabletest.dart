@@ -44,6 +44,9 @@ void main() {
           Map rowData = convertRowListToMap(bcast.row);
           RLTableRow row = new RLTableRow(rowData, table);
           rltable.addRowWithId(row.getId(), row);
+        } else if ( bcast is UpdateRowMsg ) {
+          Map rowData = convertRowListToMap(bcast.row);
+          print("update:"+rowData.toString());
         }
 //        print( "received "+DSON.encode(bcast));
       }

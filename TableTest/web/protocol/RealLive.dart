@@ -1,4 +1,38 @@
 
+class UpdateRowMsg /*implements DsonReflectable*/ {
+
+  dsonName() => 'UpdateRowMsg';
+
+  int reqId;
+  int respToId;
+  var row;
+  List<String> changedFields;
+
+  operator []= ( String field, var val ) {
+    switch (field) {
+      case 'reqId': reqId = val; break;
+      case 'respToId': respToId = val; break;
+      case 'row': row = val; break;
+      case 'changedFields': changedFields = val; break;
+    }
+  }
+
+  operator [] ( String field ) {
+    switch (field) {
+      case 'reqId': return reqId;
+      case 'respToId': return respToId;
+      case 'row': return row;
+      case 'changedFields': return changedFields;
+    }
+  }
+
+  List<String> getFields() {
+    return [
+       'reqId', 'respToId', 'row', 'changedFields',
+    ];
+  }
+}
+
 class Scheme /*implements DsonReflectable*/ {
 
   dsonName() => 'Scheme';
@@ -435,6 +469,7 @@ class AuthResponse /*implements DsonReflectable*/ {
 class RealLiveFactory {
   newInstance( String name ) {
     switch(name) {
+      case 'UpdateRowMsg': return new UpdateRowMsg();
       case 'Scheme': return new Scheme();
       case 'TableMetaData': return new TableMetaData();
       case 'TableAttribute': return new TableAttribute();
