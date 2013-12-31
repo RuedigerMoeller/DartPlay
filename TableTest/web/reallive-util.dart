@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'protocol/RealLive.dart';
 import 'reallive-table.dart';
+import 'dson/dson.dart';
 
 rlTooltip( Element elem, String text ) {
   DivElement div = document.createElement("div");
@@ -120,6 +121,12 @@ class RLTableMeta extends RLDataRow {
   }
 }
 
+abstract class RLDataRow {
+  getValue( String fieldName );
+  setValue( String fieldName, value );
+  num getId();  
+}
+
 class RLTableRow extends RLDataRow {
   
   Map data;
@@ -140,6 +147,62 @@ class RLTableRow extends RLDataRow {
   }
 
   setValue(String fieldName, value) {
-    throw("not implemented");
+    data[fieldName] = value;
+  }
+}
+
+abstract class QueryListener {
+  queryHadError(ErrorMsg err);
+  metaReceived(RLTableMeta meta);
+  rowAdded(RLDataRow row);
+  rowUpdated(String id, Map row);
+  rowRemoved(String id);
+  clear();
+}
+
+class QueryHandler {
+  
+  String query;
+  num subsId;
+  DsonWebSocket _socket;
+  
+  DsonWebSocket get socket {
+    if ( _socket == null )
+      _socket = new DsonWebSocket.existing();
+    return _socket;
+  }
+  
+  runQuery( String query ) {
+    unsubscribe();
+    socket.sendForResponse(query,0,true,(bcast) {
+      if ( bcast is ErrorMsg )
+        print( "error:"+bcast.text );
+      else {
+        if ( bcast is AddRowMsg ) {
+          Map rowData = convertRowListToMap(bcast.row);
+          RLTableRow row = new RLTableRow(rowData, table);
+          rltable.addRowWithId(row.getId(), row);
+        } else if ( bcast is UpdateRowMsg ) {
+          Map rowData = convertRowListToMap(bcast.row);
+          String id = rowData["id"].toString();
+          Map toUpdate = new Map();
+          bcast.changedFields.forEach( (String field) 
+            { 
+              if ( field != null ) 
+                toUpdate[field] = rowData[field]; 
+            });
+          rltable.updateRow(id, toUpdate);
+//          print("update:"+rowData.toString());
+        }
+//        print( "received "+DSON.encode(bcast));
+      }
+    });
+  }
+
+  unsubscribe() {
+    if ( subsId != 0 ) {
+      socket.unsubscribe(subsId);
+      subsId = 0;
+    }    
   }
 }

@@ -21,7 +21,7 @@ void main() {
 
   // server induced messages
   socket.onMessage = (msg) {
-    print( "message" + msg.toString() );
+    //print( "message" + msg.toString() );
   };
   socket.onLogin = () {
     var query = new Request();
@@ -46,7 +46,15 @@ void main() {
           rltable.addRowWithId(row.getId(), row);
         } else if ( bcast is UpdateRowMsg ) {
           Map rowData = convertRowListToMap(bcast.row);
-          print("update:"+rowData.toString());
+          String id = rowData["id"].toString();
+          Map toUpdate = new Map();
+          bcast.changedFields.forEach( (String field) 
+            { 
+              if ( field != null ) 
+                toUpdate[field] = rowData[field]; 
+            });
+          rltable.updateRow(id, toUpdate);
+//          print("update:"+rowData.toString());
         }
 //        print( "received "+DSON.encode(bcast));
       }

@@ -1,6 +1,7 @@
 import 'package:polymer/polymer.dart';
 import 'dart:html';
 import 'dart:async';
+import 'reallive-util.dart';
 
 @CustomTag('reallive-table')
 class RLTable extends PolymerElement {
@@ -428,13 +429,6 @@ class DefaultRenderSpec extends RLTableRenderSpec {
     return defValRend;  
   }
   
-}
-
-abstract class RLDataRow {
-  List<String> getFieldNames();
-  getValue( String fieldName );
-  setValue( String fieldName, value );
-  num getId();  
 }
 
 class RLListRowData extends RLDataRow {

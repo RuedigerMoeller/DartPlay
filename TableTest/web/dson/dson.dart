@@ -498,7 +498,7 @@ DsonWebSocket DSONSocket;
 class DsonWebSocket {
   
   WebSocket socket;
-  bool log = true;
+  bool log = false;
   var authRequest;
   var authHandler;
   int reqCount = 1;
@@ -512,6 +512,12 @@ class DsonWebSocket {
   var onMessage = (msg) => print( "unhandled dson received "+msg );
   var onDecodingException = (e) => print( "exception in decoding:$e" );
   var onLogin = () => print("logged in");
+  
+  factory DsonWebSocket.existing() {
+    if ( DSONSocket == null )
+      throw ("socket not initialized");
+    return DSONSocket;
+  }
   
   factory DsonWebSocket(String url) {
     if ( DSONSocket == null )
