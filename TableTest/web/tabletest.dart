@@ -24,42 +24,19 @@ void main() {
     //print( "message" + msg.toString() );
   };
   socket.onLogin = () {
-    var query = new Request();
-    RLTableMeta table = LoginContext.getTableByName("sys.User");
-    rltable.setHeader(table);
-//    query.unparsedRequest = """
+        
+//    """
 //      Query: 'sys.User' having: 
 //        field: 'uid' equals: 'a';
 //        subscribe
 //      ;
 //    """;
-    query.unparsedRequest = """
-      Query: 'sys.User' subscribe;
-    """;
-    socket.sendForResponse(query,0,true,(bcast) {
-      if ( bcast is ErrorMsg )
-        print( "error:"+bcast.text );
-      else {
-        if ( bcast is AddRowMsg ) {
-          Map rowData = convertRowListToMap(bcast.row);
-          RLTableRow row = new RLTableRow(rowData, table);
-          rltable.addRowWithId(row.getId(), row);
-        } else if ( bcast is UpdateRowMsg ) {
-          Map rowData = convertRowListToMap(bcast.row);
-          String id = rowData["id"].toString();
-          Map toUpdate = new Map();
-          bcast.changedFields.forEach( (String field) 
-            { 
-              if ( field != null ) 
-                toUpdate[field] = rowData[field]; 
-            });
-          rltable.updateRow(id, toUpdate);
-//          print("update:"+rowData.toString());
-        }
-//        print( "received "+DSON.encode(bcast));
-      }
-    });
-  };    
+    rltable.queryText.value =
+      "Query: 'sys.User' subscribe;"
+    ;
+
+  };
+     
   
   
 //  List<RLTable> tables = [rltable]; 

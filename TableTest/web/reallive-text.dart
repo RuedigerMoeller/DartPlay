@@ -2,6 +2,7 @@ import 'package:polymer/polymer.dart';
 import 'dart:html';
 import 'dart:math';
 import 'reallive-table.dart';
+import 'reallive-util.dart';
 
 @CustomTag('reallive-text')
 class RLText extends PolymerElement {
@@ -76,20 +77,6 @@ class RLText extends PolymerElement {
 
     textField.onInput.listen( onInput );
     textField.onContextMenu.listen( onContext );
-
-    setCompletionList(
-    [ 
-     new RLMapRowData({"name":"KnickKnack", "description":"someone" }, 8), 
-     new RLMapRowData({"name":"ARuedi", "description":"some sample description here" }, 1), 
-     new RLMapRowData({"name":"ab", "description":"someone" }, 2), 
-     new RLMapRowData({"name":"aab", "description":"someone" }, 3), 
-     new RLMapRowData({"name":"aabcd", "description":"someone" }, 4), 
-     new RLMapRowData({"name":"BlaBla", "description":"someone" }, 7), 
-     new RLMapRowData({"name":"baba", "description":"someone" }, 5), 
-     new RLMapRowData({"name":"ARuedi", "description":"someone" }, 6), 
-    ],
-    "name"
-    );
     
   }
   
@@ -105,11 +92,11 @@ class RLText extends PolymerElement {
   }
   
   showCompletion(String text) {
-    table.removeAllRows();
+    table.clear();
     completionData.forEach( (E) {
         String string = E.getValue(completedField).toString().toUpperCase();
         if ( string.startsWith(text.toUpperCase()) )
-          table.addRow(E); 
+          table.rowAdded(E); 
       } 
     );
     if ( table.rowCount > 0 ) {

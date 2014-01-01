@@ -124,6 +124,7 @@ class RLTableMeta extends RLDataRow {
 abstract class RLDataRow {
   getValue( String fieldName );
   setValue( String fieldName, value );
+  List<String> getFieldNames();
   num getId();  
 }
 
@@ -165,6 +166,19 @@ class QueryHandler {
   String query;
   num subsId;
   DsonWebSocket _socket;
+  QueryListener li;
+  RLTableMeta tableMeta;
+  
+  QueryHandler();
+  
+  QueryHandler.withListener( QueryListener list ) {
+    li = list;
+  }
+
+  QueryHandler.withQuery( QueryListener list, String query ) {
+    li = list;
+    runQuery(query);
+  }
   
   DsonWebSocket get socket {
     if ( _socket == null )
@@ -172,16 +186,23 @@ class QueryHandler {
     return _socket;
   }
   
-  runQuery( String query ) {
+  runQuery( String queryString ) {
     unsubscribe();
-    socket.sendForResponse(query,0,true,(bcast) {
+    var query = new Request();
+    query.unparsedRequest = queryString;
+    subsId = socket.sendForResponse(query,0,true,(bcast) {
       if ( bcast is ErrorMsg )
-        print( "error:"+bcast.text );
+        li.queryHadError( bcast );
       else {
         if ( bcast is AddRowMsg ) {
           Map rowData = convertRowListToMap(bcast.row);
-          RLTableRow row = new RLTableRow(rowData, table);
-          rltable.addRowWithId(row.getId(), row);
+          if (tableMeta==null) {
+            int colId = rowData['collectionId'];
+            tableMeta = LoginContext.getTable(colId);
+            li.metaReceived(tableMeta);
+          }
+          RLTableRow row = new RLTableRow(rowData, tableMeta);
+          li.rowAdded(row);
         } else if ( bcast is UpdateRowMsg ) {
           Map rowData = convertRowListToMap(bcast.row);
           String id = rowData["id"].toString();
@@ -191,12 +212,16 @@ class QueryHandler {
               if ( field != null ) 
                 toUpdate[field] = rowData[field]; 
             });
-          rltable.updateRow(id, toUpdate);
+          li.rowUpdated(id, toUpdate);
 //          print("update:"+rowData.toString());
+        } else if ( bcast is RemRowMsg ) {
+          String id = bcast["rowId"].toString();
+          li.rowRemoved(id);
         }
 //        print( "received "+DSON.encode(bcast));
       }
     });
+    print("SUBSID:"+subsId.toString());
   }
 
   unsubscribe() {
@@ -205,4 +230,5 @@ class QueryHandler {
       subsId = 0;
     }    
   }
+  
 }
