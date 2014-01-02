@@ -7,8 +7,8 @@ import 'protocol/RealLive.dart';
 @CustomTag('reallive-table')
 class RLTable extends PolymerElement with QueryListener {
 
-  @published int spaneWidth = 400;
-  @published int spaneHeight = 400;
+  @published String spaneWidth = "400px";
+  @published String spaneHeight = "400px";
   @published String overflowX = "scroll";
   
   static var selectedStyle = "background-color:#008DCC; color:#fff;";
@@ -250,9 +250,10 @@ class RLTable extends PolymerElement with QueryListener {
   }
   
   setHeader(RLDataRow header) {
-    if ( tableHeader.rows.length == 0 ) {
-      tableHeader.addRow();
+    if ( tableHeader.rows.length > 0 ) {
+      tableHeader.rows[0].remove();
     }
+    tableHeader.addRow();
     TableRowElement newRow = tableHeader.rows[0];
     newRow.attributes['t_id'] = "header";
     headerRenderer.renderRow("header", newRow, header, tableMeta);
@@ -314,7 +315,15 @@ class RLTable extends PolymerElement with QueryListener {
 //  abstract class QueryListener {
     
     queryHadError(ErrorMsg err) {
-      
+      var td = new TableMetaData();
+      td.tableName = 'Error';
+      var attr = new TableAttribute();
+      attr.name= "Error Message";
+      td.attributes = [ attr ];
+      tableMeta = new RLTableMeta(td);
+      metaReceived(tableMeta);
+      var row = new RLTableRow({"Error Message" : '<font color="red">'+err.text+'</font>'}, tableMeta);
+      rowAdded(row);
     }
     
     metaReceived(RLTableMeta meta) {

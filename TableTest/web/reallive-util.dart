@@ -228,6 +228,7 @@ class QueryHandler {
     if ( subsId != 0 ) {
       socket.unsubscribe(subsId);
       subsId = 0;
+      tableMeta = null;
     }    
   }
   

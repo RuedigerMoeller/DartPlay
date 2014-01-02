@@ -18,6 +18,7 @@ void main() {
   DsonWebSocket socket = new DsonWebSocket("ws://localhost:8089/"); 
 
   RLTable rltable = querySelector("#apptable").xtag;
+  rltable.spaneHeight = (window.innerHeight-100).toString()+"px";
 
   // server induced messages
   socket.onMessage = (msg) {
